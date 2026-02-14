@@ -278,6 +278,7 @@ serenity-go/
 ```
 
 ## Development Workflow
+When asked to build a new feature and you're on `main`, create a feature branch.
 
 1. **Setup**: Run `make deps` to ensure dependencies are current
 2. **Development**: Use `make fmt` and `make lint` frequently during coding. **Always** use TDD approach.

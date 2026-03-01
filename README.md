@@ -412,7 +412,7 @@ actor.AttemptsTo(customInteraction)
 ### Custom Questions
 
 ```go
-customQuestion := core.Of[int]("custom value", func(actor core.Actor) (int, error) {
+customQuestion := core.QuestionAbout[int]("custom value", func(actor core.Actor, ctx context.Context) (int, error) {
     // Your custom logic here
     return 42, nil
 })
@@ -513,4 +513,3 @@ Contributions are welcome! Please feel free to submit issues and pull requests.
 
 ## License
 Apache 2.0 - see LICENSE file for details.
-

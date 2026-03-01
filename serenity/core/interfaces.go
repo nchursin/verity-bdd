@@ -36,7 +36,7 @@
 //	)
 //
 //	// Ask questions about system state
-//	userCount := core.Of("user count", func(actor core.Actor) (int, error) {
+//	userCount := core.QuestionAbout("user count", func(actor core.Actor, _ context.Context) (int, error) {
 //		db := actor.AbilityTo(&database.DatabaseAbility{}).(database.DatabaseAbility)
 //		return db.QueryRow("SELECT COUNT(*) FROM users").Int()
 //	})
@@ -68,13 +68,13 @@
 //	Questions use Go generics for type-safe answers about system state:
 //
 //	// Type-safe question with generic parameter
-//	userName := core.Of("current user name", func(actor core.Actor) (string, error) {
+//	userName := core.QuestionAbout("current user name", func(actor core.Actor, ctx context.Context) (string, error) {
 //		session := actor.AbilityTo(&auth.SessionAbility{}).(auth.SessionAbility)
 //		return session.GetCurrentUser().Name, nil
 //	})
 //
 //	// Complex type question
-//	userProfile := core.Of("user profile", func(actor core.Actor) (*UserProfile, error) {
+//	userProfile := core.QuestionAbout("user profile", func(actor core.Actor, ctx context.Context) (*UserProfile, error) {
 //		db := actor.AbilityTo(&database.DatabaseAbility{}).(database.DatabaseAbility)
 //		return db.GetUserProfile(actor.Name())
 //	})
@@ -588,14 +588,14 @@ type Task interface {
 //
 // Creating Questions:
 //
-//	// Using core.Of (convenience function)
-//	userCount := core.Of("user count", func(actor core.Actor) (int, error) {
+//	// Using core.QuestionAbout (convenience factory)
+//	userCount := core.QuestionAbout("user count", func(actor core.Actor, _ context.Context) (int, error) {
 //		db := actor.AbilityTo(&database.DatabaseAbility{}).(database.DatabaseAbility)
 //		return db.QueryRow("SELECT COUNT(*) FROM users").Int()
 //	})
 //
 //	// Using core.NewQuestion
-//	userName := core.NewQuestion("current user name", func(actor core.Actor) (string, error) {
+//	userName := core.NewQuestion("current user name", func(actor core.Actor, ctx context.Context) (string, error) {
 //		session := actor.AbilityTo(&auth.SessionAbility{}).(auth.SessionAbility)
 //		return session.GetCurrentUser().Name, nil
 //	})
@@ -618,7 +618,7 @@ type Task interface {
 // Question Examples:
 //
 //	// Simple type question
-//	isSystemOnline := core.Of("system online status", func(actor core.Actor) (bool, error) {
+//	isSystemOnline := core.QuestionAbout("system online status", func(actor core.Actor, _ context.Context) (bool, error) {
 //		ability, err := actor.AbilityTo(&health.HealthCheckAbility{})
 //		if err != nil {
 //			return false, err
@@ -627,13 +627,13 @@ type Task interface {
 //	})
 //
 //	// Complex type question
-//	userProfile := core.Of("user profile", func(actor core.Actor) (*UserProfile, error) {
+//	userProfile := core.QuestionAbout("user profile", func(actor core.Actor, _ context.Context) (*UserProfile, error) {
 //		db := actor.AbilityTo(&database.DatabaseAbility{}).(database.DatabaseAbility)
 //		return db.GetUserProfile(actor.Name())
 //	})
 //
 //	// Collection question
-//	activeOrders := core.Of("active orders", func(actor core.Actor) ([]Order, error) {
+//	activeOrders := core.QuestionAbout("active orders", func(actor core.Actor, _ context.Context) ([]Order, error) {
 //		api := actor.AbilityTo(&api.CallAnAPI{}).(api.CallAnAPI)
 //		response, err := api.Get("/orders?status=active")
 //		if err != nil {
@@ -643,7 +643,7 @@ type Task interface {
 //	})
 //
 //	// Error-state question
-//	lastError := core.Of("last system error", func(actor core.Actor) (*ErrorInfo, error) {
+//	lastError := core.QuestionAbout("last system error", func(actor core.Actor, _ context.Context) (*ErrorInfo, error) {
 //		log := actor.AbilityTo(&logging.LogAbility{}).(logging.LogAbility)
 //		return log.GetLastError()
 //	})
@@ -659,19 +659,19 @@ type Task interface {
 //  4. History Questions - Query past events
 //
 //     // State Question
-//     systemStatus := core.Of("system status", func(actor core.Actor) (SystemStatus, error) {
+//     systemStatus := core.QuestionAbout("system status", func(actor core.Actor, _ context.Context) (SystemStatus, error) {
 //     monitor := actor.AbilityTo(&monitoring.Ability{}).(monitoring.Ability)
 //     return monitor.GetCurrentStatus()
 //     })
 //
 //     // Calculation Question
-//     averageResponseTime := core.Of("average response time", func(actor core.Actor) (time.Duration, error) {
+//     averageResponseTime := core.QuestionAbout("average response time", func(actor core.Actor, _ context.Context) (time.Duration, error) {
 //     metrics := actor.AbilityTo(&metrics.Ability{}).(metrics.Ability)
 //     return metrics.CalculateAverageResponseTime(time.Hour)
 //     })
 //
 //     // Validation Question
-//     hasValidLicense := core.Of("has valid license", func(actor core.Actor) (bool, error) {
+//     hasValidLicense := core.QuestionAbout("has valid license", func(actor core.Actor, _ context.Context) (bool, error) {
 //     license := actor.AbilityTo(&license.Ability{}).(license.Ability)
 //     return license.IsValid()
 //     })

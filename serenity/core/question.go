@@ -15,19 +15,19 @@ import (
 //
 // Factory Functions:
 //
-//	NewQuestion() - Creates a new question with explicit function
-//	Of()          - Convenience function for creating questions
+//	NewQuestion()   - Creates a new question with explicit function
+//	QuestionAbout() - Convenience function for creating questions
 //
 // Usage Examples:
 //
 //	// Create a question using NewQuestion
-//	userCount := core.NewQuestion[int]("number of users", func(actor core.Actor) (int, error) {
+//	userCount := core.NewQuestion[int]("number of users", func(actor core.Actor, _ context.Context) (int, error) {
 //		db := actor.AbilityTo(&database.DatabaseAbility{}).(database.DatabaseAbility)
 //		return db.QueryRow("SELECT COUNT(*) FROM users").Int()
 //	})
 //
-//	// Create a question using Of (convenience)
-//	userName := core.Of("current user name", func(actor core.Actor) (string, error) {
+//	// Create a question using QuestionAbout (convenience)
+//	userName := core.QuestionAbout("current user name", func(actor core.Actor, _ context.Context) (string, error) {
 //		session := actor.AbilityTo(&auth.SessionAbility{}).(auth.SessionAbility)
 //		return session.GetCurrentUser().Name
 //	})
@@ -58,7 +58,7 @@ import (
 // This generic implementation allows creating questions that return
 // specific types while maintaining the Question interface contract.
 //
-// Type question is private - use NewQuestion() or Of() factory functions.
+// Type question is private - use NewQuestion() or QuestionAbout() factory functions.
 type question[T any] struct {
 	// description provides a human-readable description of what the question asks
 	description string
@@ -84,7 +84,7 @@ type question[T any] struct {
 // Usage Examples:
 //
 //	// Simple type question
-//	userCount := core.NewQuestion[int]("number of users in system", func(actor core.Actor) (int, error) {
+//	userCount := core.NewQuestion[int]("number of users in system", func(actor core.Actor, _ context.Context) (int, error) {
 //		db, err := actor.AbilityTo(&database.DatabaseAbility{})
 //		if err != nil {
 //			return 0, fmt.Errorf("actor needs database ability: %w", err)
@@ -93,7 +93,7 @@ type question[T any] struct {
 //	})
 //
 //	// Complex type question
-//	userProfile := core.NewQuestion[*UserProfile]("user profile", func(actor core.Actor) (*UserProfile, error) {
+//	userProfile := core.NewQuestion[*UserProfile]("user profile", func(actor core.Actor, _ context.Context) (*UserProfile, error) {
 //		db, err := actor.AbilityTo(&database.DatabaseAbility{})
 //		if err != nil {
 //			return nil, fmt.Errorf("actor needs database ability: %w", err)
@@ -102,7 +102,7 @@ type question[T any] struct {
 //	})
 //
 //	// Collection question
-//	activeOrders := core.NewQuestion[[]Order]("active orders", func(actor core.Actor) ([]Order, error) {
+//	activeOrders := core.NewQuestion[[]Order]("active orders", func(actor core.Actor, _ context.Context) ([]Order, error) {
 //		api, err := actor.AbilityTo(&api.CallAnAPI{})
 //		if err != nil {
 //			return nil, fmt.Errorf("actor needs API ability: %w", err)
@@ -115,7 +115,7 @@ type question[T any] struct {
 //	})
 //
 //	// Boolean question
-//	isSystemOnline := core.NewQuestion[bool]("system online status", func(actor core.Actor) (bool, error) {
+//	isSystemOnline := core.NewQuestion[bool]("system online status", func(actor core.Actor, _ context.Context) (bool, error) {
 //		health, err := actor.AbilityTo(&monitoring.HealthAbility{})
 //		if err != nil {
 //			return false, fmt.Errorf("actor needs health check ability: %w", err)
@@ -155,7 +155,7 @@ func NewQuestion[T any](description string, ask func(actor Actor, ctx context.Co
 //
 // Example:
 //
-//	q := core.Of("user count", getUserCount)
+//	q := core.QuestionAbout("user count", getUserCount)
 //	fmt.Println(q.Description()) // "asks user count"
 func (q *question[T]) Description() string {
 	return fmt.Sprintf("asks %s", q.description)
@@ -189,7 +189,7 @@ func (q *question[T]) AnsweredBy(actor Actor, ctx context.Context) (T, error) {
 	return q.ask(actor, ctx)
 }
 
-// Of creates a new question with the given description and ask function.
+// QuestionAbout creates a new question with the given description and ask function.
 // This is a convenience function that internally calls NewQuestion().
 // Use this as a shorter alternative to NewQuestion().
 //
@@ -198,7 +198,7 @@ func (q *question[T]) AnsweredBy(actor Actor, ctx context.Context) (T, error) {
 //
 // Parameters:
 //   - description: Human-readable description of what the question asks
-//   - ask: Function that takes an actor and returns the typed answer
+//   - ask: Function that takes an actor and context, returning the typed answer
 //
 // Returns:
 //   - Question[T]: A new question that returns type T when answered
@@ -206,25 +206,25 @@ func (q *question[T]) AnsweredBy(actor Actor, ctx context.Context) (T, error) {
 // Usage Examples:
 //
 //	// Simple boolean question
-//	isHealthy := core.Of("system health status", func(actor core.Actor) (bool, error) {
+//	isHealthy := core.QuestionAbout("system health status", func(actor core.Actor, _ context.Context) (bool, error) {
 //		health := actor.AbilityTo(&monitoring.HealthAbility{})
 //		return health.(monitoring.HealthAbility).IsHealthy()
 //	})
 //
 //	// String question
-//	currentUser := core.Of("current user name", func(actor core.Actor) (string, error) {
+//	currentUser := core.QuestionAbout("current user name", func(actor core.Actor, _ context.Context) (string, error) {
 //		session := actor.AbilityTo(&auth.SessionAbility{})
 //		return session.(auth.SessionAbility).GetCurrentUser().Name
 //	})
 //
 //	// Integer question with calculation
-//	averageResponseTime := core.Of("average response time", func(actor core.Actor) (time.Duration, error) {
+//	averageResponseTime := core.QuestionAbout("average response time", func(actor core.Actor, _ context.Context) (time.Duration, error) {
 //		metrics := actor.AbilityTo(&monitoring.MetricsAbility{})
 //		return metrics.(monitoring.MetricsAbility).CalculateAverageResponseTime(time.Hour)
 //	})
 //
 //	// Struct question
-//	systemInfo := core.Of("system information", func(actor core.Actor) (*SystemInfo, error) {
+//	systemInfo := core.QuestionAbout("system information", func(actor core.Actor, _ context.Context) (*SystemInfo, error) {
 //		info := &SystemInfo{}
 //		health := actor.AbilityTo(&monitoring.HealthAbility{})
 //		metrics := actor.AbilityTo(&monitoring.MetricsAbility{})
@@ -244,16 +244,16 @@ func (q *question[T]) AnsweredBy(actor Actor, ctx context.Context) (T, error) {
 //		ensure.That(systemInfo, expectations.HasField("Version", expectations.Not(expectations.IsEmpty()))),
 //	)
 //
-// NewQuestion vs Of:
+// NewQuestion vs QuestionAbout:
 //
 //	// Use NewQuestion when you want explicit creation
 //	q1 := core.NewQuestion[int]("user count", getUserCount)
 //
-//	// Use Of for convenience (identical result)
-//	q2 := core.Of("user count", getUserCount)
+//	// Use QuestionAbout for convenience (identical result)
+//	q2 := core.QuestionAbout("user count", getUserCount)
 //
 //	// Both create the same type of question
 //	var q1, q2 core.Question[int]
-func Of[T any](description string, ask func(actor Actor, ctx context.Context) (T, error)) Question[T] {
+func QuestionAbout[T any](description string, ask func(actor Actor, ctx context.Context) (T, error)) Question[T] {
 	return NewQuestion(description, ask)
 }

@@ -73,7 +73,8 @@ func (ta *testActor) AbilityTo(abilityType abilities.Ability) (abilities.Ability
 		}
 	}
 
-	return nil, fmt.Errorf("actor '%s' does not have the required ability", ta.name)
+	abName := core.AbilityName(abilityType)
+	return nil, fmt.Errorf("actor '%s' can't %s. Did you give them the ability?", ta.name, abName)
 }
 
 // AttemptsTo executes activities and automatically handles any errors through TestContext.

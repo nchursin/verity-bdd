@@ -6,12 +6,15 @@ import (
 
 	"go.uber.org/mock/gomock"
 
+	"github.com/nchursin/serenity-go/serenity/abilities"
 	"github.com/nchursin/serenity-go/serenity/core"
 	coreMocks "github.com/nchursin/serenity-go/serenity/core/testing/mocks"
 	"github.com/nchursin/serenity-go/serenity/reporting"
 	reportingMocks "github.com/nchursin/serenity-go/serenity/reporting/mocks"
 	testingMocks "github.com/nchursin/serenity-go/serenity/testing/mocks"
 )
+
+type dummyAbility struct{ id string }
 
 func TestTestActorAttemptsToWithReporting(t *testing.T) {
 	ctrl := gomock.NewController(t)
@@ -48,4 +51,89 @@ func TestTestActorAttemptsToWithReporting(t *testing.T) {
 
 	// Execute activity
 	actor.AttemptsTo(mockActivity)
+}
+
+func TestAbilityToReturnsFriendlyError(t *testing.T) {
+	actor := &testActor{
+		name:      "TestActor",
+		ctx:       context.Background(),
+		abilities: []abilities.Ability{},
+	}
+
+	ability, err := actor.AbilityTo(&dummyAbility{})
+	if err == nil {
+		t.Fatalf("expected error, got nil and ability %v", ability)
+	}
+
+	expected := "actor 'TestActor' can't testing.dummyAbility. Did you give them the ability?"
+	if err.Error() != expected {
+		t.Fatalf("expected error %q, got %q", expected, err.Error())
+	}
+}
+
+func TestAbilityOfReturnsConcreteAbility(t *testing.T) {
+	first := &dummyAbility{id: "first"}
+	actor := &testActor{
+		name:      "TestActor",
+		ctx:       context.Background(),
+		abilities: []abilities.Ability{first},
+	}
+
+	ability, err := core.AbilityOf[*dummyAbility](actor)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+
+	if ability != first {
+		t.Fatalf("expected first ability, got %+v", ability)
+	}
+}
+
+func TestAbilityOfReturnsFriendlyErrorWhenMissing(t *testing.T) {
+	actor := &testActor{
+		name:      "TestActor",
+		ctx:       context.Background(),
+		abilities: []abilities.Ability{},
+	}
+
+	ability, err := core.AbilityOf[*dummyAbility](actor)
+	if err == nil {
+		t.Fatalf("expected error, got ability %+v", ability)
+	}
+
+	expected := "actor 'TestActor' can't testing.dummyAbility. Did you give them the ability?"
+	if err.Error() != expected {
+		t.Fatalf("expected error %q, got %q", expected, err.Error())
+	}
+}
+
+func TestAbilityOfReturnsFirstMatchingAbility(t *testing.T) {
+	first := &dummyAbility{id: "first"}
+	second := &dummyAbility{id: "second"}
+	actor := &testActor{
+		name:      "TestActor",
+		ctx:       context.Background(),
+		abilities: []abilities.Ability{first, second},
+	}
+
+	ability, err := core.AbilityOf[*dummyAbility](actor)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+
+	if ability != first {
+		t.Fatalf("expected first ability, got %+v", ability)
+	}
+}
+
+func TestAbilityOfHandlesNilActor(t *testing.T) {
+	ability, err := core.AbilityOf[*dummyAbility](nil)
+	if err == nil {
+		t.Fatalf("expected error, got ability %+v", ability)
+	}
+
+	expected := "actor is nil; cannot get testing.dummyAbility ability"
+	if err.Error() != expected {
+		t.Fatalf("expected error %q, got %q", expected, err.Error())
+	}
 }

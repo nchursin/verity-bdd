@@ -32,17 +32,12 @@ func (t *takeNoteActivity) Description() string {
 }
 
 func (t *takeNoteActivity) PerformAs(actor core.Actor, ctx context.Context) error {
-	ability, err := actor.AbilityTo(&TakeNotesAbility{})
+	abiliy, err := core.AbilityOf[*TakeNotesAbility](actor)
 	if err != nil {
 		return err
 	}
 
-	noteBookAbility, ok := ability.(*TakeNotesAbility)
-	if !ok {
-		return fmt.Errorf("notes ability must be *TakeNotesAbility, got %T", ability)
-	}
-
-	noteBookAbility.Set(t.key, t.value)
+	abiliy.Set(t.key, t.value)
 	return nil
 }
 

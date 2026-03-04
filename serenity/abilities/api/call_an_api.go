@@ -43,9 +43,14 @@ func Using(client *http.Client) CallAnAPI {
 	}
 }
 
-// CallAnApiAt creates a new CallAnAPI ability with the given base URL
+// CallAnApiAt creates a new CallAnAPI ability with the given base URL.
+// Паника, если baseURL невалиден, чтобы ошибка surfaced сразу.
 func CallAnApiAt(baseURL string) CallAnAPI {
-	return Using(http.DefaultClient).(*callAnAPI).withBaseURL(baseURL)
+	ab := Using(http.DefaultClient)
+	if err := ab.SetBaseURL(baseURL); err != nil {
+		panic(fmt.Errorf("CallAnApiAt invalid base URL: %w", err))
+	}
+	return ab
 }
 
 // SendRequest sends an HTTP request and stores the response
@@ -56,9 +61,9 @@ func (c *callAnAPI) SendRequest(req *http.Request, ctx context.Context) (*http.R
 	c.mutex.RUnlock()
 
 	if baseURL != "" && req.URL != nil && !req.URL.IsAbs() {
-		parsedBaseURL, err := url.Parse(baseURL)
+		parsedBaseURL, err := validateBaseURL(baseURL)
 		if err != nil {
-			return nil, fmt.Errorf("invalid base URL: %w", err)
+			return nil, err
 		}
 
 		req.URL = parsedBaseURL.ResolveReference(req.URL)
@@ -73,6 +78,9 @@ func (c *callAnAPI) SendRequest(req *http.Request, ctx context.Context) (*http.R
 
 	// Store the response for later retrieval
 	c.mutex.Lock()
+	if c.lastResponse != nil && c.lastResponse.Body != nil {
+		_ = c.lastResponse.Body.Close()
+	}
 	c.lastResponse = resp
 	c.mutex.Unlock()
 
@@ -88,13 +96,13 @@ func (c *callAnAPI) LastResponse() *http.Response {
 
 // SetBaseURL sets the base URL for subsequent requests
 func (c *callAnAPI) SetBaseURL(baseURL string) error {
-	_, err := url.Parse(baseURL)
+	parsed, err := validateBaseURL(baseURL)
 	if err != nil {
-		return fmt.Errorf("invalid base URL: %w", err)
+		return err
 	}
 
 	c.mutex.Lock()
-	c.baseURL = baseURL
+	c.baseURL = parsed.String()
 	c.mutex.Unlock()
 	return nil
 }
@@ -106,10 +114,15 @@ func (c *callAnAPI) GetBaseURL() string {
 	return c.baseURL
 }
 
-// withBaseURL sets the base URL and returns the ability for chaining
-func (c *callAnAPI) withBaseURL(baseURL string) CallAnAPI {
-	c.mutex.Lock()
-	c.baseURL = baseURL
-	c.mutex.Unlock()
-	return c
+func validateBaseURL(baseURL string) (*url.URL, error) {
+	parsedBaseURL, err := url.Parse(baseURL)
+	if err != nil {
+		return nil, fmt.Errorf("invalid base URL: %w", err)
+	}
+
+	if parsedBaseURL.Scheme == "" || parsedBaseURL.Host == "" {
+		return nil, fmt.Errorf("invalid base URL: scheme and host are required")
+	}
+
+	return parsedBaseURL, nil
 }

@@ -7,27 +7,44 @@
 package testing
 
 import (
-	"fmt"
+	"reflect"
 
 	"github.com/nchursin/serenity-go/serenity/abilities"
 )
 
-// abilityMatchesType checks if two abilities are of the same type.
-// This helper function is used internally to match ability types when
-// retrieving specific abilities from an actor's ability collection.
-//
-// Parameters:
-//
-//	ability - The ability instance to check
-//	abilityType - The type reference ability to match against
-//
-// Returns:
-//
-//	true if the abilities are of the same concrete type, false otherwise
-//
-// This function uses type string comparison to determine type equality,
-// which is sufficient for the current ability system where each ability
-// type has a unique implementation.
-func abilityMatchesType(ability, abilityType abilities.Ability) bool {
-	return fmt.Sprintf("%T", ability) == fmt.Sprintf("%T", abilityType)
+// abilityMatchesType checks if the provided ability is assignable to or implements
+// the target ability type (interface or concrete) based on runtime types.
+func abilityMatchesType(ability abilities.Ability, abilityType abilities.Ability) bool {
+	if ability == nil || abilityType == nil {
+		return false
+	}
+
+	targetType := reflect.TypeOf(abilityType)
+	abType := reflect.TypeOf(ability)
+
+	if abType.AssignableTo(targetType) || (targetType.Kind() == reflect.Interface && abType.Implements(targetType)) {
+		return true
+	}
+
+	if abType.Kind() == reflect.Pointer {
+		abElem := abType.Elem()
+		if abElem.AssignableTo(targetType) || (targetType.Kind() == reflect.Interface && abElem.Implements(targetType)) {
+			return true
+		}
+	}
+
+	if targetType.Kind() == reflect.Pointer {
+		targetElem := targetType.Elem()
+		if abType.AssignableTo(targetElem) || (targetElem.Kind() == reflect.Interface && abType.Implements(targetElem)) {
+			return true
+		}
+		if abType.Kind() == reflect.Pointer {
+			abElem := abType.Elem()
+			if abElem.AssignableTo(targetElem) || (targetElem.Kind() == reflect.Interface && abElem.Implements(targetElem)) {
+				return true
+			}
+		}
+	}
+
+	return abType.String() == targetType.String()
 }

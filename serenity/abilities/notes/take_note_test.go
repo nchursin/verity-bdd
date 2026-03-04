@@ -48,8 +48,8 @@ func (a *stubActor) AnswersTo(question core.Question[any]) (any, bool) {
 }
 
 func TestTakeNoteStoresValue(t *testing.T) {
-	noteBook := NewNoteBook()
-	actor := newStubActor("alice", context.Background(), noteBook)
+	ability := TakeNotes()
+	actor := newStubActor("alice", context.Background(), ability)
 
 	activity := TakeNoteOf("secret-token").As("auth")
 
@@ -66,7 +66,7 @@ func TestTakeNoteStoresValue(t *testing.T) {
 		t.Fatalf("expected no error performing take note, got %v", err)
 	}
 
-	value, err := noteBook.Get("auth")
+	value, err := ability.(*TakeNotesAbility).Get("auth")
 	if err != nil {
 		t.Fatalf("expected stored note, got error: %v", err)
 	}
@@ -88,6 +88,10 @@ func TestTakeNoteRequiresAbility(t *testing.T) {
 	}
 }
 
+type dummyAbility struct{}
+
+func (d *dummyAbility) String() string { return "dummy" }
+
 func TestTakeNoteReportsStep(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	reporter := mocks.NewMockReporter(ctrl)
@@ -108,4 +112,14 @@ func TestTakeNoteReportsStep(t *testing.T) {
 	actor := serenityTest.ActorCalled("Sam").WhoCan(TakeNotes())
 
 	actor.AttemptsTo(TakeNoteOf("secret").As("remember"))
+}
+
+func TestTakeNoteErrorsWhenAbilityTypeMismatch(t *testing.T) {
+	actor := newStubActor("mike", context.Background(), &dummyAbility{})
+
+	activity := TakeNoteOf("value").As("k")
+	err := activity.PerformAs(actor, context.Background())
+	if err == nil {
+		t.Fatalf("expected error when ability type is not TakeNotesAbility")
+	}
 }

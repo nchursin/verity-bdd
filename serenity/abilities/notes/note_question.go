@@ -28,17 +28,17 @@ func (q *noteQuestion[T]) Description() string {
 func (q *noteQuestion[T]) AnsweredBy(actor core.Actor, ctx context.Context) (T, error) {
 	var zero T
 
-	ability, err := actor.AbilityTo(&NoteBook{})
+	ability, err := actor.AbilityTo(&TakeNotesAbility{})
 	if err != nil {
 		return zero, err
 	}
 
-	noteBook, ok := ability.(*NoteBook)
+	noteBookAbility, ok := ability.(*TakeNotesAbility)
 	if !ok {
-		return zero, fmt.Errorf("notes ability must be *NoteBook, got %T", ability)
+		return zero, fmt.Errorf("notes ability must be *TakeNotesAbility, got %T", ability)
 	}
 
-	value, err := noteBook.Get(q.key)
+	value, err := noteBookAbility.Get(q.key)
 	if err != nil {
 		return zero, err
 	}

@@ -6,9 +6,9 @@ import (
 )
 
 func TestNoteQuestionReturnsTypedValue(t *testing.T) {
-	noteBook := NewNoteBook()
-	noteBook.Set("name", "serenity")
-	actor := newStubActor("reader", context.Background(), noteBook)
+	ability := TakeNotes()
+	ability.(*TakeNotesAbility).Set("name", "serenity")
+	actor := newStubActor("reader", context.Background(), ability)
 
 	answer, err := Note[string]("name").AnsweredBy(actor, context.Background())
 	if err != nil {
@@ -20,7 +20,7 @@ func TestNoteQuestionReturnsTypedValue(t *testing.T) {
 }
 
 func TestNoteQuestionErrorsWhenMissing(t *testing.T) {
-	actor := newStubActor("reader", context.Background(), NewNoteBook())
+	actor := newStubActor("reader", context.Background(), TakeNotes())
 
 	_, err := Note[string]("missing").AnsweredBy(actor, context.Background())
 	if err == nil {
@@ -28,10 +28,28 @@ func TestNoteQuestionErrorsWhenMissing(t *testing.T) {
 	}
 }
 
+func TestNoteQuestionErrorsWhenNoAbility(t *testing.T) {
+	actor := newStubActor("reader", context.Background())
+
+	_, err := Note[string]("missing").AnsweredBy(actor, context.Background())
+	if err == nil {
+		t.Fatalf("expected error when actor lacks notes ability")
+	}
+}
+
+func TestNoteQuestionErrorsOnAbilityTypeMismatch(t *testing.T) {
+	actor := newStubActor("reader", context.Background(), &dummyAbility{})
+
+	_, err := Note[string]("missing").AnsweredBy(actor, context.Background())
+	if err == nil {
+		t.Fatalf("expected error when ability type mismatched")
+	}
+}
+
 func TestNoteQuestionErrorsOnTypeMismatch(t *testing.T) {
-	noteBook := NewNoteBook()
-	noteBook.Set("count", 123)
-	actor := newStubActor("reader", context.Background(), noteBook)
+	ability := TakeNotes()
+	ability.(*TakeNotesAbility).Set("count", 123)
+	actor := newStubActor("reader", context.Background(), ability)
 
 	_, err := Note[string]("count").AnsweredBy(actor, context.Background())
 	if err == nil {
@@ -40,9 +58,9 @@ func TestNoteQuestionErrorsOnTypeMismatch(t *testing.T) {
 }
 
 func TestNoteValueReturnsUntyped(t *testing.T) {
-	noteBook := NewNoteBook()
-	noteBook.Set("count", 321)
-	actor := newStubActor("reader", context.Background(), noteBook)
+	ability := TakeNotes()
+	ability.(*TakeNotesAbility).Set("count", 321)
+	actor := newStubActor("reader", context.Background(), ability)
 
 	value, err := NoteValue("count").AnsweredBy(actor, context.Background())
 	if err != nil {

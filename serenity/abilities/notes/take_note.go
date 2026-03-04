@@ -7,11 +7,6 @@ import (
 	"github.com/nchursin/serenity-go/serenity/core"
 )
 
-// TakeNotes returns a new NoteBook ability for the actor.
-func TakeNotes() *NoteBook {
-	return NewNoteBook()
-}
-
 // takeNoteBuilder constructs the TakeNote activity.
 type takeNoteBuilder struct {
 	value any
@@ -37,17 +32,17 @@ func (t *takeNoteActivity) Description() string {
 }
 
 func (t *takeNoteActivity) PerformAs(actor core.Actor, ctx context.Context) error {
-	ability, err := actor.AbilityTo(&NoteBook{})
+	ability, err := actor.AbilityTo(&TakeNotesAbility{})
 	if err != nil {
 		return err
 	}
 
-	noteBook, ok := ability.(*NoteBook)
+	noteBookAbility, ok := ability.(*TakeNotesAbility)
 	if !ok {
-		return fmt.Errorf("notes ability must be *NoteBook, got %T", ability)
+		return fmt.Errorf("notes ability must be *TakeNotesAbility, got %T", ability)
 	}
 
-	noteBook.Set(t.key, t.value)
+	noteBookAbility.Set(t.key, t.value)
 	return nil
 }
 

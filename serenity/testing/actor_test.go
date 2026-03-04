@@ -16,6 +16,15 @@ import (
 
 type dummyAbility struct{ id string }
 
+type ifaceAbility interface {
+	abilities.Ability
+	Foo() string
+}
+
+type ifaceImpl struct{ id string }
+
+func (i *ifaceImpl) Foo() string { return i.id }
+
 func TestTestActorAttemptsToWithReporting(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
@@ -135,5 +144,42 @@ func TestAbilityOfHandlesNilActor(t *testing.T) {
 	expected := "actor is nil; cannot get testing.dummyAbility ability"
 	if err.Error() != expected {
 		t.Fatalf("expected error %q, got %q", expected, err.Error())
+	}
+}
+
+func TestAbilityOfSupportsInterfaceAbility(t *testing.T) {
+	impl := &ifaceImpl{id: "ok"}
+	actor := &testActor{
+		name:      "TestActor",
+		ctx:       context.Background(),
+		abilities: []abilities.Ability{impl},
+	}
+
+	ability, err := core.AbilityOf[ifaceAbility](actor)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+
+	if ability.Foo() != "ok" {
+		t.Fatalf("expected Foo to return ok, got %s", ability.Foo())
+	}
+}
+
+func TestAbilityOfReturnsFirstMatchingInterfaceAbility(t *testing.T) {
+	first := &ifaceImpl{id: "first"}
+	second := &ifaceImpl{id: "second"}
+	actor := &testActor{
+		name:      "TestActor",
+		ctx:       context.Background(),
+		abilities: []abilities.Ability{first, second},
+	}
+
+	ability, err := core.AbilityOf[ifaceAbility](actor)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+
+	if ability != first {
+		t.Fatalf("expected first interface ability, got %+v", ability)
 	}
 }

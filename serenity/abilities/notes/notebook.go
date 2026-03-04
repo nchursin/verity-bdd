@@ -3,7 +3,19 @@ package notes
 import (
 	"fmt"
 	"sync"
+
+	"github.com/nchursin/serenity-go/serenity/abilities"
 )
+
+// TakeNotesAbility wraps the NoteBook so it can be registered as an ability.
+type TakeNotesAbility struct {
+	*NoteBook
+}
+
+// TakeNotes returns a new ability instance that stores notes for an actor.
+func TakeNotes() abilities.Ability {
+	return &TakeNotesAbility{NoteBook: NewNoteBook()}
+}
 
 // NoteBook stores actor notes in a threadsafe map.
 // It is meant to be used as an ability attached to an actor.

@@ -5,12 +5,13 @@ import (
 	"fmt"
 	"testing"
 
+	"go.uber.org/mock/gomock"
+
 	"github.com/nchursin/serenity-go/serenity/abilities"
 	"github.com/nchursin/serenity-go/serenity/core"
 	"github.com/nchursin/serenity-go/serenity/reporting"
 	"github.com/nchursin/serenity-go/serenity/reporting/mocks"
 	serenitytesting "github.com/nchursin/serenity-go/serenity/testing"
-	"go.uber.org/mock/gomock"
 )
 
 type stubActor struct {

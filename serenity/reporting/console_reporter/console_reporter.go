@@ -90,10 +90,6 @@ func (cr *ConsoleReporter) OnStepStart(stepDescription string) {
 
 	// Add to active steps for tracking
 	cr.addActiveStep(description, indentLevel)
-
-	// Write step start with carriage return to allow overwriting
-	indent := cr.getIndent()
-	cr.writeWithoutNewline("%s🔄 %s", indent, description)
 }
 
 // OnStepFinish is called when a step/activity completes
@@ -200,8 +196,7 @@ func (cr *ConsoleReporter) writeOverLine(format string, args ...interface{}) {
 	defer cr.mutex.Unlock()
 	if cr.output != nil {
 		content := fmt.Sprintf(format, args...)
-		// Clear line completely and write new content
-		_, _ = fmt.Fprintf(cr.output, "\r%s\n", content)
+		_, _ = fmt.Fprintf(cr.output, "%s\n", content)
 	}
 }
 

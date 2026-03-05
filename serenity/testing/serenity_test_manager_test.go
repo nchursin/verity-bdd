@@ -138,3 +138,51 @@ func TestSerenityTestAddsNotesAttachmentOnShutdown(t *testing.T) {
 
 	test.Shutdown()
 }
+
+func TestSerenityTestAddsNotesAttachmentOnFailure(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	mockReporter := reportingMocks.NewMockReporter(ctrl)
+	mockTestContext := mocks.NewMockTestContext(ctrl)
+
+	mockReporter.EXPECT().OnTestStart("NotesFailedTest")
+	mockReporter.EXPECT().OnTestFinish(gomock.Any()).Do(func(result reporting.TestResult) {
+		require.Equal(t, "NotesFailedTest", result.Name())
+		require.Equal(t, reporting.StatusFailed, result.Status())
+		require.Error(t, result.Error())
+		require.EqualError(t, result.Error(), "test failed")
+
+		attachments := result.Attachments()
+		require.Len(t, attachments, 1)
+
+		attachment := attachments[0]
+		require.Equal(t, "notes", attachment.Name)
+		require.Equal(t, "application/json", attachment.ContentType)
+
+		var payload map[string]map[string]any
+		require.NoError(t, json.Unmarshal(attachment.Content, &payload))
+
+		notesForActor, ok := payload["Sam"]
+		require.True(t, ok, "expected notes for actor Sam")
+		require.Equal(t, "secret", notesForActor["token"])
+		intCount, ok := notesForActor["count"].(float64)
+		require.True(t, ok, "expected numeric count")
+		require.Equal(t, float64(3), intCount)
+	})
+
+	mockTestContext.EXPECT().Name().Return("NotesFailedTest")
+	mockTestContext.EXPECT().Failed().Return(true)
+	mockTestContext.EXPECT().Helper()
+	mockTestContext.EXPECT().Cleanup(gomock.Any())
+
+	ctx := context.Background()
+	test := NewSerenityTestWithReporter(ctx, mockTestContext, mockReporter)
+
+	actor := test.ActorCalled("Sam").WhoCan(notes.TakeNotes())
+	ability, err := actor.AbilityTo(&notes.TakeNotesAbility{})
+	require.NoError(t, err)
+	notebook := ability.(*notes.TakeNotesAbility)
+	notebook.Set("token", "secret")
+	notebook.Set("count", 3)
+
+	test.Shutdown()
+}

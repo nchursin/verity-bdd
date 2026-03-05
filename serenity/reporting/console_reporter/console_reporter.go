@@ -69,6 +69,14 @@ func (cr *ConsoleReporter) OnTestFinish(result reporting.TestResult) {
 		cr.writeLine("   Error: %s", result.Error().Error())
 	}
 
+	attachments := result.Attachments()
+	if len(attachments) > 0 {
+		cr.writeLine("   Attachments:")
+		for _, attachment := range attachments {
+			cr.writeLine("   - %s (%s): %s", attachment.Name, attachment.ContentType, string(attachment.Content))
+		}
+	}
+
 	cr.writeLine("")
 }
 

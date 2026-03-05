@@ -2,7 +2,9 @@ package testing
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"strings"
 	"sync"
 	"time"
 
@@ -97,10 +99,11 @@ type SerenityTest interface {
 
 // testResult implements the TestResult interface
 type testResult struct {
-	name     string
-	status   reporting.Status
-	duration time.Duration
-	err      error
+	name        string
+	status      reporting.Status
+	duration    time.Duration
+	err         error
+	attachments []reporting.Attachment
 }
 
 // Name returns the test name
@@ -121,6 +124,11 @@ func (tr *testResult) Duration() float64 {
 // Error returns the test error, if any
 func (tr *testResult) Error() error {
 	return tr.err
+}
+
+// Attachments returns any attachments associated with the result
+func (tr *testResult) Attachments() []reporting.Attachment {
+	return tr.attachments
 }
 
 // serenityTest implements SerenityTest
@@ -235,17 +243,31 @@ func (st *serenityTest) Shutdown() {
 	duration := time.Since(st.startTime)
 	status := reporting.StatusPassed
 	var testErr error
+	attachments := make([]reporting.Attachment, 0)
 
 	if st.testCtx.Failed() {
 		status = reporting.StatusFailed
 		testErr = fmt.Errorf("test failed")
 	}
 
+	noteDump := st.collectNotes()
+	if noteDump != nil {
+		content, err := json.Marshal(noteDump)
+		if err == nil {
+			attachments = append(attachments, reporting.Attachment{
+				Name:        "notes",
+				ContentType: "application/json",
+				Content:     content,
+			})
+		}
+	}
+
 	result := &testResult{
-		name:     st.testName,
-		status:   status,
-		duration: duration,
-		err:      testErr,
+		name:        st.testName,
+		status:      status,
+		duration:    duration,
+		err:         testErr,
+		attachments: attachments,
 	}
 
 	// Notify reporter that test is finished
@@ -256,4 +278,48 @@ func (st *serenityTest) Shutdown() {
 	// Clear actors map
 	st.actors = make(map[string]core.Actor)
 	st.shutdown = true
+}
+
+type notesCollector interface {
+	All() map[string]any
+}
+
+func (st *serenityTest) collectNotes() map[string]map[string]any {
+	if len(st.actors) == 0 {
+		return nil
+	}
+
+	collected := make(map[string]map[string]any)
+	for name, actor := range st.actors {
+		internalActor, ok := actor.(*testActor)
+		if !ok {
+			continue
+		}
+
+		for _, ability := range internalActor.abilities {
+			typeName := fmt.Sprintf("%T", ability)
+			if !strings.Contains(typeName, "notes.TakeNotesAbility") {
+				continue
+			}
+
+			noteAbility, ok := ability.(notesCollector)
+			if !ok {
+				continue
+			}
+
+			notesCopy := noteAbility.All()
+			if len(notesCopy) == 0 {
+				continue
+			}
+
+			collected[name] = notesCopy
+			break
+		}
+	}
+
+	if len(collected) == 0 {
+		return nil
+	}
+
+	return collected
 }

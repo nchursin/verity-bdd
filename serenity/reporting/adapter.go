@@ -69,7 +69,7 @@ func (at *ActivityTracker) Start() {
 }
 
 // Finish completes tracking the activity
-func (at *ActivityTracker) Finish(err error) {
+func (at *ActivityTracker) Finish(err error, attachments ...Attachment) {
 	status := StatusPassed
 	var activityErr error = nil
 
@@ -80,10 +80,11 @@ func (at *ActivityTracker) Finish(err error) {
 
 	description := at.getActivityDescription()
 	result := &testResult{
-		name:     description,
-		status:   status,
-		duration: time.Since(at.startTime).Seconds(),
-		error:    activityErr,
+		name:        description,
+		status:      status,
+		duration:    time.Since(at.startTime).Seconds(),
+		error:       activityErr,
+		attachments: attachments,
 	}
 
 	at.reporter.OnStepFinish(result)
@@ -91,13 +92,15 @@ func (at *ActivityTracker) Finish(err error) {
 
 // testResult implements TestResult interface
 type testResult struct {
-	name     string
-	status   Status
-	duration float64
-	error    error
+	name        string
+	status      Status
+	duration    float64
+	error       error
+	attachments []Attachment
 }
 
-func (tr *testResult) Name() string      { return tr.name }
-func (tr *testResult) Status() Status    { return tr.status }
-func (tr *testResult) Duration() float64 { return tr.duration }
-func (tr *testResult) Error() error      { return tr.error }
+func (tr *testResult) Name() string              { return tr.name }
+func (tr *testResult) Status() Status            { return tr.status }
+func (tr *testResult) Duration() float64         { return tr.duration }
+func (tr *testResult) Error() error              { return tr.error }
+func (tr *testResult) Attachments() []Attachment { return tr.attachments }

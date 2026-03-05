@@ -2,6 +2,7 @@ package testing
 
 import (
 	"context"
+	"encoding/json"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -11,6 +12,8 @@ import (
 	"github.com/nchursin/serenity-go/serenity/reporting/console_reporter"
 	reportingMocks "github.com/nchursin/serenity-go/serenity/reporting/mocks"
 	"github.com/nchursin/serenity-go/serenity/testing/mocks"
+
+	"github.com/nchursin/serenity-go/serenity/abilities/notes"
 )
 
 func TestSerenityTestWithConsoleReporter(t *testing.T) {
@@ -90,5 +93,48 @@ func TestSerenityTestLifecycleReportingFailed(t *testing.T) {
 	test := NewSerenityTestWithReporter(ctx, mockTestContext, mockReporter)
 
 	// Simulate test end
+	test.Shutdown()
+}
+
+func TestSerenityTestAddsNotesAttachmentOnShutdown(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	mockReporter := reportingMocks.NewMockReporter(ctrl)
+	mockTestContext := mocks.NewMockTestContext(ctrl)
+
+	mockReporter.EXPECT().OnTestStart("NotesTest")
+	mockReporter.EXPECT().OnTestFinish(gomock.Any()).Do(func(result reporting.TestResult) {
+		attachments := result.Attachments()
+		require.Len(t, attachments, 1)
+
+		attachment := attachments[0]
+		require.Equal(t, "notes", attachment.Name)
+		require.Equal(t, "application/json", attachment.ContentType)
+
+		var payload map[string]map[string]any
+		require.NoError(t, json.Unmarshal(attachment.Content, &payload))
+
+		notesForActor, ok := payload["Sam"]
+		require.True(t, ok, "expected notes for actor Sam")
+		require.Equal(t, "secret", notesForActor["token"])
+		intCount, ok := notesForActor["count"].(float64)
+		require.True(t, ok, "expected numeric count")
+		require.Equal(t, float64(2), intCount)
+	})
+
+	mockTestContext.EXPECT().Name().Return("NotesTest")
+	mockTestContext.EXPECT().Failed().Return(false)
+	mockTestContext.EXPECT().Helper()
+	mockTestContext.EXPECT().Cleanup(gomock.Any())
+
+	ctx := context.Background()
+	test := NewSerenityTestWithReporter(ctx, mockTestContext, mockReporter)
+
+	actor := test.ActorCalled("Sam").WhoCan(notes.TakeNotes())
+	ability, err := actor.AbilityTo(&notes.TakeNotesAbility{})
+	require.NoError(t, err)
+	notebook := ability.(*notes.TakeNotesAbility)
+	notebook.Set("token", "secret")
+	notebook.Set("count", 2)
+
 	test.Shutdown()
 }

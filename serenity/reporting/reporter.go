@@ -26,6 +26,15 @@ type TestResult interface {
 	Status() Status
 	Duration() float64
 	Error() error
+	Attachments() []Attachment
+}
+
+// Attachment represents additional data to include in a report entry.
+// Content should be a serialized payload (for example, JSON).
+type Attachment struct {
+	Name        string
+	ContentType string
+	Content     []byte
 }
 
 // Status represents the status of a test or step

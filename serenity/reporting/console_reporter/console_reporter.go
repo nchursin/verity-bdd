@@ -181,15 +181,6 @@ func (cr *ConsoleReporter) removeActiveStep(description string, indentLevel int)
 	return nil
 }
 
-// writeWithoutNewline writes without newline and with carriage return for line replacement
-func (cr *ConsoleReporter) writeWithoutNewline(format string, args ...interface{}) {
-	cr.mutex.Lock()
-	defer cr.mutex.Unlock()
-	if cr.output != nil {
-		_, _ = fmt.Fprintf(cr.output, format, args...)
-	}
-}
-
 // writeOverLine clears the current line and writes new content
 func (cr *ConsoleReporter) writeOverLine(format string, args ...interface{}) {
 	cr.mutex.Lock()

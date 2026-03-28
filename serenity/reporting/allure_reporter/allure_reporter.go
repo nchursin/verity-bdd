@@ -1,0 +1,228 @@
+package allure_reporter
+
+import (
+	"crypto/rand"
+	"encoding/hex"
+	"encoding/json"
+	"io"
+	"os"
+	"path/filepath"
+	"sync"
+	"time"
+
+	"github.com/nchursin/serenity-go/serenity/reporting"
+)
+
+// AllureReporter writes Serenity events in Allure 2 result format.
+type AllureReporter struct {
+	resultsDir string
+
+	mutex   sync.Mutex
+	current *runningTest
+}
+
+type runningTest struct {
+	uuid      string
+	name      string
+	startMs   int64
+	steps     []allureStepResult
+	openSteps []openStep
+}
+
+type openStep struct {
+	name    string
+	startMs int64
+}
+
+type allureResult struct {
+	UUID          string             `json:"uuid"`
+	Name          string             `json:"name"`
+	Status        string             `json:"status"`
+	StatusDetails *allureStatus      `json:"statusDetails,omitempty"`
+	Start         int64              `json:"start"`
+	Stop          int64              `json:"stop"`
+	Steps         []allureStepResult `json:"steps,omitempty"`
+	Attachments   []allureAttachment `json:"attachments,omitempty"`
+}
+
+type allureStatus struct {
+	Message string `json:"message,omitempty"`
+}
+
+type allureStepResult struct {
+	Name        string             `json:"name"`
+	Status      string             `json:"status"`
+	Start       int64              `json:"start"`
+	Stop        int64              `json:"stop"`
+	Attachments []allureAttachment `json:"attachments,omitempty"`
+}
+
+type allureAttachment struct {
+	Name   string `json:"name"`
+	Source string `json:"source"`
+	Type   string `json:"type"`
+}
+
+// NewAllureReporterWithDir creates a reporter that stores results in dir.
+func NewAllureReporterWithDir(dir string) *AllureReporter {
+	return &AllureReporter{resultsDir: dir}
+}
+
+func (ar *AllureReporter) SetOutput(_ io.Writer) {}
+
+func (ar *AllureReporter) OnTestStart(testName string) {
+	ar.mutex.Lock()
+	defer ar.mutex.Unlock()
+
+	ar.current = &runningTest{
+		uuid:    mustUUID(),
+		name:    testName,
+		startMs: time.Now().UnixMilli(),
+	}
+}
+
+func (ar *AllureReporter) OnStepStart(stepDescription string) {
+	ar.mutex.Lock()
+	defer ar.mutex.Unlock()
+
+	if ar.current == nil {
+		return
+	}
+
+	ar.current.openSteps = append(ar.current.openSteps, openStep{
+		name:    stepDescription,
+		startMs: time.Now().UnixMilli(),
+	})
+}
+
+func (ar *AllureReporter) OnStepFinish(stepResult reporting.TestResult) {
+	ar.mutex.Lock()
+	defer ar.mutex.Unlock()
+
+	if ar.current == nil {
+		return
+	}
+
+	startMs := time.Now().UnixMilli()
+	name := stepResult.Name()
+	if len(ar.current.openSteps) > 0 {
+		last := ar.current.openSteps[len(ar.current.openSteps)-1]
+		ar.current.openSteps = ar.current.openSteps[:len(ar.current.openSteps)-1]
+		startMs = last.startMs
+		if name == "" {
+			name = last.name
+		}
+	}
+
+	stopMs := endTime(startMs, stepResult.Duration())
+
+	attachments := ar.persistAttachments(stepResult.Attachments())
+	ar.current.steps = append(ar.current.steps, allureStepResult{
+		Name:        name,
+		Status:      mapStatus(stepResult.Status()),
+		Start:       startMs,
+		Stop:        stopMs,
+		Attachments: attachments,
+	})
+}
+
+func (ar *AllureReporter) OnTestFinish(result reporting.TestResult) {
+	ar.mutex.Lock()
+	defer ar.mutex.Unlock()
+
+	if ar.current == nil {
+		ar.current = &runningTest{
+			uuid:    mustUUID(),
+			name:    result.Name(),
+			startMs: time.Now().UnixMilli(),
+		}
+	}
+
+	if ar.current.name == "" {
+		ar.current.name = result.Name()
+	}
+
+	statusDetails := (*allureStatus)(nil)
+	if result.Error() != nil {
+		statusDetails = &allureStatus{Message: result.Error().Error()}
+	}
+
+	out := allureResult{
+		UUID:          ar.current.uuid,
+		Name:          ar.current.name,
+		Status:        mapStatus(result.Status()),
+		StatusDetails: statusDetails,
+		Start:         ar.current.startMs,
+		Stop:          endTime(ar.current.startMs, result.Duration()),
+		Steps:         ar.current.steps,
+		Attachments:   ar.persistAttachments(result.Attachments()),
+	}
+
+	_ = os.MkdirAll(ar.resultsDir, 0o750)
+	body, err := json.Marshal(out)
+	if err == nil {
+		_ = os.WriteFile(filepath.Join(ar.resultsDir, out.UUID+"-result.json"), body, 0o600)
+	}
+
+	ar.current = nil
+}
+
+func (ar *AllureReporter) persistAttachments(attachments []reporting.Attachment) []allureAttachment {
+	if len(attachments) == 0 {
+		return nil
+	}
+
+	_ = os.MkdirAll(ar.resultsDir, 0o750)
+
+	result := make([]allureAttachment, 0, len(attachments))
+	for _, att := range attachments {
+		source := mustUUID() + "-attachment"
+		if err := os.WriteFile(filepath.Join(ar.resultsDir, source), att.Content, 0o600); err != nil {
+			continue
+		}
+
+		result = append(result, allureAttachment{
+			Name:   att.Name,
+			Source: source,
+			Type:   att.ContentType,
+		})
+	}
+
+	if len(result) == 0 {
+		return nil
+	}
+
+	return result
+}
+
+func endTime(startMs int64, durationSeconds float64) int64 {
+	if durationSeconds <= 0 {
+		return startMs + 1
+	}
+
+	stopMs := startMs + int64(durationSeconds*1000)
+	if stopMs <= startMs {
+		return startMs + 1
+	}
+
+	return stopMs
+}
+
+func mapStatus(status reporting.Status) string {
+	switch status {
+	case reporting.StatusFailed:
+		return "failed"
+	case reporting.StatusSkipped:
+		return "skipped"
+	default:
+		return "passed"
+	}
+}
+
+func mustUUID() string {
+	b := make([]byte, 16)
+	if _, err := rand.Read(b); err != nil {
+		return time.Now().Format("20060102150405.000000000")
+	}
+	return hex.EncodeToString(b)
+}

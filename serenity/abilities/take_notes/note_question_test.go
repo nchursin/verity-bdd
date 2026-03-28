@@ -1,16 +1,18 @@
-package notes
+package take_notes_test
 
 import (
 	"context"
 	"testing"
+
+	take_notes "github.com/nchursin/serenity-go/serenity/abilities/take_notes"
 )
 
 func TestNoteQuestionReturnsTypedValue(t *testing.T) {
-	ability := TakeNotes()
-	ability.(*TakeNotesAbility).Set("name", "serenity")
+	ability := take_notes.UsingEmptyNotepad()
+	ability.(*take_notes.TakeNotesAbility).Set("name", "serenity")
 	actor := newStubActor("reader", context.Background(), ability)
 
-	answer, err := Note[string]("name").AnsweredBy(actor, context.Background())
+	answer, err := take_notes.Note[string]("name").AnsweredBy(actor, context.Background())
 	if err != nil {
 		t.Fatalf("expected note to be answered, got error: %v", err)
 	}
@@ -20,9 +22,9 @@ func TestNoteQuestionReturnsTypedValue(t *testing.T) {
 }
 
 func TestNoteQuestionErrorsWhenMissing(t *testing.T) {
-	actor := newStubActor("reader", context.Background(), TakeNotes())
+	actor := newStubActor("reader", context.Background(), take_notes.UsingEmptyNotepad())
 
-	_, err := Note[string]("missing").AnsweredBy(actor, context.Background())
+	_, err := take_notes.Note[string]("missing").AnsweredBy(actor, context.Background())
 	if err == nil {
 		t.Fatalf("expected error when note missing")
 	}
@@ -31,7 +33,7 @@ func TestNoteQuestionErrorsWhenMissing(t *testing.T) {
 func TestNoteQuestionErrorsWhenNoAbility(t *testing.T) {
 	actor := newStubActor("reader", context.Background())
 
-	_, err := Note[string]("missing").AnsweredBy(actor, context.Background())
+	_, err := take_notes.Note[string]("missing").AnsweredBy(actor, context.Background())
 	if err == nil {
 		t.Fatalf("expected error when actor lacks notes ability")
 	}
@@ -40,29 +42,29 @@ func TestNoteQuestionErrorsWhenNoAbility(t *testing.T) {
 func TestNoteQuestionErrorsOnAbilityTypeMismatch(t *testing.T) {
 	actor := newStubActor("reader", context.Background(), &dummyAbility{})
 
-	_, err := Note[string]("missing").AnsweredBy(actor, context.Background())
+	_, err := take_notes.Note[string]("missing").AnsweredBy(actor, context.Background())
 	if err == nil {
 		t.Fatalf("expected error when ability type mismatched")
 	}
 }
 
 func TestNoteQuestionErrorsOnTypeMismatch(t *testing.T) {
-	ability := TakeNotes()
-	ability.(*TakeNotesAbility).Set("count", 123)
+	ability := take_notes.UsingEmptyNotepad()
+	ability.(*take_notes.TakeNotesAbility).Set("count", 123)
 	actor := newStubActor("reader", context.Background(), ability)
 
-	_, err := Note[string]("count").AnsweredBy(actor, context.Background())
+	_, err := take_notes.Note[string]("count").AnsweredBy(actor, context.Background())
 	if err == nil {
 		t.Fatalf("expected error on type mismatch")
 	}
 }
 
 func TestNoteValueReturnsUntyped(t *testing.T) {
-	ability := TakeNotes()
-	ability.(*TakeNotesAbility).Set("count", 321)
+	ability := take_notes.UsingEmptyNotepad()
+	ability.(*take_notes.TakeNotesAbility).Set("count", 321)
 	actor := newStubActor("reader", context.Background(), ability)
 
-	value, err := NoteValue("count").AnsweredBy(actor, context.Background())
+	value, err := take_notes.NoteValue("count").AnsweredBy(actor, context.Background())
 	if err != nil {
 		t.Fatalf("expected note to be answered, got error: %v", err)
 	}

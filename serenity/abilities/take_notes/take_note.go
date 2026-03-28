@@ -1,4 +1,4 @@
-package notes
+package take_notes
 
 import (
 	"context"
@@ -42,5 +42,5 @@ func (t *takeNoteActivity) PerformAs(actor core.Actor, ctx context.Context) erro
 }
 
 func (t *takeNoteActivity) FailureMode() core.FailureMode {
-	return core.FailFast
+	return core.Critical()
 }

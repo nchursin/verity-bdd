@@ -8,6 +8,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"go.uber.org/mock/gomock"
 
+	"github.com/nchursin/serenity-go/serenity/abilities"
 	"github.com/nchursin/serenity-go/serenity/reporting"
 	"github.com/nchursin/serenity-go/serenity/reporting/console_reporter"
 	reportingMocks "github.com/nchursin/serenity-go/serenity/reporting/mocks"
@@ -15,6 +16,84 @@ import (
 
 	"github.com/nchursin/serenity-go/serenity/abilities/notes"
 )
+
+type sceneDefaultAbility struct {
+	owner string
+}
+
+func TestNewSerenityTest_ConfiguredByScene(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	mockReporter := reportingMocks.NewMockReporter(ctrl)
+	mockTestContext := mocks.NewMockTestContext(ctrl)
+
+	sceneCtx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	scene := Scene{
+		Context:  sceneCtx,
+		Reporter: mockReporter,
+		DefaultAbilities: []DefaultAbilityFactory{
+			func(actorName string) abilities.Ability {
+				return &sceneDefaultAbility{owner: actorName}
+			},
+		},
+	}
+
+	mockTestContext.EXPECT().Helper()
+	mockTestContext.EXPECT().Name().Return("SceneConfiguredTest")
+	mockTestContext.EXPECT().Cleanup(gomock.Any())
+	mockTestContext.EXPECT().Failed().Return(false)
+
+	mockReporter.EXPECT().OnTestStart("SceneConfiguredTest")
+	mockReporter.EXPECT().OnTestFinish(gomock.Any())
+
+	test := NewSerenityTest(mockTestContext, scene)
+	actor := test.ActorCalled("Sam")
+
+	require.Same(t, sceneCtx, actor.Context())
+
+	ability, err := actor.AbilityTo(&sceneDefaultAbility{})
+	require.NoError(t, err)
+	require.Equal(t, "Sam", ability.(*sceneDefaultAbility).owner)
+
+	test.Shutdown()
+}
+
+func TestSceneDefaultAbilities_AreIsolatedPerActor(t *testing.T) {
+	ctx := context.Background()
+
+	test := NewSerenityTest(t, Scene{
+		Context: ctx,
+		DefaultAbilities: []DefaultAbilityFactory{
+			func(actorName string) abilities.Ability {
+				return notes.TakeNotes()
+			},
+		},
+	})
+
+	alice := test.ActorCalled("Alice")
+	bob := test.ActorCalled("Bob")
+
+	aliceAbilityRaw, err := alice.AbilityTo(&notes.TakeNotesAbility{})
+	require.NoError(t, err)
+	bobAbilityRaw, err := bob.AbilityTo(&notes.TakeNotesAbility{})
+	require.NoError(t, err)
+
+	aliceNotes := aliceAbilityRaw.(*notes.TakeNotesAbility)
+	bobNotes := bobAbilityRaw.(*notes.TakeNotesAbility)
+
+	aliceNotes.Set("token", "alice-secret")
+
+	aliceToken, err := aliceNotes.Get("token")
+	require.NoError(t, err)
+	require.Equal(t, "alice-secret", aliceToken)
+
+	bobToken, err := bobNotes.Get("token")
+	require.Error(t, err)
+	require.Nil(t, bobToken)
+
+	require.NotSame(t, aliceNotes, bobNotes)
+}
 
 func TestSerenityTestWithConsoleReporter(t *testing.T) {
 	ctx := context.Background()

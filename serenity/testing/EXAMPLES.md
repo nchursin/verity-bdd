@@ -7,7 +7,7 @@ This document demonstrates recommended patterns for using the TestContext API in
 ```go
 func TestAPIExample(t *testing.T) {
     // ALWAYS use defer Shutdown() immediately after test creation
-    test := serenity.NewSerenityTest(t)
+    test := serenity.NewSerenityTest(t, serenity.Scene{})
 
     // Use descriptive actor names for better reporting
     apiUser := test.ActorCalled("APIUser").WhoCan(
@@ -30,7 +30,7 @@ func TestAPIExample(t *testing.T) {
 
 ```go
 func TestConcurrentOperations(t *testing.T) {
-    test := serenity.NewSerenityTest(t)
+    test := serenity.NewSerenityTest(t, serenity.Scene{})
 
     // Actors are thread-safe and can be shared across goroutines
     actor := test.ActorCalled("ConcurrentUser").WhoCan(
@@ -59,7 +59,7 @@ func TestConcurrentOperations(t *testing.T) {
 
 ```go
 func TestErrorScenarios(t *testing.T) {
-    test := serenity.NewSerenityTest(t)
+    test := serenity.NewSerenityTest(t, serenity.Scene{})
 
     actor := test.ActorCalled("ErrorProneUser").WhoCan(
         api.CallAnApiAt("https://invalid-domain-that-does-not-exist.com"),
@@ -75,7 +75,7 @@ func TestErrorScenarios(t *testing.T) {
 
 ```go
 func TestMultipleRoles(t *testing.T) {
-    test := serenity.NewSerenityTest(t)
+    test := serenity.NewSerenityTest(t, serenity.Scene{})
 
     // Create specialized actors for different roles
     admin := test.ActorCalled("Admin").WhoCan(api.CallAnApiAt("https://api.example.com"))
@@ -150,7 +150,7 @@ func (r *customReporter) OnActivityFinish(activityName string, actorName string,
 ### Before (Legacy)
 ```go
 func TestLegacyApproach(t *testing.T) {
-    test := serenity.NewSerenityTest(t)
+    test := serenity.NewSerenityTest(t, serenity.Scene{})
 
     actor := test.ActorCalled("APIUser").WhoCan(
         api.CallAnApiAt("https://api.example.com"),
@@ -168,7 +168,7 @@ func TestLegacyApproach(t *testing.T) {
 ### After (TestContext API)
 ```go
 func TestNewApproach(t *testing.T) {
-    test := serenity.NewSerenityTest(t)
+    test := serenity.NewSerenityTest(t, serenity.Scene{})
 
     actor := test.ActorCalled("APIUser").WhoCan(
         api.CallAnApiAt("https://api.example.com"),

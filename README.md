@@ -38,7 +38,7 @@ import (
 )
 
 func TestAPI(t *testing.T) {
-    test := serenity.NewSerenityTest(t)
+    test := serenity.NewSerenityTest(t, serenity.Scene{})
 
     // Create an actor with API ability
     actor := test.ActorCalled("APITester").WhoCan(
@@ -69,7 +69,7 @@ func TestAPI(t *testing.T) {
 Actors represent people or systems interacting with your application:
 
 ```go
-test := serenity.NewSerenityTest(t)
+test := serenity.NewSerenityTest(t, serenity.Scene{})
 
 // Create an actor
 actor := test.ActorCalled("John Doe")
@@ -83,7 +83,7 @@ actor = actor.WhoCan(api.CallAnApiAt("https://api.example.com"))
 Abilities enable actors to interact with different interfaces:
 
 ```go
-test := serenity.NewSerenityTest(t)
+test := serenity.NewSerenityTest(t, serenity.Scene{})
 
 // HTTP API ability
 apiAbility := api.CallAnApiAt("https://api.example.com")
@@ -274,7 +274,7 @@ The TestContext API automatically provides console reporting:
 
 ```go
 func TestAPITesting(t *testing.T) {
-    test := serenity.NewSerenityTest(t)
+    test := serenity.NewSerenityTest(t, serenity.Scene{})
 
     actor := test.ActorCalled("APITester").WhoCan(api.CallAnApiAt("https://jsonplaceholder.typicode.com"))
 
@@ -484,7 +484,7 @@ actor.AttemptsTo(
 ### Multiple Actors
 
 ```go
-test := serenity.NewSerenityTest(t)
+test := serenity.NewSerenityTest(t, serenity.Scene{})
 
 admin := test.ActorCalled("Admin").WhoCan(api.CallAnApiAt(baseURL))
 user := test.ActorCalled("RegularUser").WhoCan(api.CallAnApiAt(baseURL))

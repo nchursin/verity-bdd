@@ -35,7 +35,7 @@ Welcome to the comprehensive documentation for Serenity-Go - a Screenplay Patter
 ### Actors
 Actors represent users or systems that interact with your application:
 ```go
-test := serenity.NewSerenityTest(t)
+test := serenity.NewSerenityTest(t, serenity.Scene{})
 
 actor := test.ActorCalled("APITester").WhoCan(api.CallAnApiAt("https://api.example.com"))
 ```
@@ -65,7 +65,7 @@ go get github.com/nchursin/serenity-go
 ### 2. Basic Test
 ```go
 func TestAPI(t *testing.T) {
-    test := serenity.NewSerenityTest(t)
+    test := serenity.NewSerenityTest(t, serenity.Scene{})
 
     actor := test.ActorCalled("APITester").WhoCan(
         api.CallAnApiAt("https://jsonplaceholder.typicode.com"),

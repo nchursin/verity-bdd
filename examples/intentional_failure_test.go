@@ -20,7 +20,7 @@ func TestIntentionalFailure(t *testing.T) {
 	// Create mock TestContext
 	mockCtx := mocks.NewMockTestContext(ctrl)
 
-	mockCtx.EXPECT().Helper().Times(2)
+	mockCtx.EXPECT().Helper().Times(1)
 	mockCtx.EXPECT().Cleanup(gomock.Any())
 
 	// Expect Name() to be called during test initialization
@@ -34,7 +34,7 @@ func TestIntentionalFailure(t *testing.T) {
 	mockCtx.EXPECT().Errorf(gomock.Any(), gomock.Any()).Times(1)
 
 	// Create SerenityTest with mock context
-	test := serenity.NewSerenityTest(mockCtx)
+	test := serenity.NewSerenityTest(mockCtx, serenity.Scene{})
 	// Call it manually to do it before mocks
 	defer test.Shutdown()
 

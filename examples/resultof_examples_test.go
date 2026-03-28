@@ -14,7 +14,7 @@ import (
 
 // TestResultOf demonstrates usage of answerable.ResultOf for dynamic assertions
 func TestResultOf(t *testing.T) {
-	test := serenity.NewSerenityTest(t)
+	test := serenity.NewSerenityTest(t, serenity.Scene{})
 
 	actor := test.ActorCalled("ResultOfTester")
 
@@ -57,7 +57,7 @@ func TestResultOf(t *testing.T) {
 
 // TestResultOfCalculations demonstrates using ResultOf for calculations
 func TestResultOfCalculations(t *testing.T) {
-	test := serenity.NewSerenityTest(t)
+	test := serenity.NewSerenityTest(t, serenity.Scene{})
 
 	dataProcessor := test.ActorCalled("DataProcessor")
 
@@ -112,7 +112,7 @@ func TestResultOfCalculations(t *testing.T) {
 
 // TestResultWithErrorHandling demonstrates error handling in ResultOf functions
 func TestResultWithErrorHandling(t *testing.T) {
-	test := serenity.NewSerenityTest(t)
+	test := serenity.NewSerenityTest(t, serenity.Scene{})
 
 	actor := test.ActorCalled("ErrorTestActor")
 
@@ -154,7 +154,7 @@ func TestResultWithErrorHandling(t *testing.T) {
 
 // TestResultOfWithActor demonstrates using actor properties in ResultOf
 func TestResultOfWithActor(t *testing.T) {
-	test := serenity.NewSerenityTest(t)
+	test := serenity.NewSerenityTest(t, serenity.Scene{})
 
 	actor1 := test.ActorCalled("Actor1")
 	actor2 := test.ActorCalled("Actor2")
@@ -188,7 +188,7 @@ func TestResultOfWithActor(t *testing.T) {
 
 // TestResultOfComplexTypes demonstrates using ResultOf with complex data structures
 func TestResultOfComplexTypes(t *testing.T) {
-	test := serenity.NewSerenityTest(t)
+	test := serenity.NewSerenityTest(t, serenity.Scene{})
 
 	actor := test.ActorCalled("ComplexTypeTester")
 
@@ -272,7 +272,7 @@ func TestResultOfComplexTypes(t *testing.T) {
 
 // TestResultOfMixedWithStatic demonstrates mixing ResultOf with ValueOf
 func TestResultOfMixedWithStatic(t *testing.T) {
-	test := serenity.NewSerenityTest(t)
+	test := serenity.NewSerenityTest(t, serenity.Scene{})
 
 	actor := test.ActorCalled("MixedTester")
 
@@ -323,7 +323,7 @@ func TestResultOfMixedWithStatic(t *testing.T) {
 
 // TestResultOfEdgeCases demonstrates edge cases and special scenarios
 func TestResultOfEdgeCases(t *testing.T) {
-	test := serenity.NewSerenityTest(t)
+	test := serenity.NewSerenityTest(t, serenity.Scene{})
 
 	actor := test.ActorCalled("EdgeCaseTester")
 

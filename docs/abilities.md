@@ -239,7 +239,7 @@ func (f *FileContentQuestion) Description() string {
 
 ```go
 func TestFileOperations(t *testing.T) {
-    test := serenity.NewSerenityTest(t)
+    test := serenity.NewSerenityTest(t, serenity.Scene{})
 
     // Создаем Actor с нашей новой Ability
     actor := test.ActorCalled("FileUser").WhoCan(
@@ -260,7 +260,7 @@ func TestFileOperations(t *testing.T) {
 
 ```go
 func TestAPIAndFileOperations(t *testing.T) {
-    test := serenity.NewSerenityTest(t)
+    test := serenity.NewSerenityTest(t, serenity.Scene{})
 
     actor := test.ActorCalled("IntegrationTester").WhoCan(
         api.CallAnApiAt("https://api.example.com"),
@@ -442,7 +442,7 @@ func TestFileManagerAbility_ReadFile_NotFound(t *testing.T) {
 
 ```go
 func TestFileManagerIntegration(t *testing.T) {
-    test := serenity.NewSerenityTest(t)
+    test := serenity.NewSerenityTest(t, serenity.Scene{})
 
     actor := test.ActorCalled("FileTester").WhoCan(
         custom.ManageFilesIn(t.TempDir()),

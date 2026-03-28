@@ -56,6 +56,43 @@ func TestCustomReporting(t *testing.T) {
 
 ## Custom Reporter Configuration
 
+## Allure Reporter
+
+Для CI и rich-отчетов можно использовать нативный Allure-репортер.
+
+```go
+import (
+    "context"
+
+    "github.com/nchursin/serenity-go/serenity/reporting/allure_reporter"
+    serenity "github.com/nchursin/serenity-go/serenity/testing"
+)
+
+func TestWithAllure(t *testing.T) {
+    reporter := allure_reporter.NewAllureReporterWithDir("allure-results")
+
+    test := serenity.NewSerenityTest(t, serenity.Scene{
+        Context:  context.Background(),
+        Reporter: reporter,
+    })
+
+    actor := test.ActorCalled("Tester")
+    actor.AttemptsTo(
+        // ... активности
+    )
+}
+```
+
+Репортер сохраняет:
+- `*-result.json` с test status и шагами
+- файлы вложений (`source`) для test-level и step-level attachments
+
+Локальный просмотр отчета:
+
+```bash
+allure serve allure-results
+```
+
 ### Настройка вывода в файл
 
 ```go

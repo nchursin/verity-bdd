@@ -361,6 +361,39 @@ test := serenity.NewSerenityTestWithReporter(t, reporter)
 
 For detailed documentation on console reporting, see [docs/reporting.md](docs/reporting.md).
 
+## Allure Reporting
+
+Serenity-Go includes a native Allure reporter that writes Allure 2 result files, step data, and attachments.
+
+```go
+import (
+    "context"
+
+    "github.com/nchursin/serenity-go/serenity/reporting/allure_reporter"
+    serenity "github.com/nchursin/serenity-go/serenity/testing"
+)
+
+func TestWithAllure(t *testing.T) {
+    reporter := allure_reporter.NewAllureReporterWithDir("allure-results")
+
+    test := serenity.NewSerenityTest(t, serenity.Scene{
+        Context:  context.Background(),
+        Reporter: reporter,
+    })
+
+    actor := test.ActorCalled("Tester")
+    actor.AttemptsTo(
+        // your activities
+    )
+}
+```
+
+Generate a local HTML report after test run:
+
+```bash
+allure serve allure-results
+```
+
 ## Working Examples
 
 The `examples/` directory contains working examples with real APIs:

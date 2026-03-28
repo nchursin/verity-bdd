@@ -21,7 +21,7 @@ import (
 // Previously, only core.Question[T] objects could be used in ensure.That(),
 // but answerable.ValueOf() allows any static value to be wrapped as a Question.
 func TestAnswerableValueOf(t *testing.T) {
-	test := serenity.NewSerenityTest(t)
+	test := serenity.NewSerenityTest(t, serenity.Scene{})
 
 	actor := test.ActorCalled("ValueTester")
 
@@ -54,7 +54,7 @@ func TestAnswerableValueOf(t *testing.T) {
 // TestAnswerableWithMixedQuestions demonstrates mixing static value questions
 // with traditional dynamic questions from API interactions.
 func TestAnswerableWithMixedQuestions(t *testing.T) {
-	test := serenity.NewSerenityTest(t)
+	test := serenity.NewSerenityTest(t, serenity.Scene{})
 
 	apiTester := test.ActorCalled("APITester").WhoCan(api.CallAnApiAt("https://jsonplaceholder.typicode.com"))
 
@@ -81,7 +81,7 @@ func TestAnswerableWithMixedQuestions(t *testing.T) {
 // TestAnswerableDescriptions shows how answerable.ValueOf() generates
 // clear descriptions that appear in test failure messages.
 func TestAnswerableDescriptions(t *testing.T) {
-	test := serenity.NewSerenityTest(t)
+	test := serenity.NewSerenityTest(t, serenity.Scene{})
 
 	actor := test.ActorCalled("DescriptionTester")
 
@@ -98,7 +98,7 @@ func TestAnswerableDescriptions(t *testing.T) {
 
 // TestAnswerableEdgeCases demonstrates handling of edge cases
 func TestAnswerableEdgeCases(t *testing.T) {
-	test := serenity.NewSerenityTest(t)
+	test := serenity.NewSerenityTest(t, serenity.Scene{})
 
 	actor := test.ActorCalled("EdgeCaseTester")
 

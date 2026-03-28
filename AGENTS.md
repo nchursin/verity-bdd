@@ -12,7 +12,7 @@ For all functionlaity **ALWAYS** use TDD approach.
 
 1. Create a set of test cases as a plan
 2. Go with the TDD loop
-3. **DO NOT WRITE** new functionality without a &*RED FAILING TEST*&
+3. **DO NOT WRITE** new functionality without a **RED FAILING TEST**
 
 ### TDD loop
 1. Write **exactly one** **RED** failing test

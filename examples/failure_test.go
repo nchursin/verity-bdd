@@ -11,7 +11,7 @@ import (
 
 // TestFailureHandling demonstrates how different failure modes work
 func TestFailureHandling(t *testing.T) {
-	test := serenity.NewSerenityTest(t)
+	test := serenity.NewSerenityTest(t, serenity.Scene{})
 
 	apiTester := test.ActorCalled("APITester").WhoCan(api.CallAnApiAt("https://jsonplaceholder.typicode.com"))
 

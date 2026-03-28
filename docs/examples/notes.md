@@ -13,7 +13,7 @@ import (
 )
 
 func TestNotesExample(t *testing.T) {
-    test := serenitytesting.NewSerenityTest(t)
+    test := serenitytesting.NewSerenityTest(t, serenitytesting.Scene{})
     actor := test.ActorCalled("Nina").WhoCan(notes.TakeNotes())
 
     actor.AttemptsTo(

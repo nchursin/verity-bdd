@@ -13,7 +13,7 @@
 //
 // Basic Usage:
 //
-//	test := serenity.NewSerenityTest(t)
+//	test := serenity.NewSerenityTest(t, serenity.Scene{})
 //
 //	actor := test.ActorCalled("APITester").WhoCan(
 //		api.CallAnApiAt("https://api.example.com"),
@@ -26,7 +26,7 @@
 //
 // Multiple Actors:
 //
-//	test := serenity.NewSerenityTest(t)
+//	test := serenity.NewSerenityTest(t, serenity.Scene{})
 //
 //	admin := test.ActorCalled("Admin").WhoCan(api.CallAnApiAt(apiURL))
 //	user := test.ActorCalled("User").WhoCan(api.CallAnApiAt(apiURL))
@@ -89,7 +89,7 @@ type TestContext interface {
 //
 // Concurrent Testing:
 //
-//	test := serenity.NewSerenityTest(t)
+//	test := serenity.NewSerenityTest(t, serenity.Scene{})
 //
 //	var wg sync.WaitGroup
 //	actor := test.ActorCalled("ConcurrentUser").WhoCan(api.CallAnApiAt(apiURL))
@@ -108,7 +108,7 @@ type TestContext interface {
 //
 // Error Scenarios:
 //
-//	test := serenity.NewSerenityTest(t)
+//	test := serenity.NewSerenityTest(t, serenity.Scene{})
 //
 //	actor := test.ActorCalled("ErrorProneUser").WhoCan(api.CallAnApiAt("https://invalid.example.com"))
 //

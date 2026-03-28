@@ -20,6 +20,16 @@ type ReporterProvider interface {
 	GetReporterAdapter() *reporting.TestRunnerAdapter
 }
 
+// DefaultAbilityFactory creates a default ability for the actor name.
+type DefaultAbilityFactory func(actorName string) abilities.Ability
+
+// Scene configures SerenityTest runtime behavior.
+type Scene struct {
+	Context          context.Context
+	Reporter         reporting.Reporter
+	DefaultAbilities []DefaultAbilityFactory
+}
+
 // SerenityTest manages the lifecycle of test actors and provides the TestContext API.
 // This interface serves as the main entry point for using the simplified testing approach.
 //
@@ -57,7 +67,7 @@ type SerenityTest interface {
 	// Failure to call Shutdown() may result in resource leaks.
 	//
 	// Example:
-	//	test := serenity.NewSerenityTest(t)
+	//	test := serenity.NewSerenityTest(t, serenity.Scene{})
 	//
 	// Side effects:
 	//	- Flushes any pending reports
@@ -74,7 +84,7 @@ type SerenityTest interface {
 // Basic Test Structure:
 //
 //	func TestAPIEndpoints(t *testing.T) {
-//		test := serenity.NewSerenityTest(t)
+//		test := serenity.NewSerenityTest(t, serenity.Scene{})
 //
 //		actor := test.ActorCalled("APITester").WhoCan(
 //			api.CallAnApiAt("https://jsonplaceholder.typicode.com"),
@@ -133,54 +143,74 @@ func (tr *testResult) Attachments() []reporting.Attachment {
 
 // serenityTest implements SerenityTest
 type serenityTest struct {
-	testCtx   TestContext
-	ctx       context.Context
-	actors    map[string]core.Actor
-	mutex     sync.RWMutex
-	adapter   *reporting.TestRunnerAdapter
-	startTime time.Time
-	testName  string
-	shutdown  bool
+	testCtx                 TestContext
+	ctx                     context.Context
+	actors                  map[string]core.Actor
+	mutex                   sync.RWMutex
+	adapter                 *reporting.TestRunnerAdapter
+	startTime               time.Time
+	testName                string
+	shutdown                bool
+	defaultAbilityFactories []DefaultAbilityFactory
 }
 
 // NewSerenityTest creates a new SerenityTest instance
-func NewSerenityTest(t TestContext) SerenityTest {
+func NewSerenityTest(t TestContext, scene Scene) SerenityTest {
 	t.Helper()
-	return NewSerenityTestWithReporter(context.Background(), t, console_reporter.NewConsoleReporter())
-}
 
-// NewSerenityTest creates a new SerenityTest instance
-func NewSerenityTestWithContext(ctx context.Context, t TestContext) SerenityTest {
-	t.Helper()
-	return NewSerenityTestWithReporter(ctx, t, console_reporter.NewConsoleReporter())
-}
+	resolved := Scene{
+		Context:  context.Background(),
+		Reporter: console_reporter.NewConsoleReporter(),
+	}
 
-// NewSerenityTestWithReporter creates a new SerenityTest instance with a reporter
-func NewSerenityTestWithReporter(ctx context.Context, t TestContext, reporter reporting.Reporter) SerenityTest {
-	t.Helper()
+	if scene.Context != nil {
+		resolved.Context = scene.Context
+	}
+	if scene.Reporter != nil {
+		resolved.Reporter = scene.Reporter
+	}
+	resolved.DefaultAbilities = append(resolved.DefaultAbilities, scene.DefaultAbilities...)
+
 	var adapter *reporting.TestRunnerAdapter
-	if reporter != nil {
-		adapter = reporting.NewTestRunnerAdapter(reporter)
+	if resolved.Reporter != nil {
+		adapter = reporting.NewTestRunnerAdapter(resolved.Reporter)
 	}
 
 	testName := t.Name()
 
 	// Notify reporter that test is starting
-	if reporter != nil {
-		reporter.OnTestStart(testName)
+	if resolved.Reporter != nil {
+		resolved.Reporter.OnTestStart(testName)
 	}
 
 	st := &serenityTest{
-		testCtx:   t,
-		ctx:       ctx,
-		actors:    make(map[string]core.Actor),
-		adapter:   adapter,
-		startTime: time.Now(),
-		testName:  testName,
+		testCtx:                 t,
+		ctx:                     resolved.Context,
+		actors:                  make(map[string]core.Actor),
+		adapter:                 adapter,
+		startTime:               time.Now(),
+		testName:                testName,
+		defaultAbilityFactories: append([]DefaultAbilityFactory(nil), resolved.DefaultAbilities...),
 	}
 
 	t.Cleanup(func() { t.Helper(); st.Shutdown() })
 	return st
+}
+
+// NewSerenityTest creates a new SerenityTest instance
+func NewSerenityTestWithContext(ctx context.Context, t TestContext) SerenityTest {
+	return NewSerenityTest(t, Scene{
+		Context:  ctx,
+		Reporter: console_reporter.NewConsoleReporter(),
+	})
+}
+
+// NewSerenityTestWithReporter creates a new SerenityTest instance with a reporter
+func NewSerenityTestWithReporter(ctx context.Context, t TestContext, reporter reporting.Reporter) SerenityTest {
+	return NewSerenityTest(t, Scene{
+		Context:  ctx,
+		Reporter: reporter,
+	})
 }
 
 // ActorCalled returns an actor with the given name
@@ -201,14 +231,28 @@ func (st *serenityTest) ActorCalled(name string) core.Actor {
 		return actor
 	}
 
-	// Create new actor with test context and reporter
-	actor = &testActor{
+	createdActor := &testActor{
 		name:        name,
 		abilities:   make([]abilities.Ability, 0),
 		testContext: st.testCtx,
 		reporter:    st.adapter,
 		ctx:         st.ctx,
 	}
+
+	for _, factory := range st.defaultAbilityFactories {
+		if factory == nil {
+			continue
+		}
+
+		ability := factory(name)
+		if ability == nil {
+			continue
+		}
+
+		createdActor.WhoCan(ability)
+	}
+
+	actor = createdActor
 
 	st.actors[name] = actor
 	return actor

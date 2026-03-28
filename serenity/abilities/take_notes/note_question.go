@@ -1,4 +1,4 @@
-package notes
+package take_notes
 
 import (
 	"context"

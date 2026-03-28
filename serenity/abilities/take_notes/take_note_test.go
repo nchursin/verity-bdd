@@ -1,4 +1,4 @@
-package notes
+package take_notes_test
 
 import (
 	"context"
@@ -8,6 +8,7 @@ import (
 	"go.uber.org/mock/gomock"
 
 	"github.com/nchursin/serenity-go/serenity/abilities"
+	take_notes "github.com/nchursin/serenity-go/serenity/abilities/take_notes"
 	"github.com/nchursin/serenity-go/serenity/core"
 	"github.com/nchursin/serenity-go/serenity/reporting"
 	"github.com/nchursin/serenity-go/serenity/reporting/mocks"
@@ -49,10 +50,10 @@ func (a *stubActor) AnswersTo(question core.Question[any]) (any, bool) {
 }
 
 func TestTakeNoteStoresValue(t *testing.T) {
-	ability := TakeNotes()
+	ability := take_notes.UsingEmptyNotepad()
 	actor := newStubActor("alice", context.Background(), ability)
 
-	activity := TakeNoteOf("secret-token").As("auth")
+	activity := take_notes.TakeNoteOf("secret-token").As("auth")
 
 	if activity.Description() != "#actor takes note \"auth\"" {
 		t.Fatalf("unexpected description: %s", activity.Description())
@@ -67,7 +68,7 @@ func TestTakeNoteStoresValue(t *testing.T) {
 		t.Fatalf("expected no error performing take note, got %v", err)
 	}
 
-	value, err := ability.(*TakeNotesAbility).Get("auth")
+	value, err := ability.(*take_notes.TakeNotesAbility).Get("auth")
 	if err != nil {
 		t.Fatalf("expected stored note, got error: %v", err)
 	}
@@ -79,7 +80,7 @@ func TestTakeNoteStoresValue(t *testing.T) {
 func TestTakeNoteRequiresAbility(t *testing.T) {
 	actor := newStubActor("bob", context.Background())
 
-	activity := TakeNoteOf("value").As("missing")
+	activity := take_notes.TakeNoteOf("value").As("missing")
 	err := activity.PerformAs(actor, context.Background())
 	if err == nil {
 		t.Fatalf("expected error when actor lacks notebook ability")
@@ -110,15 +111,15 @@ func TestTakeNoteReportsStep(t *testing.T) {
 	reporter.EXPECT().OnTestFinish(gomock.Any())
 
 	serenityTest := serenitytesting.NewSerenityTestWithReporter(context.Background(), t, reporter)
-	actor := serenityTest.ActorCalled("Sam").WhoCan(TakeNotes())
+	actor := serenityTest.ActorCalled("Sam").WhoCan(take_notes.UsingEmptyNotepad())
 
-	actor.AttemptsTo(TakeNoteOf("secret").As("remember"))
+	actor.AttemptsTo(take_notes.TakeNoteOf("secret").As("remember"))
 }
 
 func TestTakeNoteErrorsWhenAbilityTypeMismatch(t *testing.T) {
 	actor := newStubActor("mike", context.Background(), &dummyAbility{})
 
-	activity := TakeNoteOf("value").As("k")
+	activity := take_notes.TakeNoteOf("value").As("k")
 	err := activity.PerformAs(actor, context.Background())
 	if err == nil {
 		t.Fatalf("expected error when ability type is not TakeNotesAbility")

@@ -1,4 +1,4 @@
-package notes
+package take_notes
 
 import (
 	"fmt"
@@ -12,9 +12,18 @@ type TakeNotesAbility struct {
 	*NoteBook
 }
 
-// TakeNotes returns a new ability instance that stores notes for an actor.
-func TakeNotes() abilities.Ability {
+// UsingEmptyNotepad returns a new ability instance with an empty notepad.
+func UsingEmptyNotepad() abilities.Ability {
 	return &TakeNotesAbility{NoteBook: NewNoteBook()}
+}
+
+// Using returns an ability that stores notes in provided notepad.
+func Using(notepad *NoteBook) abilities.Ability {
+	if notepad == nil {
+		notepad = NewNoteBook()
+	}
+
+	return &TakeNotesAbility{NoteBook: notepad}
 }
 
 // NoteBook stores actor notes in a threadsafe map.
@@ -27,6 +36,16 @@ type NoteBook struct {
 // NewNoteBook creates a new empty NoteBook.
 func NewNoteBook() *NoteBook {
 	return &NoteBook{notes: make(map[string]any)}
+}
+
+// NotepadWith creates a notepad pre-filled with provided values.
+func NotepadWith(initial map[string]any) *NoteBook {
+	notepad := NewNoteBook()
+	for key, value := range initial {
+		notepad.Set(key, value)
+	}
+
+	return notepad
 }
 
 // Set saves a value under the provided key.

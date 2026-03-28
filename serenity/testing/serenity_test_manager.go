@@ -4,11 +4,11 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"strings"
 	"sync"
 	"time"
 
 	"github.com/nchursin/serenity-go/serenity/abilities"
+	"github.com/nchursin/serenity-go/serenity/abilities/take_notes"
 	"github.com/nchursin/serenity-go/serenity/core"
 	"github.com/nchursin/serenity-go/serenity/reporting"
 	"github.com/nchursin/serenity-go/serenity/reporting/console_reporter"
@@ -341,8 +341,7 @@ func (st *serenityTest) collectNotes() map[string]map[string]any {
 		}
 
 		for _, ability := range internalActor.abilities {
-			typeName := fmt.Sprintf("%T", ability)
-			if !strings.Contains(typeName, "notes.TakeNotesAbility") {
+			if _, ok := ability.(*take_notes.TakeNotesAbility); !ok {
 				continue
 			}
 

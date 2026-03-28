@@ -3,7 +3,7 @@ package examples
 import (
 	"context"
 
-	"github.com/nchursin/serenity-go/serenity/abilities/notes"
+	"github.com/nchursin/serenity-go/serenity/abilities/take_notes"
 	"github.com/nchursin/serenity-go/serenity/core"
 	serenity "github.com/nchursin/serenity-go/serenity/testing"
 )
@@ -39,15 +39,15 @@ func ExampleConsoleReporter_actorNotesWithCoreDo() {
 	test := serenity.NewSerenityTest(testCtx, serenity.Scene{})
 	defer testCtx.RunCleanups()
 
-	actor := test.ActorCalled("Sam").WhoCan(notes.TakeNotes())
+	actor := test.ActorCalled("Sam").WhoCan(take_notes.UsingEmptyNotepad())
 	actor.AttemptsTo(
 		core.Do("#actor writes a secret", func(actor core.Actor, ctx context.Context) error {
-			ability, err := actor.AbilityTo(&notes.TakeNotesAbility{})
+			ability, err := actor.AbilityTo(&take_notes.TakeNotesAbility{})
 			if err != nil {
 				return err
 			}
 
-			notebook := ability.(*notes.TakeNotesAbility)
+			notebook := ability.(*take_notes.TakeNotesAbility)
 			notebook.Set("token", "secret")
 			return nil
 		}),

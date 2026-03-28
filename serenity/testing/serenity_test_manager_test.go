@@ -14,7 +14,7 @@ import (
 	reportingMocks "github.com/nchursin/serenity-go/serenity/reporting/mocks"
 	"github.com/nchursin/serenity-go/serenity/testing/mocks"
 
-	"github.com/nchursin/serenity-go/serenity/abilities/notes"
+	"github.com/nchursin/serenity-go/serenity/abilities/take_notes"
 )
 
 type sceneDefaultAbility struct {
@@ -66,7 +66,7 @@ func TestSceneDefaultAbilities_AreIsolatedPerActor(t *testing.T) {
 		Context: ctx,
 		DefaultAbilities: []DefaultAbilityFactory{
 			func(actorName string) abilities.Ability {
-				return notes.TakeNotes()
+				return take_notes.UsingEmptyNotepad()
 			},
 		},
 	})
@@ -74,13 +74,13 @@ func TestSceneDefaultAbilities_AreIsolatedPerActor(t *testing.T) {
 	alice := test.ActorCalled("Alice")
 	bob := test.ActorCalled("Bob")
 
-	aliceAbilityRaw, err := alice.AbilityTo(&notes.TakeNotesAbility{})
+	aliceAbilityRaw, err := alice.AbilityTo(&take_notes.TakeNotesAbility{})
 	require.NoError(t, err)
-	bobAbilityRaw, err := bob.AbilityTo(&notes.TakeNotesAbility{})
+	bobAbilityRaw, err := bob.AbilityTo(&take_notes.TakeNotesAbility{})
 	require.NoError(t, err)
 
-	aliceNotes := aliceAbilityRaw.(*notes.TakeNotesAbility)
-	bobNotes := bobAbilityRaw.(*notes.TakeNotesAbility)
+	aliceNotes := aliceAbilityRaw.(*take_notes.TakeNotesAbility)
+	bobNotes := bobAbilityRaw.(*take_notes.TakeNotesAbility)
 
 	aliceNotes.Set("token", "alice-secret")
 
@@ -93,6 +93,43 @@ func TestSceneDefaultAbilities_AreIsolatedPerActor(t *testing.T) {
 	require.Nil(t, bobToken)
 
 	require.NotSame(t, aliceNotes, bobNotes)
+}
+
+func TestSceneDefaultAbilities_CanPreFillNotesByActorName(t *testing.T) {
+	test := NewSerenityTest(t, Scene{
+		Context: context.Background(),
+		DefaultAbilities: []DefaultAbilityFactory{
+			func(actorName string) abilities.Ability {
+				return take_notes.Using(take_notes.NotepadWith(map[string]any{
+					"firstName": actorName,
+					"role":      "Tester",
+				}))
+			},
+		},
+	})
+
+	alice := test.ActorCalled("Alice")
+	bob := test.ActorCalled("Bob")
+
+	aliceAbilityRaw, err := alice.AbilityTo(&take_notes.TakeNotesAbility{})
+	require.NoError(t, err)
+	bobAbilityRaw, err := bob.AbilityTo(&take_notes.TakeNotesAbility{})
+	require.NoError(t, err)
+
+	aliceNotes := aliceAbilityRaw.(*take_notes.TakeNotesAbility)
+	bobNotes := bobAbilityRaw.(*take_notes.TakeNotesAbility)
+
+	aliceFirstName, err := aliceNotes.Get("firstName")
+	require.NoError(t, err)
+	bobFirstName, err := bobNotes.Get("firstName")
+	require.NoError(t, err)
+
+	require.Equal(t, "Alice", aliceFirstName)
+	require.Equal(t, "Bob", bobFirstName)
+
+	role, err := aliceNotes.Get("role")
+	require.NoError(t, err)
+	require.Equal(t, "Tester", role)
 }
 
 func TestSerenityTestWithConsoleReporter(t *testing.T) {
@@ -208,10 +245,10 @@ func TestSerenityTestAddsNotesAttachmentOnShutdown(t *testing.T) {
 	ctx := context.Background()
 	test := NewSerenityTestWithReporter(ctx, mockTestContext, mockReporter)
 
-	actor := test.ActorCalled("Sam").WhoCan(notes.TakeNotes())
-	ability, err := actor.AbilityTo(&notes.TakeNotesAbility{})
+	actor := test.ActorCalled("Sam").WhoCan(take_notes.UsingEmptyNotepad())
+	ability, err := actor.AbilityTo(&take_notes.TakeNotesAbility{})
 	require.NoError(t, err)
-	notebook := ability.(*notes.TakeNotesAbility)
+	notebook := ability.(*take_notes.TakeNotesAbility)
 	notebook.Set("token", "secret")
 	notebook.Set("count", 2)
 
@@ -256,10 +293,10 @@ func TestSerenityTestAddsNotesAttachmentOnFailure(t *testing.T) {
 	ctx := context.Background()
 	test := NewSerenityTestWithReporter(ctx, mockTestContext, mockReporter)
 
-	actor := test.ActorCalled("Sam").WhoCan(notes.TakeNotes())
-	ability, err := actor.AbilityTo(&notes.TakeNotesAbility{})
+	actor := test.ActorCalled("Sam").WhoCan(take_notes.UsingEmptyNotepad())
+	ability, err := actor.AbilityTo(&take_notes.TakeNotesAbility{})
 	require.NoError(t, err)
-	notebook := ability.(*notes.TakeNotesAbility)
+	notebook := ability.(*take_notes.TakeNotesAbility)
 	notebook.Set("token", "secret")
 	notebook.Set("count", 3)
 

@@ -9,10 +9,10 @@ package main
 
 import (
     "testing"
-    "github.com/nchursin/verity-bdd/verity/answerable"
-    "github.com/nchursin/verity-bdd/verity/expectations"
-    "github.com/nchursin/verity-bdd/verity/expectations/ensure"
-    verity "github.com/nchursin/verity-bdd/verity/testing"
+    "github.com/nchursin/verity-bdd"
+    "github.com/nchursin/verity-bdd/verity_expectations"
+    "github.com/nchursin/verity-bdd/verity_expectations/ensure"
+    verity "github.com/nchursin/verity-bdd"
 )
 
 func TestStaticValues(t *testing.T) {

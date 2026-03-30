@@ -16,7 +16,7 @@ import (
     "fmt"
     _ "github.com/lib/pq"
     
-    "github.com/nchursin/verity-bdd/verity/abilities"
+    "github.com/nchursin/verity-bdd/verity_abilities"
 )
 
 // DatabaseAbility - способность для работы с базами данных

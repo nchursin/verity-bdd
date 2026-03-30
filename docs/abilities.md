@@ -47,7 +47,7 @@ specificAbility := ability.(SpecificAbility)
 ```go
 package custom
 
-import "github.com/nchursin/verity-bdd/verity/abilities"
+import "github.com/nchursin/verity-bdd/verity_abilities"
 
 // FileManagerAbility - способность для работы с файлами
 type FileManagerAbility interface {
@@ -177,7 +177,7 @@ type FileManagerConfig struct {
 package custom
 
 import (
-    "github.com/nchursin/verity-bdd/verity/core"
+    "github.com/nchursin/verity-bdd"
 )
 
 // ReadFileActivity - чтение файла

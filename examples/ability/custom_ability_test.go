@@ -10,15 +10,13 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/nchursin/verity-bdd/verity/abilities"
-	"github.com/nchursin/verity-bdd/verity/abilities/api"
-	"github.com/nchursin/verity-bdd/verity/core"
-	verity "github.com/nchursin/verity-bdd/verity/testing"
+	verity "github.com/nchursin/verity-bdd"
+	"github.com/nchursin/verity-bdd/verity_abilities/api"
 )
 
 // FileSystemAbility enables an actor to interact with the file system
 type FileSystemAbility interface {
-	abilities.Ability
+	verity.Ability
 	// Core file operations
 	ReadFile(path string) (string, error)
 	WriteFile(path string, content string) error
@@ -222,7 +220,7 @@ func ReadFile(path string) *ReadFileActivity {
 	return &ReadFileActivity{path: path}
 }
 
-func (r *ReadFileActivity) PerformAs(actor core.Actor, ctx context.Context) error {
+func (r *ReadFileActivity) PerformAs(actor verity.Actor, ctx context.Context) error {
 	ability, err := actor.AbilityTo(&fileSystemAbility{})
 	if err != nil {
 		return fmt.Errorf("actor does not have file system ability: %w", err)
@@ -247,7 +245,7 @@ func WriteFile(path string, content string) *WriteFileActivity {
 	return &WriteFileActivity{path: path, content: content}
 }
 
-func (w *WriteFileActivity) PerformAs(actor core.Actor, ctx context.Context) error {
+func (w *WriteFileActivity) PerformAs(actor verity.Actor, ctx context.Context) error {
 	ability, err := actor.AbilityTo(&fileSystemAbility{})
 	if err != nil {
 		return fmt.Errorf("actor does not have file system ability: %w", err)
@@ -258,8 +256,8 @@ func (w *WriteFileActivity) PerformAs(actor core.Actor, ctx context.Context) err
 }
 
 // FailureMode returns the failure mode for send requests (default: FailFast)
-func (s *WriteFileActivity) FailureMode() core.FailureMode {
-	return core.FailFast
+func (s *WriteFileActivity) FailureMode() verity.FailureMode {
+	return verity.FailFast
 }
 
 func (w *WriteFileActivity) Description() string {
@@ -275,7 +273,7 @@ func DeleteFile(path string) *DeleteFileActivity {
 	return &DeleteFileActivity{path: path}
 }
 
-func (d *DeleteFileActivity) PerformAs(actor core.Actor, ctx context.Context) error {
+func (d *DeleteFileActivity) PerformAs(actor verity.Actor, ctx context.Context) error {
 	ability, err := actor.AbilityTo(&fileSystemAbility{})
 	if err != nil {
 		return fmt.Errorf("actor does not have file system ability: %w", err)
@@ -286,8 +284,8 @@ func (d *DeleteFileActivity) PerformAs(actor core.Actor, ctx context.Context) er
 }
 
 // FailureMode returns the failure mode for send requests (default: FailFast)
-func (d *DeleteFileActivity) FailureMode() core.FailureMode {
-	return core.FailFast
+func (d *DeleteFileActivity) FailureMode() verity.FailureMode {
+	return verity.FailFast
 }
 
 func (d *DeleteFileActivity) Description() string {
@@ -305,7 +303,7 @@ func FileContent(path string) *FileContentQuestion {
 	return &FileContentQuestion{path: path}
 }
 
-func (f *FileContentQuestion) AnsweredBy(actor core.Actor, ctx context.Context) (string, error) {
+func (f *FileContentQuestion) AnsweredBy(actor verity.Actor, ctx context.Context) (string, error) {
 	ability, err := actor.AbilityTo(&fileSystemAbility{})
 	if err != nil {
 		return "", fmt.Errorf("actor does not have file system ability: %w", err)
@@ -328,7 +326,7 @@ func FileExists(path string) *FileExistsQuestion {
 	return &FileExistsQuestion{path: path}
 }
 
-func (f *FileExistsQuestion) AnsweredBy(actor core.Actor, ctx context.Context) (bool, error) {
+func (f *FileExistsQuestion) AnsweredBy(actor verity.Actor, ctx context.Context) (bool, error) {
 	ability, err := actor.AbilityTo(&fileSystemAbility{})
 	if err != nil {
 		return false, fmt.Errorf("actor does not have file system ability: %w", err)

@@ -36,7 +36,7 @@ import (
     "fmt"
     "sync"
     
-    "github.com/nchursin/verity-bdd/verity/abilities"
+    "github.com/nchursin/verity-bdd/verity_abilities"
 )
 
 // YourAbilityName - способность для [краткое описание]
@@ -322,7 +322,7 @@ package your_ability
 import (
     "fmt"
     
-    "github.com/nchursin/verity-bdd/verity/core"
+    "github.com/nchursin/verity-bdd"
 )
 
 // ====================
@@ -405,9 +405,9 @@ import (
     "github.com/stretchr/testify/assert"
     "github.com/stretchr/testify/require"
     
-    "github.com/nchursin/verity-bdd/verity/core"
-    "github.com/nchursin/verity-bdd/verity/assertions"
-    "github.com/nchursin/verity-bdd/verity/expectations"
+    "github.com/nchursin/verity-bdd"
+    "github.com/nchursin/verity-bdd/verity_expectations"
+    "github.com/nchursin/verity-bdd/verity_expectations"
 )
 
 // ====================

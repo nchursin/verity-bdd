@@ -41,8 +41,8 @@ func TestAPITesting(t *testing.T) {
 
 ```go
 import (
-    "github.com/nchursin/verity-bdd/verity/reporting/console_reporter"
-    verity "github.com/nchursin/verity-bdd/verity/testing"
+    "github.com/nchursin/verity-bdd/verity_reporting/console_reporter"
+    verity "github.com/nchursin/verity-bdd"
 )
 
 func TestCustomReporting(t *testing.T) {
@@ -64,8 +64,8 @@ func TestCustomReporting(t *testing.T) {
 import (
     "context"
 
-    "github.com/nchursin/verity-bdd/verity/reporting/allure_reporter"
-    verity "github.com/nchursin/verity-bdd/verity/testing"
+    "github.com/nchursin/verity-bdd/verity_reporting/allure_reporter"
+    verity "github.com/nchursin/verity-bdd"
 )
 
 func TestWithAllure(t *testing.T) {
@@ -98,8 +98,8 @@ allure serve allure-results
 ```go
 import (
     "os"
-    "github.com/nchursin/verity-bdd/verity/reporting/console_reporter"
-    verity "github.com/nchursin/verity-bdd/verity/testing"
+    "github.com/nchursin/verity-bdd/verity_reporting/console_reporter"
+    verity "github.com/nchursin/verity-bdd"
 )
 
 reporter := console_reporter.NewConsoleReporter()
@@ -124,7 +124,7 @@ test := verity.NewVerityTestWithReporter(t, reporter)
 ```go
 import (
     "os"
-    "github.com/nchursin/verity-bdd/verity/reporting/console_reporter"
+    "github.com/nchursin/verity-bdd/verity_reporting/console_reporter"
 )
 
 reporter := console_reporter.NewConsoleReporter()
@@ -141,8 +141,8 @@ ConsoleReporter может записывать вывод в файл для п
 ```go
 import (
     "os"
-    "github.com/nchursin/verity-bdd/verity/reporting/console_reporter"
-    verity "github.com/nchursin/verity-bdd/verity/testing"
+    "github.com/nchursin/verity-bdd/verity_reporting/console_reporter"
+    verity "github.com/nchursin/verity-bdd"
 )
 
 // Создаем файл для вывода
@@ -215,8 +215,8 @@ test := verity.NewVerityTest(t, verity.Scene{})  // Автоматически �
 
 ```go
 import (
-    "github.com/nchursin/verity-bdd/verity/reporting/console_reporter"
-    verity "github.com/nchursin/verity-bdd/verity/testing"
+    "github.com/nchursin/verity-bdd/verity_reporting/console_reporter"
+    verity "github.com/nchursin/verity-bdd"
 )
 
 test := verity.NewVerityTestWithReporter(t, customReporter)
@@ -294,7 +294,7 @@ if err != nil {
 ```go
 import (
     "os"
-    "github.com/nchursin/verity-bdd/verity/reporting/console_reporter"
+    "github.com/nchursin/verity-bdd/verity_reporting/console_reporter"
 )
 
 reporter := console_reporter.NewConsoleReporter()
@@ -306,7 +306,7 @@ reporter.SetOutput(os.Stdout)  // Явный вывод в консоль
 Каждый тест должен создавать собственный TestContext:
 ```go
 import (
-    verity "github.com/nchursin/verity-bdd/verity/testing"
+    verity "github.com/nchursin/verity-bdd"
 )
 
 func TestParallel1(t *testing.T) {

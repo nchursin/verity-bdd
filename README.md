@@ -35,11 +35,10 @@ package main
 import (
     "testing"
 
-    "github.com/nchursin/verity-bdd/verity/abilities/api"
-    "github.com/nchursin/verity-bdd/verity/core"
-    "github.com/nchursin/verity-bdd/verity/expectations"
-    "github.com/nchursin/verity-bdd/verity/expectations/ensure"
-    verity "github.com/nchursin/verity-bdd/verity/testing"
+    "github.com/nchursin/verity-bdd/verity_abilities/api"
+    expectations "github.com/nchursin/verity-bdd/verity_expectations"
+    "github.com/nchursin/verity-bdd/verity_expectations/ensure"
+    verity "github.com/nchursin/verity-bdd"
 )
 
 func TestAPI(t *testing.T) {
@@ -329,8 +328,8 @@ Example output:
 ```go
 import (
     "os"
-    "github.com/nchursin/verity-bdd/verity/reporting/console_reporter"
-    verity "github.com/nchursin/verity-bdd/verity/testing"
+    "github.com/nchursin/verity-bdd/verity_reporting/console_reporter"
+    verity "github.com/nchursin/verity-bdd"
 )
 
 // Create custom console reporter
@@ -346,8 +345,8 @@ For detailed documentation on console reporting, see [docs/reporting.md](docs/re
 ```go
 import (
     "os"
-    "github.com/nchursin/verity-bdd/verity/reporting/console_reporter"
-    verity "github.com/nchursin/verity-bdd/verity/testing"
+    "github.com/nchursin/verity-bdd/verity_reporting/console_reporter"
+    verity "github.com/nchursin/verity-bdd"
 )
 
 // Create file for output
@@ -374,8 +373,8 @@ Verity-BDD includes a native Allure reporter that writes Allure 2 result files, 
 import (
     "context"
 
-    "github.com/nchursin/verity-bdd/verity/reporting/allure_reporter"
-    verity "github.com/nchursin/verity-bdd/verity/testing"
+    "github.com/nchursin/verity-bdd/verity_reporting/allure_reporter"
+    verity "github.com/nchursin/verity-bdd"
 )
 
 func TestWithAllure(t *testing.T) {
@@ -419,12 +418,13 @@ For detailed `Satisfies` examples, see [docs/SATISFIES_EXAMPLES.md](docs/SATISFI
 
 ### Core Components
 
-- **verity/core/** - Screenplay Pattern interfaces (Actor, Activity, Question, Task)
-- **verity/abilities/api/** - HTTP API testing capabilities
-- **verity/expectations/** - Assertion system and expectations
-- **verity/expectations/ensure/** - Ensure-style assertions
-- **verity/testing/** - TestContext API and testing utilities
-- **verity/reporting/** - Console reporting and output utilities
+- **github.com/nchursin/verity-bdd** - Core Screenplay API, testing API, and answerable helpers
+- **github.com/nchursin/verity-bdd/verity_abilities** - Default ability contracts and ability packages
+- **github.com/nchursin/verity-bdd/verity_expectations** - Expectations and assertion helpers
+- **github.com/nchursin/verity-bdd/verity_expectations/ensure** - Ensure activities
+- **github.com/nchursin/verity-bdd/verity_reporting** - Reporting contracts and adapters
+- **github.com/nchursin/verity-bdd/verity_reporting/console_reporter** - Console reporter
+- **github.com/nchursin/verity-bdd/verity_reporting/allure_reporter** - Allure reporter
 
 ### Design Principles
 

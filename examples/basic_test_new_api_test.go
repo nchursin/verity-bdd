@@ -4,10 +4,10 @@ import (
 	"context"
 	"testing"
 
-	"github.com/nchursin/verity-bdd/verity/abilities/api"
-	"github.com/nchursin/verity-bdd/verity/expectations"
-	"github.com/nchursin/verity-bdd/verity/expectations/ensure"
-	verity "github.com/nchursin/verity-bdd/verity/testing"
+	verity "github.com/nchursin/verity-bdd"
+	"github.com/nchursin/verity-bdd/verity_abilities/api"
+	expectations "github.com/nchursin/verity-bdd/verity_expectations"
+	"github.com/nchursin/verity-bdd/verity_expectations/ensure"
 )
 
 // TestJSONPlaceholderBasicsNewAPI demonstrates basic API testing with JSONPlaceholder using new TestContext API

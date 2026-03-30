@@ -1,0 +1,185 @@
+package testing
+
+import (
+	"context"
+	"testing"
+
+	"go.uber.org/mock/gomock"
+
+	"github.com/nchursin/verity-bdd/internal/abilities"
+	"github.com/nchursin/verity-bdd/internal/core"
+	coreMocks "github.com/nchursin/verity-bdd/internal/core/testing/mocks"
+	"github.com/nchursin/verity-bdd/internal/reporting"
+	reportingMocks "github.com/nchursin/verity-bdd/internal/reporting/mocks"
+	testingMocks "github.com/nchursin/verity-bdd/internal/testing/mocks"
+)
+
+type dummyAbility struct{ id string }
+
+type ifaceAbility interface {
+	abilities.Ability
+	Foo() string
+}
+
+type ifaceImpl struct{ id string }
+
+func (i *ifaceImpl) Foo() string { return i.id }
+
+func TestTestActorAttemptsToWithReporting(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	// Create mocks
+	mockReporter := reportingMocks.NewMockReporter(ctrl)
+	mockTestContext := testingMocks.NewMockTestContext(ctrl)
+
+	// Expect OnStepStart and OnStepFinish for activity
+	mockReporter.EXPECT().OnStepStart("Send GET request to /posts").Times(1)
+	mockReporter.EXPECT().OnStepFinish(gomock.Any()).Times(1)
+
+	// Expect no error from test context
+	mockTestContext.EXPECT().Failed().Return(false).AnyTimes()
+
+	// Create test actor with mock reporter
+	adapter := reporting.NewTestRunnerAdapter(mockReporter)
+	testCtx := context.Background()
+	test := &verityTest{
+		testCtx: mockTestContext,
+		ctx:     testCtx,
+		actors:  make(map[string]core.Actor),
+		adapter: adapter,
+	}
+
+	actor := test.ActorCalled("TestActor")
+
+	// Create mock activity
+	mockActivity := coreMocks.NewMockActivity(ctrl)
+	mockActivity.EXPECT().PerformAs(gomock.Any(), gomock.Any()).Return(nil).Times(1)
+	mockActivity.EXPECT().Description().Return("Send GET request to /posts").Times(1)
+	mockActivity.EXPECT().FailureMode().Return(core.FailFast).AnyTimes()
+
+	// Execute activity
+	actor.AttemptsTo(mockActivity)
+}
+
+func TestAbilityToReturnsFriendlyError(t *testing.T) {
+	actor := &testActor{
+		name:      "TestActor",
+		ctx:       context.Background(),
+		abilities: []abilities.Ability{},
+	}
+
+	ability, err := actor.AbilityTo(&dummyAbility{})
+	if err == nil {
+		t.Fatalf("expected error, got nil and ability %v", ability)
+	}
+
+	expected := "actor 'TestActor' can't testing.dummyAbility. Did you give them the ability?"
+	if err.Error() != expected {
+		t.Fatalf("expected error %q, got %q", expected, err.Error())
+	}
+}
+
+func TestAbilityOfReturnsConcreteAbility(t *testing.T) {
+	first := &dummyAbility{id: "first"}
+	actor := &testActor{
+		name:      "TestActor",
+		ctx:       context.Background(),
+		abilities: []abilities.Ability{first},
+	}
+
+	ability, err := core.AbilityOf[*dummyAbility](actor)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+
+	if ability != first {
+		t.Fatalf("expected first ability, got %+v", ability)
+	}
+}
+
+func TestAbilityOfReturnsFriendlyErrorWhenMissing(t *testing.T) {
+	actor := &testActor{
+		name:      "TestActor",
+		ctx:       context.Background(),
+		abilities: []abilities.Ability{},
+	}
+
+	ability, err := core.AbilityOf[*dummyAbility](actor)
+	if err == nil {
+		t.Fatalf("expected error, got ability %+v", ability)
+	}
+
+	expected := "actor 'TestActor' can't testing.dummyAbility. Did you give them the ability?"
+	if err.Error() != expected {
+		t.Fatalf("expected error %q, got %q", expected, err.Error())
+	}
+}
+
+func TestAbilityOfReturnsFirstMatchingAbility(t *testing.T) {
+	first := &dummyAbility{id: "first"}
+	second := &dummyAbility{id: "second"}
+	actor := &testActor{
+		name:      "TestActor",
+		ctx:       context.Background(),
+		abilities: []abilities.Ability{first, second},
+	}
+
+	ability, err := core.AbilityOf[*dummyAbility](actor)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+
+	if ability != first {
+		t.Fatalf("expected first ability, got %+v", ability)
+	}
+}
+
+func TestAbilityOfHandlesNilActor(t *testing.T) {
+	ability, err := core.AbilityOf[*dummyAbility](nil)
+	if err == nil {
+		t.Fatalf("expected error, got ability %+v", ability)
+	}
+
+	expected := "actor is nil; cannot get testing.dummyAbility ability"
+	if err.Error() != expected {
+		t.Fatalf("expected error %q, got %q", expected, err.Error())
+	}
+}
+
+func TestAbilityOfSupportsInterfaceAbility(t *testing.T) {
+	impl := &ifaceImpl{id: "ok"}
+	actor := &testActor{
+		name:      "TestActor",
+		ctx:       context.Background(),
+		abilities: []abilities.Ability{impl},
+	}
+
+	ability, err := core.AbilityOf[ifaceAbility](actor)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+
+	if ability.Foo() != "ok" {
+		t.Fatalf("expected Foo to return ok, got %s", ability.Foo())
+	}
+}
+
+func TestAbilityOfReturnsFirstMatchingInterfaceAbility(t *testing.T) {
+	first := &ifaceImpl{id: "first"}
+	second := &ifaceImpl{id: "second"}
+	actor := &testActor{
+		name:      "TestActor",
+		ctx:       context.Background(),
+		abilities: []abilities.Ability{first, second},
+	}
+
+	ability, err := core.AbilityOf[ifaceAbility](actor)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+
+	if ability != first {
+		t.Fatalf("expected first interface ability, got %+v", ability)
+	}
+}

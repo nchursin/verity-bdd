@@ -9,10 +9,9 @@ import (
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
 
-	"github.com/nchursin/verity-bdd/verity/answerable"
-	"github.com/nchursin/verity-bdd/verity/expectations"
-	"github.com/nchursin/verity-bdd/verity/expectations/ensure"
-	verity "github.com/nchursin/verity-bdd/verity/testing"
+	verity "github.com/nchursin/verity-bdd"
+	expectations "github.com/nchursin/verity-bdd/verity_expectations"
+	"github.com/nchursin/verity-bdd/verity_expectations/ensure"
 )
 
 // TestSatisfiesBasic demonstrates basic usage of Satisfies expectation
@@ -23,7 +22,7 @@ func TestSatisfiesBasic(t *testing.T) {
 
 	// Test positive number validation
 	actor.AttemptsTo(
-		ensure.That(answerable.ValueOf(42), expectations.Satisfies("is positive number", func(actual int) error {
+		ensure.That(verity.ValueOf(42), expectations.Satisfies("is positive number", func(actual int) error {
 			if actual <= 0 {
 				return fmt.Errorf("expected positive value, but got %d", actual)
 			}
@@ -33,7 +32,7 @@ func TestSatisfiesBasic(t *testing.T) {
 
 	// Test string validation
 	actor.AttemptsTo(
-		ensure.That(answerable.ValueOf("hello@world.com"), expectations.Satisfies("contains valid email", func(actual string) error {
+		ensure.That(verity.ValueOf("hello@world.com"), expectations.Satisfies("contains valid email", func(actual string) error {
 			if !strings.Contains(actual, "@") {
 				return fmt.Errorf("missing @ symbol in email")
 			}
@@ -58,7 +57,7 @@ func TestSatisfiesWithStructs(t *testing.T) {
 
 	validUser := User{Name: "Alice", Age: 25}
 	actor.AttemptsTo(
-		ensure.That(answerable.ValueOf(validUser), expectations.Satisfies("has valid user data", func(actual User) error {
+		ensure.That(verity.ValueOf(validUser), expectations.Satisfies("has valid user data", func(actual User) error {
 			if actual.Name == "" {
 				return fmt.Errorf("name is empty")
 			}
@@ -89,7 +88,7 @@ func TestSatisfiesWithCmpStructComparison(t *testing.T) {
 	actual := User{Name: "Alice", Age: 25, Tags: []string{"admin", "user"}}
 
 	actor.AttemptsTo(
-		ensure.That(answerable.ValueOf(actual), expectations.Satisfies("matches expected user structure", func(actual User) error {
+		ensure.That(verity.ValueOf(actual), expectations.Satisfies("matches expected user structure", func(actual User) error {
 			if diff := cmp.Diff(expected, actual); diff != "" {
 				return fmt.Errorf("user struct mismatch (-expected +actual):\n%s", diff)
 			}
@@ -126,7 +125,7 @@ func TestSatisfiesWithCmpWithOptions(t *testing.T) {
 	}
 
 	actor.AttemptsTo(
-		ensure.That(answerable.ValueOf(actual), expectations.Satisfies("matches user ignoring timestamps", func(actual TimestampedUser) error {
+		ensure.That(verity.ValueOf(actual), expectations.Satisfies("matches user ignoring timestamps", func(actual TimestampedUser) error {
 			if diff := cmp.Diff(expected, actual,
 				cmpopts.IgnoreFields(TimestampedUser{}, "CreatedAt", "UpdatedAt"),
 				cmpopts.EquateEmpty()); diff != "" {
@@ -159,7 +158,7 @@ func TestSatisfiesWithCmpSliceComparison(t *testing.T) {
 	}
 
 	actor.AttemptsTo(
-		ensure.That(answerable.ValueOf(actual), expectations.Satisfies("matches items ignoring order", func(actual []Item) error {
+		ensure.That(verity.ValueOf(actual), expectations.Satisfies("matches items ignoring order", func(actual []Item) error {
 			if diff := cmp.Diff(expected, actual,
 				cmpopts.SortSlices(func(a, b Item) bool { return a.ID < b.ID })); diff != "" {
 				return fmt.Errorf("items slice mismatch (-expected +actual):\n%s", diff)
@@ -208,7 +207,7 @@ func TestSatisfiesWithCmpTransform(t *testing.T) {
 	}
 
 	actor.AttemptsTo(
-		ensure.That(answerable.ValueOf(actual), expectations.Satisfies("matches expected user data", func(actual APIResponse) error {
+		ensure.That(verity.ValueOf(actual), expectations.Satisfies("matches expected user data", func(actual APIResponse) error {
 			if diff := cmp.Diff(expected, User{
 				FirstName: actual.Data.User.FirstName,
 				LastName:  actual.Data.User.LastName,
@@ -254,7 +253,7 @@ func TestSatisfiesWithComplexValidation(t *testing.T) {
 	}
 
 	actor.AttemptsTo(
-		ensure.That(answerable.ValueOf(order), expectations.Satisfies("has valid order data", func(actual Order) error {
+		ensure.That(verity.ValueOf(order), expectations.Satisfies("has valid order data", func(actual Order) error {
 			// Validate ID format
 			if !strings.HasPrefix(actual.ID, "ORD-") {
 				return fmt.Errorf("order ID must start with ORD-, got %s", actual.ID)
@@ -328,7 +327,7 @@ func TestSatisfiesErrorMessages(t *testing.T) {
 	// Uncomment to see error message format:
 	/*
 		actor.AttemptsTo(
-			ensure.That(answerable.ValueOf(-5), expectations.Satisfies("is positive number", func(actual int) error {
+			ensure.That(verity.ValueOf(-5), expectations.Satisfies("is positive number", func(actual int) error {
 				if actual <= 0 {
 					return fmt.Errorf("expected positive value, but got %d", actual)
 				}
@@ -339,7 +338,7 @@ func TestSatisfiesErrorMessages(t *testing.T) {
 
 	// Simple test to ensure actor is used
 	actor.AttemptsTo(
-		ensure.That(answerable.ValueOf(5), expectations.Satisfies("is positive number", func(actual int) error {
+		ensure.That(verity.ValueOf(5), expectations.Satisfies("is positive number", func(actual int) error {
 			if actual <= 0 {
 				return fmt.Errorf("expected positive value, but got %d", actual)
 			}
@@ -368,7 +367,7 @@ func TestSatisfiesWithMaps(t *testing.T) {
 	}
 
 	actor.AttemptsTo(
-		ensure.That(answerable.ValueOf(config), expectations.Satisfies("has valid configuration", func(actual map[string]interface{}) error {
+		ensure.That(verity.ValueOf(config), expectations.Satisfies("has valid configuration", func(actual map[string]interface{}) error {
 			// Check required sections
 			requiredSections := []string{"database", "logging", "features"}
 			for _, section := range requiredSections {

@@ -4,22 +4,21 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/nchursin/verity-bdd/verity/abilities/api"
-	"github.com/nchursin/verity-bdd/verity/answerable"
-	"github.com/nchursin/verity-bdd/verity/expectations"
-	"github.com/nchursin/verity-bdd/verity/expectations/ensure"
-	verity "github.com/nchursin/verity-bdd/verity/testing"
+	verity "github.com/nchursin/verity-bdd"
+	"github.com/nchursin/verity-bdd/verity_abilities/api"
+	expectations "github.com/nchursin/verity-bdd/verity_expectations"
+	"github.com/nchursin/verity-bdd/verity_expectations/ensure"
 )
 
-// TestAnswerableValueOf demonstrates the usage of answerable.ValueOf() API
+// TestAnswerableValueOf demonstrates the usage of verity.ValueOf() API
 // for creating Question[T] objects from static values.
 //
 // This enables the use of static values in ensure.That() assertions:
 //
-//	ensure.That(answerable.ValueOf(4), expectations.Equals(4))
+//	ensure.That(verity.ValueOf(4), expectations.Equals(4))
 //
 // Previously, only core.Question[T] objects could be used in ensure.That(),
-// but answerable.ValueOf() allows any static value to be wrapped as a Question.
+// but verity.ValueOf() allows any static value to be wrapped as a Question.
 func TestAnswerableValueOf(t *testing.T) {
 	test := verity.NewVerityTest(t, verity.Scene{})
 
@@ -27,10 +26,10 @@ func TestAnswerableValueOf(t *testing.T) {
 
 	// Basic scalar values
 	actor.AttemptsTo(
-		ensure.That(answerable.ValueOf(42), expectations.Equals(42)),
-		ensure.That(answerable.ValueOf(3.14), expectations.Equals(3.14)),
-		ensure.That(answerable.ValueOf("hello"), expectations.Contains("hell")),
-		ensure.That(answerable.ValueOf(true), expectations.Equals(true)),
+		ensure.That(verity.ValueOf(42), expectations.Equals(42)),
+		ensure.That(verity.ValueOf(3.14), expectations.Equals(3.14)),
+		ensure.That(verity.ValueOf("hello"), expectations.Contains("hell")),
+		ensure.That(verity.ValueOf(true), expectations.Equals(true)),
 	)
 
 	// Complex types
@@ -41,13 +40,13 @@ func TestAnswerableValueOf(t *testing.T) {
 
 	person := Person{Name: "Alice", Age: 25}
 	actor.AttemptsTo(
-		ensure.That(answerable.ValueOf(person), expectations.Equals(Person{Name: "Alice", Age: 25})),
+		ensure.That(verity.ValueOf(person), expectations.Equals(Person{Name: "Alice", Age: 25})),
 	)
 
 	// Error values - check error message as string
 	err := errors.New("connection failed")
 	actor.AttemptsTo(
-		ensure.That(answerable.ValueOf(err.Error()), expectations.Contains("connection")),
+		ensure.That(verity.ValueOf(err.Error()), expectations.Contains("connection")),
 	)
 }
 
@@ -58,14 +57,14 @@ func TestAnswerableWithMixedQuestions(t *testing.T) {
 
 	apiTester := test.ActorCalled("APITester").WhoCan(api.CallAnApiAt("https://jsonplaceholder.typicode.com"))
 
-	// Mix of static value questions (using answerable.ValueOf)
+	// Mix of static value questions (using verity.ValueOf)
 	// and dynamic questions (from API interactions)
 	apiTester.AttemptsTo(
 		// Dynamic: Get actual status from API
 		api.SendGetRequest("/posts/1"),
 
 		// Static: Compare against expected status code
-		ensure.That(answerable.ValueOf(200), expectations.Equals(200)),
+		ensure.That(verity.ValueOf(200), expectations.Equals(200)),
 
 		// Dynamic: Get actual response body
 		ensure.That(api.LastResponseStatus{}, expectations.Equals(200)),
@@ -74,11 +73,11 @@ func TestAnswerableWithMixedQuestions(t *testing.T) {
 		ensure.That(api.LastResponseBody{}, expectations.Contains("title")),
 
 		// Static: Verify expected response structure
-		ensure.That(answerable.ValueOf("userId"), expectations.Contains("user")),
+		ensure.That(verity.ValueOf("userId"), expectations.Contains("user")),
 	)
 }
 
-// TestAnswerableDescriptions shows how answerable.ValueOf() generates
+// TestAnswerableDescriptions shows how verity.ValueOf() generates
 // clear descriptions that appear in test failure messages.
 func TestAnswerableDescriptions(t *testing.T) {
 	test := verity.NewVerityTest(t, verity.Scene{})
@@ -90,9 +89,9 @@ func TestAnswerableDescriptions(t *testing.T) {
 	// "hello (string)"
 	// "error something went wrong (error)"
 	actor.AttemptsTo(
-		ensure.That(answerable.ValueOf(42), expectations.Equals(42)),
-		ensure.That(answerable.ValueOf("hello"), expectations.Contains("hell")),
-		ensure.That(answerable.ValueOf(errors.New("something went wrong").Error()), expectations.Contains("something")),
+		ensure.That(verity.ValueOf(42), expectations.Equals(42)),
+		ensure.That(verity.ValueOf("hello"), expectations.Contains("hell")),
+		ensure.That(verity.ValueOf(errors.New("something went wrong").Error()), expectations.Contains("something")),
 	)
 }
 
@@ -104,8 +103,8 @@ func TestAnswerableEdgeCases(t *testing.T) {
 
 	// Zero values
 	actor.AttemptsTo(
-		ensure.That(answerable.ValueOf(0), expectations.Equals(0)),
-		ensure.That(answerable.ValueOf(false), expectations.Equals(false)),
-		ensure.That(answerable.ValueOf(""), expectations.Equals("")),
+		ensure.That(verity.ValueOf(0), expectations.Equals(0)),
+		ensure.That(verity.ValueOf(false), expectations.Equals(false)),
+		ensure.That(verity.ValueOf(""), expectations.Equals("")),
 	)
 }

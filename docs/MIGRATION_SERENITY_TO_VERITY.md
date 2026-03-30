@@ -25,8 +25,8 @@ After:
 
 ```go
 import (
-    "github.com/nchursin/verity-bdd/verity/abilities/api"
-    verity "github.com/nchursin/verity-bdd/verity/testing"
+    "github.com/nchursin/verity-bdd/verity_abilities/api"
+    verity "github.com/nchursin/verity-bdd"
 )
 ```
 

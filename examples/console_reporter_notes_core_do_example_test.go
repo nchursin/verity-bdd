@@ -3,9 +3,8 @@ package examples
 import (
 	"context"
 
-	"github.com/nchursin/verity-bdd/verity/abilities/take_notes"
-	"github.com/nchursin/verity-bdd/verity/core"
-	verity "github.com/nchursin/verity-bdd/verity/testing"
+	verity "github.com/nchursin/verity-bdd"
+	"github.com/nchursin/verity-bdd/verity_abilities/take_notes"
 )
 
 type exampleTestContext struct {
@@ -32,7 +31,7 @@ func (e *exampleTestContext) RunCleanups() {
 	}
 }
 
-// ExampleConsoleReporter_actorNotesWithCoreDo shows how an actor can record notes via core.Do
+// ExampleConsoleReporter_actorNotesWithCoreDo shows how an actor can record notes via verity.Do
 // and see them in the console reporter output.
 func ExampleConsoleReporter_actorNotesWithCoreDo() {
 	testCtx := &exampleTestContext{name: "ExampleNotesCoreDo"}
@@ -41,7 +40,7 @@ func ExampleConsoleReporter_actorNotesWithCoreDo() {
 
 	actor := test.ActorCalled("Sam").WhoCan(take_notes.UsingEmptyNotepad())
 	actor.AttemptsTo(
-		core.Do("#actor writes a secret", func(actor core.Actor, ctx context.Context) error {
+		verity.Do("#actor writes a secret", func(actor verity.Actor, ctx context.Context) error {
 			ability, err := actor.AbilityTo(&take_notes.TakeNotesAbility{})
 			if err != nil {
 				return err

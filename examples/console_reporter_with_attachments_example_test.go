@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/nchursin/verity-bdd/verity/reporting"
-	"github.com/nchursin/verity-bdd/verity/reporting/console_reporter"
+	reporting "github.com/nchursin/verity-bdd/verity_reporting"
+	"github.com/nchursin/verity-bdd/verity_reporting/console_reporter"
 )
 
 type exampleResult struct {

@@ -7,11 +7,11 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/nchursin/verity-bdd/verity/abilities/api"
-	"github.com/nchursin/verity-bdd/verity/expectations"
-	"github.com/nchursin/verity-bdd/verity/expectations/ensure"
-	"github.com/nchursin/verity-bdd/verity/reporting/console_reporter"
-	verity "github.com/nchursin/verity-bdd/verity/testing"
+	verity "github.com/nchursin/verity-bdd"
+	"github.com/nchursin/verity-bdd/verity_abilities/api"
+	expectations "github.com/nchursin/verity-bdd/verity_expectations"
+	"github.com/nchursin/verity-bdd/verity_expectations/ensure"
+	"github.com/nchursin/verity-bdd/verity_reporting/console_reporter"
 )
 
 // TestConsoleReportingDemo demonstrates console reporting features

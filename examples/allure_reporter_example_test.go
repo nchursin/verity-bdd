@@ -9,10 +9,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/nchursin/verity-bdd/verity/abilities/take_notes"
-	"github.com/nchursin/verity-bdd/verity/core"
-	"github.com/nchursin/verity-bdd/verity/reporting/allure_reporter"
-	verity "github.com/nchursin/verity-bdd/verity/testing"
+	verity "github.com/nchursin/verity-bdd"
+	"github.com/nchursin/verity-bdd/verity_abilities/take_notes"
+	"github.com/nchursin/verity-bdd/verity_reporting/allure_reporter"
 )
 
 // TestAllureReporterExample_GeneratesReportFiles is a documentation-style example:
@@ -28,10 +27,10 @@ func TestAllureReporterExample_GeneratesReportFiles(t *testing.T) {
 
 	actor := test.ActorCalled("Sam").WhoCan(take_notes.UsingEmptyNotepad())
 	actor.AttemptsTo(
-		core.Do("#actor does something", func(actor core.Actor, ctx context.Context) error {
+		verity.Do("#actor does something", func(actor verity.Actor, ctx context.Context) error {
 			return nil
 		}),
-		core.Do("#actor records an Allure-friendly step", func(actor core.Actor, ctx context.Context) error {
+		verity.Do("#actor records an Allure-friendly step", func(actor verity.Actor, ctx context.Context) error {
 			ability, err := actor.AbilityTo(&take_notes.TakeNotesAbility{})
 			if err != nil {
 				return err
@@ -41,7 +40,7 @@ func TestAllureReporterExample_GeneratesReportFiles(t *testing.T) {
 			notebook.Set("token", "secret")
 			return nil
 		}),
-		core.Do("#actor does something else", func(actor core.Actor, ctx context.Context) error {
+		verity.Do("#actor does something else", func(actor verity.Actor, ctx context.Context) error {
 			return nil
 		}),
 	)

@@ -8,8 +8,8 @@ package examples
 import (
     "testing"
 
-    "github.com/nchursin/verity-bdd/verity/abilities/take_notes"
-    veritytesting "github.com/nchursin/verity-bdd/verity/testing"
+    "github.com/nchursin/verity-bdd/verity_abilities/take_notes"
+    veritytesting "github.com/nchursin/verity-bdd"
 )
 
 func TestNotesExample(t *testing.T) {

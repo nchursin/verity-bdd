@@ -37,7 +37,7 @@ jobs:
       run: go mod download
 
     - name: Run tests
-      run: go test ./verity/... -v -race -coverprofile=verity-coverage.out
+      run: go test ./... -v -race -coverprofile=verity-coverage.out
 
     - name: Convert coverage to lcov
       run: |

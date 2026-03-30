@@ -9,10 +9,10 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/nchursin/serenity-go/serenity/abilities/take_notes"
-	"github.com/nchursin/serenity-go/serenity/core"
-	"github.com/nchursin/serenity-go/serenity/reporting/allure_reporter"
-	serenity "github.com/nchursin/serenity-go/serenity/testing"
+	"github.com/nchursin/verity-bdd/verity/abilities/take_notes"
+	"github.com/nchursin/verity-bdd/verity/core"
+	"github.com/nchursin/verity-bdd/verity/reporting/allure_reporter"
+	verity "github.com/nchursin/verity-bdd/verity/testing"
 )
 
 // TestAllureReporterExample_GeneratesReportFiles is a documentation-style example:
@@ -21,7 +21,7 @@ func TestAllureReporterExample_GeneratesReportFiles(t *testing.T) {
 	resultsDir := t.TempDir()
 	reporter := allure_reporter.NewAllureReporterWithDir(resultsDir)
 
-	test := serenity.NewSerenityTest(t, serenity.Scene{
+	test := verity.NewVerityTest(t, verity.Scene{
 		Context:  context.Background(),
 		Reporter: reporter,
 	})

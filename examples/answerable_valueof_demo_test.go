@@ -4,11 +4,11 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/nchursin/serenity-go/serenity/abilities/api"
-	"github.com/nchursin/serenity-go/serenity/answerable"
-	"github.com/nchursin/serenity-go/serenity/expectations"
-	"github.com/nchursin/serenity-go/serenity/expectations/ensure"
-	serenity "github.com/nchursin/serenity-go/serenity/testing"
+	"github.com/nchursin/verity-bdd/verity/abilities/api"
+	"github.com/nchursin/verity-bdd/verity/answerable"
+	"github.com/nchursin/verity-bdd/verity/expectations"
+	"github.com/nchursin/verity-bdd/verity/expectations/ensure"
+	verity "github.com/nchursin/verity-bdd/verity/testing"
 )
 
 // TestAnswerableValueOf demonstrates the usage of answerable.ValueOf() API
@@ -21,7 +21,7 @@ import (
 // Previously, only core.Question[T] objects could be used in ensure.That(),
 // but answerable.ValueOf() allows any static value to be wrapped as a Question.
 func TestAnswerableValueOf(t *testing.T) {
-	test := serenity.NewSerenityTest(t, serenity.Scene{})
+	test := verity.NewVerityTest(t, verity.Scene{})
 
 	actor := test.ActorCalled("ValueTester")
 
@@ -54,7 +54,7 @@ func TestAnswerableValueOf(t *testing.T) {
 // TestAnswerableWithMixedQuestions demonstrates mixing static value questions
 // with traditional dynamic questions from API interactions.
 func TestAnswerableWithMixedQuestions(t *testing.T) {
-	test := serenity.NewSerenityTest(t, serenity.Scene{})
+	test := verity.NewVerityTest(t, verity.Scene{})
 
 	apiTester := test.ActorCalled("APITester").WhoCan(api.CallAnApiAt("https://jsonplaceholder.typicode.com"))
 
@@ -81,7 +81,7 @@ func TestAnswerableWithMixedQuestions(t *testing.T) {
 // TestAnswerableDescriptions shows how answerable.ValueOf() generates
 // clear descriptions that appear in test failure messages.
 func TestAnswerableDescriptions(t *testing.T) {
-	test := serenity.NewSerenityTest(t, serenity.Scene{})
+	test := verity.NewVerityTest(t, verity.Scene{})
 
 	actor := test.ActorCalled("DescriptionTester")
 
@@ -98,7 +98,7 @@ func TestAnswerableDescriptions(t *testing.T) {
 
 // TestAnswerableEdgeCases demonstrates handling of edge cases
 func TestAnswerableEdgeCases(t *testing.T) {
-	test := serenity.NewSerenityTest(t, serenity.Scene{})
+	test := verity.NewVerityTest(t, verity.Scene{})
 
 	actor := test.ActorCalled("EdgeCaseTester")
 

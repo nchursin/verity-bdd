@@ -9,15 +9,15 @@ import (
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
 
-	"github.com/nchursin/serenity-go/serenity/answerable"
-	"github.com/nchursin/serenity-go/serenity/expectations"
-	"github.com/nchursin/serenity-go/serenity/expectations/ensure"
-	serenity "github.com/nchursin/serenity-go/serenity/testing"
+	"github.com/nchursin/verity-bdd/verity/answerable"
+	"github.com/nchursin/verity-bdd/verity/expectations"
+	"github.com/nchursin/verity-bdd/verity/expectations/ensure"
+	verity "github.com/nchursin/verity-bdd/verity/testing"
 )
 
 // TestSatisfiesBasic demonstrates basic usage of Satisfies expectation
 func TestSatisfiesBasic(t *testing.T) {
-	test := serenity.NewSerenityTest(t, serenity.Scene{})
+	test := verity.NewVerityTest(t, verity.Scene{})
 
 	actor := test.ActorCalled("BasicTester")
 
@@ -47,7 +47,7 @@ func TestSatisfiesBasic(t *testing.T) {
 
 // TestSatisfiesWithStructs demonstrates custom struct validation
 func TestSatisfiesWithStructs(t *testing.T) {
-	test := serenity.NewSerenityTest(t, serenity.Scene{})
+	test := verity.NewVerityTest(t, verity.Scene{})
 
 	actor := test.ActorCalled("StructTester")
 
@@ -75,7 +75,7 @@ func TestSatisfiesWithStructs(t *testing.T) {
 
 // TestSatisfiesWithCmpStructComparison demonstrates struct comparison using go-cmp
 func TestSatisfiesWithCmpStructComparison(t *testing.T) {
-	test := serenity.NewSerenityTest(t, serenity.Scene{})
+	test := verity.NewVerityTest(t, verity.Scene{})
 
 	actor := test.ActorCalled("CmpStructTester")
 
@@ -100,7 +100,7 @@ func TestSatisfiesWithCmpStructComparison(t *testing.T) {
 
 // TestSatisfiesWithCmpWithOptions demonstrates advanced cmp usage with options
 func TestSatisfiesWithCmpWithOptions(t *testing.T) {
-	test := serenity.NewSerenityTest(t, serenity.Scene{})
+	test := verity.NewVerityTest(t, verity.Scene{})
 
 	actor := test.ActorCalled("CmpOptionsTester")
 
@@ -139,7 +139,7 @@ func TestSatisfiesWithCmpWithOptions(t *testing.T) {
 
 // TestSatisfiesWithCmpSliceComparison demonstrates slice comparison with sorting
 func TestSatisfiesWithCmpSliceComparison(t *testing.T) {
-	test := serenity.NewSerenityTest(t, serenity.Scene{})
+	test := verity.NewVerityTest(t, verity.Scene{})
 
 	actor := test.ActorCalled("CmpSliceTester")
 
@@ -171,7 +171,7 @@ func TestSatisfiesWithCmpSliceComparison(t *testing.T) {
 
 // TestSatisfiesWithCmpTransform demonstrates transformer usage
 func TestSatisfiesWithCmpTransform(t *testing.T) {
-	test := serenity.NewSerenityTest(t, serenity.Scene{})
+	test := verity.NewVerityTest(t, verity.Scene{})
 
 	actor := test.ActorCalled("CmpTransformTester")
 
@@ -222,7 +222,7 @@ func TestSatisfiesWithCmpTransform(t *testing.T) {
 
 // TestSatisfiesWithComplexValidation demonstrates complex business logic validation
 func TestSatisfiesWithComplexValidation(t *testing.T) {
-	test := serenity.NewSerenityTest(t, serenity.Scene{})
+	test := verity.NewVerityTest(t, verity.Scene{})
 
 	actor := test.ActorCalled("ComplexValidatorTester")
 
@@ -320,7 +320,7 @@ func TestSatisfiesWithComplexValidation(t *testing.T) {
 
 // TestSatisfiesErrorMessages demonstrates how error messages appear in test output
 func TestSatisfiesErrorMessages(t *testing.T) {
-	test := serenity.NewSerenityTest(t, serenity.Scene{})
+	test := verity.NewVerityTest(t, verity.Scene{})
 
 	actor := test.ActorCalled("ErrorMessagesTester")
 
@@ -350,7 +350,7 @@ func TestSatisfiesErrorMessages(t *testing.T) {
 
 // TestSatisfiesWithMaps demonstrates map validation
 func TestSatisfiesWithMaps(t *testing.T) {
-	test := serenity.NewSerenityTest(t, serenity.Scene{})
+	test := verity.NewVerityTest(t, verity.Scene{})
 
 	actor := test.ActorCalled("MapValidatorTester")
 

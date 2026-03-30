@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/nchursin/serenity-go/serenity/reporting"
-	"github.com/nchursin/serenity-go/serenity/reporting/console_reporter"
+	"github.com/nchursin/verity-bdd/verity/reporting"
+	"github.com/nchursin/verity-bdd/verity/reporting/console_reporter"
 )
 
 type exampleResult struct {

@@ -80,7 +80,7 @@ formatters:
   settings:
     goimports:
       local-prefixes:
-        - github.com/nchursin/serenity-go
+        - github.com/nchursin/verity-bdd
   exclusions:
     generated: lax
     paths:

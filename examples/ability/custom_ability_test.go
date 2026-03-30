@@ -10,10 +10,10 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/nchursin/serenity-go/serenity/abilities"
-	"github.com/nchursin/serenity-go/serenity/abilities/api"
-	"github.com/nchursin/serenity-go/serenity/core"
-	serenity "github.com/nchursin/serenity-go/serenity/testing"
+	"github.com/nchursin/verity-bdd/verity/abilities"
+	"github.com/nchursin/verity-bdd/verity/abilities/api"
+	"github.com/nchursin/verity-bdd/verity/core"
+	verity "github.com/nchursin/verity-bdd/verity/testing"
 )
 
 // FileSystemAbility enables an actor to interact with the file system
@@ -346,7 +346,7 @@ func (f *FileExistsQuestion) Description() string {
 
 func TestFileSystemAbility_BasicOperations(t *testing.T) {
 	ctx := context.Background()
-	test := serenity.NewSerenityTestWithContext(ctx, t)
+	test := verity.NewVerityTestWithContext(ctx, t)
 
 	tempDir := t.TempDir()
 	actor := test.ActorCalled("FileTester").WhoCan(ManageFilesIn(tempDir))
@@ -384,7 +384,7 @@ func TestFileSystemAbility_BasicOperations(t *testing.T) {
 
 func TestFileSystemAbility_DirectoryOperations(t *testing.T) {
 	ctx := context.Background()
-	test := serenity.NewSerenityTestWithContext(ctx, t)
+	test := verity.NewVerityTestWithContext(ctx, t)
 
 	tempDir := t.TempDir()
 	actor := test.ActorCalled("DirectoryTester").WhoCan(ManageFilesIn(tempDir))
@@ -536,7 +536,7 @@ func TestFileSystemAbility_ConcurrentAccess(t *testing.T) {
 // Integration test showing FileSystemAbility working with other abilities
 func TestFileSystemAbility_WithAPIIntegration(t *testing.T) {
 	ctx := context.Background()
-	test := serenity.NewSerenityTestWithContext(ctx, t)
+	test := verity.NewVerityTestWithContext(ctx, t)
 
 	tempDir := t.TempDir()
 	actor := test.ActorCalled("IntegrationTester").WhoCan(

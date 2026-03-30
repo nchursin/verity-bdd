@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Serenity-Go Release Script
+# Verity-BDD Release Script
 # Automates the release process with proper validation
 
 set -euo pipefail
@@ -12,7 +12,7 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-echo -e "${BLUE}🚀 Serenity-Go Release Script${NC}"
+echo -e "${BLUE}🚀 Verity-BDD Release Script${NC}"
 echo "================================"
 
 # Check if we're in the right directory
@@ -242,7 +242,7 @@ case "$COMMAND" in
         echo
         echo -e "${GREEN}✅ Release $NEXT_VERSION created successfully!${NC}"
         echo -e "${BLUE}🌐 GitHub Actions will now create the automated release.${NC}"
-        echo -e "${BLUE}🔗 Watch the progress at: https://github.com/nchursin/serenity-go/actions${NC}"
+        echo -e "${BLUE}🔗 Watch the progress at: https://github.com/nchursin/verity-bdd/actions${NC}"
         ;;
 
     "help"|"-h"|"--help")

@@ -3,15 +3,15 @@ package examples
 import (
 	"testing"
 
-	"github.com/nchursin/serenity-go/serenity/abilities/api"
-	"github.com/nchursin/serenity-go/serenity/expectations"
-	"github.com/nchursin/serenity-go/serenity/expectations/ensure"
-	serenity "github.com/nchursin/serenity-go/serenity/testing"
+	"github.com/nchursin/verity-bdd/verity/abilities/api"
+	"github.com/nchursin/verity-bdd/verity/expectations"
+	"github.com/nchursin/verity-bdd/verity/expectations/ensure"
+	verity "github.com/nchursin/verity-bdd/verity/testing"
 )
 
 // TestFailureHandling demonstrates how different failure modes work
 func TestFailureHandling(t *testing.T) {
-	test := serenity.NewSerenityTest(t, serenity.Scene{})
+	test := verity.NewVerityTest(t, verity.Scene{})
 
 	apiTester := test.ActorCalled("APITester").WhoCan(api.CallAnApiAt("https://jsonplaceholder.typicode.com"))
 

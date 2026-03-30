@@ -17,9 +17,9 @@ body = """
 {% endfor %}
 
 {% if version and previous_version -%}
-**Full Changelog**: https://github.com/nchursin/serenity-go/compare/{{ previous_version }}...{{ version }}
+**Full Changelog**: https://github.com/nchursin/verity-bdd/compare/{{ previous_version }}...{{ version }}
 {%- elif version -%}
-**Full Changelog**: https://github.com/nchursin/serenity-go/commits/{{ version }}
+**Full Changelog**: https://github.com/nchursin/verity-bdd/commits/{{ version }}
 {%- endif %}
 """
 

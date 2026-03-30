@@ -1,6 +1,6 @@
 # Satisfies Expectation Examples
 
-This document provides comprehensive examples of using the `Satisfies` expectation for custom validations in Serenity-Go.
+This document provides comprehensive examples of using the `Satisfies` expectation for custom validations in Verity-BDD.
 
 ## Overview
 

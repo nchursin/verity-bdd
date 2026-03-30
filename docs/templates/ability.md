@@ -1,6 +1,6 @@
 # Шаблон для создания новой Ability
 
-Используйте этот шаблон как основу для создания собственных Abilities в Serenity-Go.
+Используйте этот шаблон как основу для создания собственных Abilities в Verity-BDD.
 
 ## 📋 Чек-лист перед началом
 
@@ -13,7 +13,7 @@
 ## 🏗️ Структура файлов
 
 ```
-serenity/abilities/
+verity/abilities/
 ├── your_ability/
 │   ├── ability.go           # Интерфейс и основные типы
 │   ├── implementation.go    # Реализация Ability
@@ -36,7 +36,7 @@ import (
     "fmt"
     "sync"
     
-    "github.com/nchursin/serenity-go/serenity/abilities"
+    "github.com/nchursin/verity-bdd/verity/abilities"
 )
 
 // YourAbilityName - способность для [краткое описание]
@@ -322,7 +322,7 @@ package your_ability
 import (
     "fmt"
     
-    "github.com/nchursin/serenity-go/serenity/core"
+    "github.com/nchursin/verity-bdd/verity/core"
 )
 
 // ====================
@@ -405,9 +405,9 @@ import (
     "github.com/stretchr/testify/assert"
     "github.com/stretchr/testify/require"
     
-    "github.com/nchursin/serenity-go/serenity/core"
-    "github.com/nchursin/serenity-go/serenity/assertions"
-    "github.com/nchursin/serenity-go/serenity/expectations"
+    "github.com/nchursin/verity-bdd/verity/core"
+    "github.com/nchursin/verity-bdd/verity/assertions"
+    "github.com/nchursin/verity-bdd/verity/expectations"
 )
 
 // ====================
@@ -458,7 +458,7 @@ func TestYourAbility_DoSomething(t *testing.T) {
 // ====================
 
 func TestYourAbility_WithActor_BasicUsage(t *testing.T) {
-    test := serenity.NewSerenityTest(t, serenity.Scene{})
+    test := verity.NewVerityTest(t, verity.Scene{})
 
     actor := test.ActorCalled("TestUser").WhoCan(
         NewYourAbility(),
@@ -481,7 +481,7 @@ func TestYourAbility_WithActor_BasicUsage(t *testing.T) {
 // ====================
 
 func TestYourAbility_ErrorScenarios(t *testing.T) {
-    test := serenity.NewSerenityTest(t, serenity.Scene{})
+    test := verity.NewVerityTest(t, verity.Scene{})
 
     actor := test.ActorCalled("ErrorTester").WhoCan(
         NewYourAbility(),
@@ -501,7 +501,7 @@ func TestYourAbility_ErrorScenarios(t *testing.T) {
 
 ## 🚀 Быстрый старт
 
-1. **Скопируйте шаблон** в новую папку `serenity/abilities/your_ability/`
+1. **Скопируйте шаблон** в новую папку `verity/abilities/your_ability/`
 2. **Замените `YourAbilityName`** на имя вашей Ability
 3. **Реализуйте основные методы** в `implementation.go`
 4. **Создайте нужные Activities** и `Questions`

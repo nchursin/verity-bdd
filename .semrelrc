@@ -1,10 +1,10 @@
 {
   "maintainers": [
     {
-      "name": "Serenity-Go Team"
+      "name": "Verity-BDD Team"
     }
   ],
-  "repo": "nchursin/serenity-go",
+  "repo": "nchursin/verity-bdd",
   "plugins": [
     "npm"
   ],

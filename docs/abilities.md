@@ -1,6 +1,6 @@
 # Создание собственных Abilities
 
-Эта инструкция покажет, как создавать собственные Abilities для расширения возможностей Serenity-Go под ваши специфические потребности тестирования.
+Эта инструкция покажет, как создавать собственные Abilities для расширения возможностей Verity-BDD под ваши специфические потребности тестирования.
 
 ## 🎯 Что такое Ability?
 
@@ -16,7 +16,7 @@
 ### Базовый интерфейс
 
 ```go
-// serenity/abilities/ability.go
+// verity/abilities/ability.go
 package abilities
 
 // Ability - маркерный интерфейс для всех способностей
@@ -47,7 +47,7 @@ specificAbility := ability.(SpecificAbility)
 ```go
 package custom
 
-import "github.com/nchursin/serenity-go/serenity/abilities"
+import "github.com/nchursin/verity-bdd/verity/abilities"
 
 // FileManagerAbility - способность для работы с файлами
 type FileManagerAbility interface {
@@ -177,7 +177,7 @@ type FileManagerConfig struct {
 package custom
 
 import (
-    "github.com/nchursin/serenity-go/serenity/core"
+    "github.com/nchursin/verity-bdd/verity/core"
 )
 
 // ReadFileActivity - чтение файла
@@ -239,7 +239,7 @@ func (f *FileContentQuestion) Description() string {
 
 ```go
 func TestFileOperations(t *testing.T) {
-    test := serenity.NewSerenityTest(t, serenity.Scene{})
+    test := verity.NewVerityTest(t, verity.Scene{})
 
     // Создаем Actor с нашей новой Ability
     actor := test.ActorCalled("FileUser").WhoCan(
@@ -260,7 +260,7 @@ func TestFileOperations(t *testing.T) {
 
 ```go
 func TestAPIAndFileOperations(t *testing.T) {
-    test := serenity.NewSerenityTest(t, serenity.Scene{})
+    test := verity.NewVerityTest(t, verity.Scene{})
 
     actor := test.ActorCalled("IntegrationTester").WhoCan(
         api.CallAnApiAt("https://api.example.com"),
@@ -442,7 +442,7 @@ func TestFileManagerAbility_ReadFile_NotFound(t *testing.T) {
 
 ```go
 func TestFileManagerIntegration(t *testing.T) {
-    test := serenity.NewSerenityTest(t, serenity.Scene{})
+    test := verity.NewVerityTest(t, verity.Scene{})
 
     actor := test.ActorCalled("FileTester").WhoCan(
         custom.ManageFilesIn(t.TempDir()),
@@ -525,5 +525,5 @@ type WebSocketAbility interface {
 3. **Посмотрите существующие Abilities** в исходном коде проекта
 4. **Изучите готовый пример** FileSystemAbility с тестами в [examples/ability/](../examples/ability/)
 
-Удачи в создании мощных и гибких тестов с помощью Serenity-Go! 🎉
+Удачи в создании мощных и гибких тестов с помощью Verity-BDD! 🎉
 

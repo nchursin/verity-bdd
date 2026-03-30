@@ -4,17 +4,17 @@ import (
 	"context"
 	"testing"
 
-	"github.com/nchursin/serenity-go/serenity/abilities/api"
-	"github.com/nchursin/serenity-go/serenity/expectations"
-	"github.com/nchursin/serenity-go/serenity/expectations/ensure"
-	serenity "github.com/nchursin/serenity-go/serenity/testing"
+	"github.com/nchursin/verity-bdd/verity/abilities/api"
+	"github.com/nchursin/verity-bdd/verity/expectations"
+	"github.com/nchursin/verity-bdd/verity/expectations/ensure"
+	verity "github.com/nchursin/verity-bdd/verity/testing"
 )
 
 // TestNewAPIDemonstration demonstrates the new TestContext API without require.NoError
 func TestNewAPIDemonstration(t *testing.T) {
-	// Create SerenityTest context - no more manual error handling!
+	// Create VerityTest context - no more manual error handling!
 	ctx := context.Background()
-	test := serenity.NewSerenityTestWithContext(ctx, t)
+	test := verity.NewVerityTestWithContext(ctx, t)
 
 	// Create actor through test context
 	apiTester := test.ActorCalled("APITester").WhoCan(api.CallAnApiAt("https://jsonplaceholder.typicode.com"))

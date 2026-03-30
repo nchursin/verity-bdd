@@ -7,11 +7,11 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/nchursin/serenity-go/serenity/abilities/api"
-	"github.com/nchursin/serenity-go/serenity/expectations"
-	"github.com/nchursin/serenity-go/serenity/expectations/ensure"
-	"github.com/nchursin/serenity-go/serenity/reporting/console_reporter"
-	serenity "github.com/nchursin/serenity-go/serenity/testing"
+	"github.com/nchursin/verity-bdd/verity/abilities/api"
+	"github.com/nchursin/verity-bdd/verity/expectations"
+	"github.com/nchursin/verity-bdd/verity/expectations/ensure"
+	"github.com/nchursin/verity-bdd/verity/reporting/console_reporter"
+	verity "github.com/nchursin/verity-bdd/verity/testing"
 )
 
 // TestConsoleReportingDemo demonstrates console reporting features
@@ -19,7 +19,7 @@ func TestConsoleReportingDemo(t *testing.T) {
 	// Create custom console reporter with different output
 	reporter := console_reporter.NewConsoleReporter()
 
-	test := serenity.NewSerenityTestWithReporter(context.Background(), t, reporter)
+	test := verity.NewVerityTestWithReporter(context.Background(), t, reporter)
 
 	apiTester := test.ActorCalled("DemoAPITester").WhoCan(api.CallAnApiAt("https://jsonplaceholder.typicode.com"))
 
@@ -48,7 +48,7 @@ func TestReportingToFile(t *testing.T) {
 	reporter := console_reporter.NewConsoleReporter()
 	reporter.SetOutput(file)
 
-	test := serenity.NewSerenityTestWithReporter(context.Background(), t, reporter)
+	test := verity.NewVerityTestWithReporter(context.Background(), t, reporter)
 
 	apiTester := test.ActorCalled("FileReporter").WhoCan(api.CallAnApiAt("https://jsonplaceholder.typicode.com"))
 

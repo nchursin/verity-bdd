@@ -8,12 +8,12 @@ package examples
 import (
     "testing"
 
-    "github.com/nchursin/serenity-go/serenity/abilities/take_notes"
-    serenitytesting "github.com/nchursin/serenity-go/serenity/testing"
+    "github.com/nchursin/verity-bdd/verity/abilities/take_notes"
+    veritytesting "github.com/nchursin/verity-bdd/verity/testing"
 )
 
 func TestNotesExample(t *testing.T) {
-    test := serenitytesting.NewSerenityTest(t, serenitytesting.Scene{})
+    test := veritytesting.NewVerityTest(t, veritytesting.Scene{})
     actor := test.ActorCalled("Nina").WhoCan(take_notes.UsingEmptyNotepad())
 
     actor.AttemptsTo(

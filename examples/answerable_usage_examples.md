@@ -9,14 +9,14 @@ package main
 
 import (
     "testing"
-    "github.com/nchursin/serenity-go/serenity/answerable"
-    "github.com/nchursin/serenity-go/serenity/expectations"
-    "github.com/nchursin/serenity-go/serenity/expectations/ensure"
-    serenity "github.com/nchursin/serenity-go/serenity/testing"
+    "github.com/nchursin/verity-bdd/verity/answerable"
+    "github.com/nchursin/verity-bdd/verity/expectations"
+    "github.com/nchursin/verity-bdd/verity/expectations/ensure"
+    verity "github.com/nchursin/verity-bdd/verity/testing"
 )
 
 func TestStaticValues(t *testing.T) {
-    test := serenity.NewSerenityTest(t, serenity.Scene{})
+    test := verity.NewVerityTest(t, verity.Scene{})
 
     actor := test.ActorCalled("Tester")
 
@@ -46,7 +46,7 @@ func TestStaticValues(t *testing.T) {
 
 ```go
 func TestMixedQuestions(t *testing.T) {
-    test := serenity.NewSerenityTest(t, serenity.Scene{})
+    test := verity.NewVerityTest(t, verity.Scene{})
 
     apiTester := test.ActorCalled("APITester").WhoCan(api.CallAnApiAt("https://api.example.com"))
 

@@ -1,6 +1,6 @@
-# Serenity-Go Documentation
+# Verity-BDD Documentation
 
-Welcome to the comprehensive documentation for Serenity-Go - a Screenplay Pattern testing framework for Go.
+Welcome to the comprehensive documentation for Verity-BDD - a Screenplay Pattern testing framework for Go.
 
 ## 📚 Documentation Structure
 
@@ -35,7 +35,7 @@ Welcome to the comprehensive documentation for Serenity-Go - a Screenplay Patter
 ### Actors
 Actors represent users or systems that interact with your application:
 ```go
-test := serenity.NewSerenityTest(t, serenity.Scene{})
+test := verity.NewVerityTest(t, verity.Scene{})
 
 actor := test.ActorCalled("APITester").WhoCan(api.CallAnApiAt("https://api.example.com"))
 ```
@@ -59,13 +59,13 @@ err := actor.AttemptsTo(
 
 ### 1. Install
 ```bash
-go get github.com/nchursin/serenity-go
+go get github.com/nchursin/verity-bdd
 ```
 
 ### 2. Basic Test
 ```go
 func TestAPI(t *testing.T) {
-    test := serenity.NewSerenityTest(t, serenity.Scene{})
+    test := verity.NewVerityTest(t, verity.Scene{})
 
     actor := test.ActorCalled("APITester").WhoCan(
         api.CallAnApiAt("https://jsonplaceholder.typicode.com"),
@@ -107,10 +107,10 @@ Ready-to-use templates for:
 
 Have an idea to improve the documentation? Found something unclear? 
 
-- Check out the [main repository](https://github.com/nchursin/serenity-go)
+- Check out the [main repository](https://github.com/nchursin/verity-bdd)
 - Open an issue for documentation improvements
 - Submit pull requests for new examples and guides
 
 ---
 
-**Next Steps**: Start with [Creating Custom Abilities](abilities.md) to extend Serenity-Go for your testing needs.
+**Next Steps**: Start with [Creating Custom Abilities](abilities.md) to extend Verity-BDD for your testing needs.

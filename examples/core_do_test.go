@@ -5,14 +5,14 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/nchursin/serenity-go/serenity/core"
-	serenity "github.com/nchursin/serenity-go/serenity/testing"
+	"github.com/nchursin/verity-bdd/verity/core"
+	verity "github.com/nchursin/verity-bdd/verity/testing"
 )
 
 // TestCoreDoFunction demonstrates the new core.Do function for quick activity creation
 func TestCoreDoFunction(t *testing.T) {
 	ctx := context.Background()
-	test := serenity.NewSerenityTestWithContext(ctx, t)
+	test := verity.NewVerityTestWithContext(ctx, t)
 
 	actor := test.ActorCalled("TestActor")
 

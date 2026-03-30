@@ -3,9 +3,9 @@ package examples
 import (
 	"context"
 
-	"github.com/nchursin/serenity-go/serenity/abilities/take_notes"
-	"github.com/nchursin/serenity-go/serenity/core"
-	serenity "github.com/nchursin/serenity-go/serenity/testing"
+	"github.com/nchursin/verity-bdd/verity/abilities/take_notes"
+	"github.com/nchursin/verity-bdd/verity/core"
+	verity "github.com/nchursin/verity-bdd/verity/testing"
 )
 
 type exampleTestContext struct {
@@ -36,7 +36,7 @@ func (e *exampleTestContext) RunCleanups() {
 // and see them in the console reporter output.
 func ExampleConsoleReporter_actorNotesWithCoreDo() {
 	testCtx := &exampleTestContext{name: "ExampleNotesCoreDo"}
-	test := serenity.NewSerenityTest(testCtx, serenity.Scene{})
+	test := verity.NewVerityTest(testCtx, verity.Scene{})
 	defer testCtx.RunCleanups()
 
 	actor := test.ActorCalled("Sam").WhoCan(take_notes.UsingEmptyNotepad())

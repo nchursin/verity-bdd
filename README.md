@@ -1,12 +1,12 @@
-# Serenity-Go: Screenplay Pattern Testing Framework for Go
+# Verity-BDD: Screenplay Pattern Testing Framework for Go
 
-![CI](https://github.com/nchursin/serenity-go/workflows/CI/badge.svg) ![codecov](https://codecov.io/gh/nchursin/serenity-go/graph/badge.svg) ![Version](https://img.shields.io/github/v/release/nchursin/serenity-go)
+![CI](https://github.com/nchursin/verity-bdd/workflows/CI/badge.svg) ![codecov](https://codecov.io/gh/nchursin/verity-bdd/graph/badge.svg) ![Version](https://img.shields.io/github/v/release/nchursin/verity-bdd)
 
 A Go implementation of the Serenity/JS Screenplay Pattern for acceptance testing, focused on API testing capabilities.
 
 ## Overview
 
-Serenity-Go brings the power of the Screenplay Pattern to Go testing, providing:
+Verity-BDD brings the power of the Screenplay Pattern to Go testing, providing:
 
 - **Actor-centric testing** - Tests describe what actors do, not how they do it
 - **Reusable components** - Build a library of reusable tasks and interactions
@@ -16,10 +16,15 @@ Serenity-Go brings the power of the Screenplay Pattern to Go testing, providing:
 
 ## Quick Start
 
+## Breaking Rename Notice
+
+This project was hard-renamed from `Serenity-Go` to `Verity-BDD` with no backward compatibility aliases.
+If you migrate existing tests, use `docs/MIGRATION_SERENITY_TO_VERITY.md`.
+
 ### Installation
 
 ```bash
-go get github.com/nchursin/serenity-go
+go get github.com/nchursin/verity-bdd
 ```
 
 ### Basic Example
@@ -30,15 +35,15 @@ package main
 import (
     "testing"
 
-    "github.com/nchursin/serenity-go/serenity/abilities/api"
-    "github.com/nchursin/serenity-go/serenity/core"
-    "github.com/nchursin/serenity-go/serenity/expectations"
-    "github.com/nchursin/serenity-go/serenity/expectations/ensure"
-    serenity "github.com/nchursin/serenity-go/serenity/testing"
+    "github.com/nchursin/verity-bdd/verity/abilities/api"
+    "github.com/nchursin/verity-bdd/verity/core"
+    "github.com/nchursin/verity-bdd/verity/expectations"
+    "github.com/nchursin/verity-bdd/verity/expectations/ensure"
+    verity "github.com/nchursin/verity-bdd/verity/testing"
 )
 
 func TestAPI(t *testing.T) {
-    test := serenity.NewSerenityTest(t, serenity.Scene{})
+    test := verity.NewVerityTest(t, verity.Scene{})
 
     // Create an actor with API ability
     actor := test.ActorCalled("APITester").WhoCan(
@@ -69,7 +74,7 @@ func TestAPI(t *testing.T) {
 Actors represent people or systems interacting with your application:
 
 ```go
-test := serenity.NewSerenityTest(t, serenity.Scene{})
+test := verity.NewVerityTest(t, verity.Scene{})
 
 // Create an actor
 actor := test.ActorCalled("John Doe")
@@ -83,7 +88,7 @@ actor = actor.WhoCan(api.CallAnApiAt("https://api.example.com"))
 Abilities enable actors to interact with different interfaces:
 
 ```go
-test := serenity.NewSerenityTest(t, serenity.Scene{})
+test := verity.NewVerityTest(t, verity.Scene{})
 
 // HTTP API ability
 apiAbility := api.CallAnApiAt("https://api.example.com")
@@ -266,7 +271,7 @@ err := actor.AttemptsTo(
 
 ## Console Reporting
 
-Serenity-Go provides automatic console reporting for test results with emoji indicators, timing information, and detailed error messages.
+Verity-BDD provides automatic console reporting for test results with emoji indicators, timing information, and detailed error messages.
 
 ### Automatic Integration
 
@@ -274,7 +279,7 @@ The TestContext API automatically provides console reporting:
 
 ```go
 func TestAPITesting(t *testing.T) {
-    test := serenity.NewSerenityTest(t, serenity.Scene{})
+    test := verity.NewVerityTest(t, verity.Scene{})
 
     actor := test.ActorCalled("APITester").WhoCan(api.CallAnApiAt("https://jsonplaceholder.typicode.com"))
 
@@ -324,14 +329,14 @@ Example output:
 ```go
 import (
     "os"
-    "github.com/nchursin/serenity-go/serenity/reporting/console_reporter"
-    serenity "github.com/nchursin/serenity-go/serenity/testing"
+    "github.com/nchursin/verity-bdd/verity/reporting/console_reporter"
+    verity "github.com/nchursin/verity-bdd/verity/testing"
 )
 
 // Create custom console reporter
 reporter := console_reporter.NewConsoleReporter()
 
-test := serenity.NewSerenityTestWithReporter(t, reporter)
+test := verity.NewVerityTestWithReporter(t, reporter)
 ```
 
 For detailed documentation on console reporting, see [docs/reporting.md](docs/reporting.md).
@@ -341,8 +346,8 @@ For detailed documentation on console reporting, see [docs/reporting.md](docs/re
 ```go
 import (
     "os"
-    "github.com/nchursin/serenity-go/serenity/reporting/console_reporter"
-    serenity "github.com/nchursin/serenity-go/serenity/testing"
+    "github.com/nchursin/verity-bdd/verity/reporting/console_reporter"
+    verity "github.com/nchursin/verity-bdd/verity/testing"
 )
 
 // Create file for output
@@ -356,27 +361,27 @@ defer file.Close()
 reporter := console_reporter.NewConsoleReporter()
 reporter.SetOutput(file)
 
-test := serenity.NewSerenityTestWithReporter(t, reporter)
+test := verity.NewVerityTestWithReporter(t, reporter)
 ```
 
 For detailed documentation on console reporting, see [docs/reporting.md](docs/reporting.md).
 
 ## Allure Reporting
 
-Serenity-Go includes a native Allure reporter that writes Allure 2 result files, step data, and attachments.
+Verity-BDD includes a native Allure reporter that writes Allure 2 result files, step data, and attachments.
 
 ```go
 import (
     "context"
 
-    "github.com/nchursin/serenity-go/serenity/reporting/allure_reporter"
-    serenity "github.com/nchursin/serenity-go/serenity/testing"
+    "github.com/nchursin/verity-bdd/verity/reporting/allure_reporter"
+    verity "github.com/nchursin/verity-bdd/verity/testing"
 )
 
 func TestWithAllure(t *testing.T) {
     reporter := allure_reporter.NewAllureReporterWithDir("allure-results")
 
-    test := serenity.NewSerenityTest(t, serenity.Scene{
+    test := verity.NewVerityTest(t, verity.Scene{
         Context:  context.Background(),
         Reporter: reporter,
     })
@@ -414,12 +419,12 @@ For detailed `Satisfies` examples, see [docs/SATISFIES_EXAMPLES.md](docs/SATISFI
 
 ### Core Components
 
-- **serenity/core/** - Screenplay Pattern interfaces (Actor, Activity, Question, Task)
-- **serenity/abilities/api/** - HTTP API testing capabilities
-- **serenity/expectations/** - Assertion system and expectations
-- **serenity/expectations/ensure/** - Ensure-style assertions
-- **serenity/testing/** - TestContext API and testing utilities
-- **serenity/reporting/** - Console reporting and output utilities
+- **verity/core/** - Screenplay Pattern interfaces (Actor, Activity, Question, Task)
+- **verity/abilities/api/** - HTTP API testing capabilities
+- **verity/expectations/** - Assertion system and expectations
+- **verity/expectations/ensure/** - Ensure-style assertions
+- **verity/testing/** - TestContext API and testing utilities
+- **verity/reporting/** - Console reporting and output utilities
 
 ### Design Principles
 
@@ -517,7 +522,7 @@ actor.AttemptsTo(
 ### Multiple Actors
 
 ```go
-test := serenity.NewSerenityTest(t, serenity.Scene{})
+test := verity.NewVerityTest(t, verity.Scene{})
 
 admin := test.ActorCalled("Admin").WhoCan(api.CallAnApiAt(baseURL))
 user := test.ActorCalled("RegularUser").WhoCan(api.CallAnApiAt(baseURL))
@@ -533,7 +538,7 @@ user.AttemptsTo(accessResourceTask)
 
 This Go implementation follows the same design principles as Serenity/JS:
 
-| Serenity/JS | Serenity-Go |
+| Serenity/JS | Verity-BDD |
 |--------------|-------------|
 | `actorCalled('John')` | `test.ActorCalled("John")` |
 | `WhoCan(CallAnAPI.using(...))` | `WhoCan(api.CallAnApiAt(...))` |

@@ -4,16 +4,16 @@ import (
 	"context"
 	"testing"
 
-	"github.com/nchursin/serenity-go/serenity/abilities/api"
-	"github.com/nchursin/serenity-go/serenity/expectations"
-	"github.com/nchursin/serenity-go/serenity/expectations/ensure"
-	serenity "github.com/nchursin/serenity-go/serenity/testing"
+	"github.com/nchursin/verity-bdd/verity/abilities/api"
+	"github.com/nchursin/verity-bdd/verity/expectations"
+	"github.com/nchursin/verity-bdd/verity/expectations/ensure"
+	verity "github.com/nchursin/verity-bdd/verity/testing"
 )
 
 // TestJSONPlaceholderBasicsNewAPI demonstrates basic API testing with JSONPlaceholder using new TestContext API
 func TestJSONPlaceholderBasicsNewAPI(t *testing.T) {
 	ctx := context.Background()
-	test := serenity.NewSerenityTestWithContext(ctx, t)
+	test := verity.NewVerityTestWithContext(ctx, t)
 
 	apiTester := test.ActorCalled("APITester").WhoCan(api.CallAnApiAt("https://jsonplaceholder.typicode.com"))
 

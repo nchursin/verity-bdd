@@ -5,18 +5,18 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/nchursin/serenity-go/serenity/answerable"
-	"github.com/nchursin/serenity-go/serenity/core"
-	"github.com/nchursin/serenity-go/serenity/expectations"
-	"github.com/nchursin/serenity-go/serenity/expectations/ensure"
-	serenity "github.com/nchursin/serenity-go/serenity/testing"
+	"github.com/nchursin/verity-bdd/verity/answerable"
+	"github.com/nchursin/verity-bdd/verity/core"
+	"github.com/nchursin/verity-bdd/verity/expectations"
+	"github.com/nchursin/verity-bdd/verity/expectations/ensure"
+	verity "github.com/nchursin/verity-bdd/verity/testing"
 )
 
 // TestAnswerableWithEnsure demonstrates the complete integration of answerable.ValueOf
 // with ensure.That() assertions using the new TestContext API.
 func TestAnswerableWithEnsure(t *testing.T) {
 	ctx := context.Background()
-	test := serenity.NewSerenityTestWithContext(ctx, t)
+	test := verity.NewVerityTestWithContext(ctx, t)
 
 	actor := test.ActorCalled("TestActor")
 
@@ -53,7 +53,7 @@ func TestAnswerableWithEnsure(t *testing.T) {
 // that answerable.ValueOf generates for different types.
 func TestAnswerableDescriptionFormats(t *testing.T) {
 	ctx := context.Background()
-	test := serenity.NewSerenityTestWithContext(ctx, t)
+	test := verity.NewVerityTestWithContext(ctx, t)
 
 	actor := test.ActorCalled("TestActor")
 

@@ -16,7 +16,7 @@ import (
     "fmt"
     _ "github.com/lib/pq"
     
-    "github.com/nchursin/serenity-go/serenity/abilities"
+    "github.com/nchursin/verity-bdd/verity/abilities"
 )
 
 // DatabaseAbility - способность для работы с базами данных
@@ -210,7 +210,7 @@ func (i *InsertDataActivity) PerformAs(actor core.Actor) error {
 
 ```go
 func TestDatabaseOperations(t *testing.T) {
-    test := serenity.NewSerenityTest(t, serenity.Scene{})
+    test := verity.NewVerityTest(t, verity.Scene{})
 
     actor := test.ActorCalled("DBAdmin").WhoCan(
         database.ConnectToPostgreSQL("postgres://user:pass@localhost/testdb?sslmode=disable"),
@@ -434,7 +434,7 @@ func copyFile(src, dst string) error {
 
 ```go
 func TestFileSystemWithBackup(t *testing.T) {
-    test := serenity.NewSerenityTest(t, serenity.Scene{})
+    test := verity.NewVerityTest(t, verity.Scene{})
 
     tempDir := t.TempDir()
     
@@ -748,7 +748,7 @@ type RedisAbility interface {
 
 ```go
 func TestRedisOperations(t *testing.T) {
-    test := serenity.NewSerenityTest(t, serenity.Scene{})
+    test := verity.NewVerityTest(t, verity.Scene{})
 
     // Предполагаем, что у вас запущен Redis на localhost:6379
     actor := test.ActorCalled("RedisUser").WhoCan(

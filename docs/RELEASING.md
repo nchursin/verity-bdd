@@ -1,10 +1,10 @@
-# Releasing Serenity-Go
+# Releasing Verity-BDD
 
-This document explains the automated release process for Serenity-Go project.
+This document explains the automated release process for Verity-BDD project.
 
 ## 🚀 Overview
 
-Serenity-Go uses semantic versioning with automated releases based on conventional commits. The release process is fully automated using GitHub Actions, with local tools for testing and validation.
+Verity-BDD uses semantic versioning with automated releases based on conventional commits. The release process is fully automated using GitHub Actions, with local tools for testing and validation.
 
 ## 📋 Versioning Rules
 

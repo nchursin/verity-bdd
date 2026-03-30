@@ -5,11 +5,11 @@ import (
 
 	"go.uber.org/mock/gomock"
 
-	"github.com/nchursin/serenity-go/serenity/abilities/api"
-	"github.com/nchursin/serenity-go/serenity/expectations"
-	"github.com/nchursin/serenity-go/serenity/expectations/ensure"
-	serenity "github.com/nchursin/serenity-go/serenity/testing"
-	"github.com/nchursin/serenity-go/serenity/testing/mocks"
+	"github.com/nchursin/verity-bdd/verity/abilities/api"
+	"github.com/nchursin/verity-bdd/verity/expectations"
+	"github.com/nchursin/verity-bdd/verity/expectations/ensure"
+	verity "github.com/nchursin/verity-bdd/verity/testing"
+	"github.com/nchursin/verity-bdd/verity/testing/mocks"
 )
 
 // TestIntentionalFailure demonstrates error handling with wrong assertion using mock TestContext
@@ -33,8 +33,8 @@ func TestIntentionalFailure(t *testing.T) {
 	// We expect it to be called exactly once with any format string and arguments
 	mockCtx.EXPECT().Errorf(gomock.Any(), gomock.Any()).Times(1)
 
-	// Create SerenityTest with mock context
-	test := serenity.NewSerenityTest(mockCtx, serenity.Scene{})
+	// Create VerityTest with mock context
+	test := verity.NewVerityTest(mockCtx, verity.Scene{})
 	// Call it manually to do it before mocks
 	defer test.Shutdown()
 

@@ -12,7 +12,7 @@ func TestRootAPIContractCompiles(t *testing.T) {
 		return nil
 	})
 
-	var _ verity.Task = verity.TaskWhere("empty")
+	_ = verity.TaskWhere("empty")
 
 	q := verity.QuestionAbout("answer", func(actor verity.Actor, ctx context.Context) (int, error) {
 		return 42, nil

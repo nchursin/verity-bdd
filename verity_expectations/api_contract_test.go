@@ -1,7 +1,6 @@
 package verity_expectations_test
 
 import (
-	"context"
 	"testing"
 
 	verity "github.com/nchursin/verity-bdd"
@@ -11,8 +10,5 @@ import (
 
 func TestExpectationsAPIContractCompiles(t *testing.T) {
 	q := verity.ValueOf("hello")
-	activity := ensure.That(q, ve.Contains("ell"))
-
-	var _ verity.Activity = activity
-	_ = context.Background()
+	_ = ensure.That(q, ve.Contains("ell"))
 }

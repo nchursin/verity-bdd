@@ -54,8 +54,9 @@ func TestAnswerableValueOf(t *testing.T) {
 // with traditional dynamic questions from API interactions.
 func TestAnswerableWithMixedQuestions(t *testing.T) {
 	test := verity.NewVerityTest(t, verity.Scene{})
+	apiBaseURL := localJSONPlaceholderURL(t)
 
-	apiTester := test.ActorCalled("APITester").WhoCan(api.CallAnApiAt("https://jsonplaceholder.typicode.com"))
+	apiTester := test.ActorCalled("APITester").WhoCan(api.CallAnApiAt(apiBaseURL))
 
 	// Mix of static value questions (using verity.ValueOf)
 	// and dynamic questions (from API interactions)

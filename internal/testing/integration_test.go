@@ -12,6 +12,7 @@ import (
 	"github.com/nchursin/verity-bdd/internal/expectations"
 	"github.com/nchursin/verity-bdd/internal/expectations/ensure"
 	"github.com/nchursin/verity-bdd/internal/reporting/console_reporter"
+	"github.com/nchursin/verity-bdd/internal/testing/testserver"
 )
 
 func TestReportingIntegration(t *testing.T) {
@@ -22,9 +23,10 @@ func TestReportingIntegration(t *testing.T) {
 
 	ctx := context.Background()
 	test := NewVerityTestWithReporter(ctx, t, reporter)
+	apiBaseURL := testserver.StartJSONPlaceholderStub(t)
 
 	// Create actor with API ability
-	apiTester := test.ActorCalled("APITester").WhoCan(api.CallAnApiAt("https://jsonplaceholder.typicode.com"))
+	apiTester := test.ActorCalled("APITester").WhoCan(api.CallAnApiAt(apiBaseURL))
 
 	// Perform successful activities
 	apiTester.AttemptsTo(
@@ -84,10 +86,11 @@ func TestMultipleActorsReporting(t *testing.T) {
 
 	ctx := context.Background()
 	test := NewVerityTestWithReporter(ctx, t, reporter)
+	apiBaseURL := testserver.StartJSONPlaceholderStub(t)
 
 	// Create multiple actors
-	actor1 := test.ActorCalled("Actor1").WhoCan(api.CallAnApiAt("https://jsonplaceholder.typicode.com"))
-	actor2 := test.ActorCalled("Actor2").WhoCan(api.CallAnApiAt("https://jsonplaceholder.typicode.com"))
+	actor1 := test.ActorCalled("Actor1").WhoCan(api.CallAnApiAt(apiBaseURL))
+	actor2 := test.ActorCalled("Actor2").WhoCan(api.CallAnApiAt(apiBaseURL))
 
 	// Both actors perform activities
 	actor1.AttemptsTo(api.SendGetRequest("/posts/1"))
@@ -111,8 +114,9 @@ func TestComplexWorkflowReporting(t *testing.T) {
 
 	ctx := context.Background()
 	test := NewVerityTestWithReporter(ctx, t, reporter)
+	apiBaseURL := testserver.StartJSONPlaceholderStub(t)
 
-	actor := test.ActorCalled("WorkflowActor").WhoCan(api.CallAnApiAt("https://jsonplaceholder.typicode.com"))
+	actor := test.ActorCalled("WorkflowActor").WhoCan(api.CallAnApiAt(apiBaseURL))
 
 	// Perform a complex workflow with multiple steps
 	actor.AttemptsTo(
@@ -152,8 +156,9 @@ func TestConcurrentActivitiesReporting(t *testing.T) {
 
 	ctx := context.Background()
 	test := NewVerityTestWithReporter(ctx, t, reporter)
+	apiBaseURL := testserver.StartJSONPlaceholderStub(t)
 
-	actor := test.ActorCalled("ConcurrentActor").WhoCan(api.CallAnApiAt("https://jsonplaceholder.typicode.com"))
+	actor := test.ActorCalled("ConcurrentActor").WhoCan(api.CallAnApiAt(apiBaseURL))
 
 	// Perform activities concurrently
 	done := make(chan bool, 2)

@@ -12,8 +12,9 @@ import (
 // TestFailureHandling demonstrates how different failure modes work
 func TestFailureHandling(t *testing.T) {
 	test := verity.NewVerityTest(t, verity.Scene{})
+	apiBaseURL := localJSONPlaceholderURL(t)
 
-	apiTester := test.ActorCalled("APITester").WhoCan(api.CallAnApiAt("https://jsonplaceholder.typicode.com"))
+	apiTester := test.ActorCalled("APITester").WhoCan(api.CallAnApiAt(apiBaseURL))
 
 	// This should pass - all assertions are correct
 	apiTester.AttemptsTo(

@@ -14,8 +14,9 @@ import (
 func TestJSONPlaceholderBasicsNewAPI(t *testing.T) {
 	ctx := context.Background()
 	test := verity.NewVerityTestWithContext(ctx, t)
+	apiBaseURL := localJSONPlaceholderURL(t)
 
-	apiTester := test.ActorCalled("APITester").WhoCan(api.CallAnApiAt("https://jsonplaceholder.typicode.com"))
+	apiTester := test.ActorCalled("APITester").WhoCan(api.CallAnApiAt(apiBaseURL))
 
 	// Test GET posts - should return existing posts
 	apiTester.AttemptsTo(

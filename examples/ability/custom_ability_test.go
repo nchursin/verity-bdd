@@ -11,6 +11,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	verity "github.com/nchursin/verity-bdd"
+	"github.com/nchursin/verity-bdd/internal/testing/testserver"
 	"github.com/nchursin/verity-bdd/verity_abilities/api"
 )
 
@@ -535,11 +536,12 @@ func TestFileSystemAbility_ConcurrentAccess(t *testing.T) {
 func TestFileSystemAbility_WithAPIIntegration(t *testing.T) {
 	ctx := context.Background()
 	test := verity.NewVerityTestWithContext(ctx, t)
+	apiBaseURL := testserver.StartJSONPlaceholderStub(t)
 
 	tempDir := t.TempDir()
 	actor := test.ActorCalled("IntegrationTester").WhoCan(
 		ManageFilesIn(tempDir),
-		api.CallAnApiAt("https://jsonplaceholder.typicode.com"),
+		api.CallAnApiAt(apiBaseURL),
 	)
 
 	// Get data from API

@@ -20,8 +20,9 @@ func TestConsoleReportingDemo(t *testing.T) {
 	reporter := console_reporter.NewConsoleReporter()
 
 	test := verity.NewVerityTestWithReporter(context.Background(), t, reporter)
+	apiBaseURL := localJSONPlaceholderURL(t)
 
-	apiTester := test.ActorCalled("DemoAPITester").WhoCan(api.CallAnApiAt("https://jsonplaceholder.typicode.com"))
+	apiTester := test.ActorCalled("DemoAPITester").WhoCan(api.CallAnApiAt(apiBaseURL))
 
 	// This will show detailed console output with emojis and timing
 	apiTester.AttemptsTo(
@@ -49,8 +50,9 @@ func TestReportingToFile(t *testing.T) {
 	reporter.SetOutput(file)
 
 	test := verity.NewVerityTestWithReporter(context.Background(), t, reporter)
+	apiBaseURL := localJSONPlaceholderURL(t)
 
-	apiTester := test.ActorCalled("FileReporter").WhoCan(api.CallAnApiAt("https://jsonplaceholder.typicode.com"))
+	apiTester := test.ActorCalled("FileReporter").WhoCan(api.CallAnApiAt(apiBaseURL))
 
 	apiTester.AttemptsTo(
 		api.SendGetRequest("/users"),

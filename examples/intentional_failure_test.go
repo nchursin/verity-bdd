@@ -37,8 +37,9 @@ func TestIntentionalFailure(t *testing.T) {
 	test := verity.NewVerityTest(mockCtx, verity.Scene{})
 	// Call it manually to do it before mocks
 	defer test.Shutdown()
+	apiBaseURL := localJSONPlaceholderURL(t)
 
-	apiTester := test.ActorCalled("APITester").WhoCan(api.CallAnApiAt("https://jsonplaceholder.typicode.com"))
+	apiTester := test.ActorCalled("APITester").WhoCan(api.CallAnApiAt(apiBaseURL))
 
 	// This should trigger Errorf call - wrong status code (expecting 404 but getting 200)
 	apiTester.AttemptsTo(

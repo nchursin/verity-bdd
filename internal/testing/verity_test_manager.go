@@ -86,8 +86,9 @@ type VerityTest interface {
 //	func TestAPIEndpoints(t *testing.T) {
 //		test := verity.NewVerityTest(t, verity.Scene{})
 //
+//		apiBaseURL := "http://127.0.0.1:8080"
 //		actor := test.ActorCalled("APITester").WhoCan(
-//			api.CallAnApiAt("https://jsonplaceholder.typicode.com"),
+//			api.CallAnApiAt(apiBaseURL),
 //		)
 //
 //		actor.AttemptsTo(

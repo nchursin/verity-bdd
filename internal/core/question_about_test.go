@@ -26,7 +26,17 @@ func TestQuestionAboutCreatesQuestion(t *stdtesting.T) {
 		t.Fatalf("expected value 7, got %d", value)
 	}
 
-	if description := question.Description(); description != "asks number" {
-		t.Fatalf("expected description 'asks number', got %q", description)
+	if description := question.Description(); description != "number" {
+		t.Fatalf("expected description 'number', got %q", description)
+	}
+}
+
+func TestNewQuestionDescriptionIsNotPrefixed(t *stdtesting.T) {
+	question := core.NewQuestion[string]("client record of company", func(actor core.Actor, ctx context.Context) (string, error) {
+		return "ok", nil
+	})
+
+	if description := question.Description(); description != "client record of company" {
+		t.Fatalf("expected original description, got %q", description)
 	}
 }

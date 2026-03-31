@@ -5,7 +5,7 @@ This document provides essential information for AI agents working with the Veri
 ## Screenplay Pattern
 This lib is implementing a [Screenplay pattern](https://serenity-js.org/handbook/design/screenplay-pattern/) for Go.
 
-Core objects are in the `./verity` folder.
+All the implementation is in `./internal` folder. API is exposed explicitly.
 
 ## Development workflow
 For all functionlaity **ALWAYS** use `test-driven-development` skill.

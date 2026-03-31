@@ -2,7 +2,6 @@ package core
 
 import (
 	"context"
-	"fmt"
 )
 
 // This file provides concrete implementations of the Question interface
@@ -147,18 +146,17 @@ func NewQuestion[T any](description string, ask func(actor Actor, ctx context.Co
 	}
 }
 
-// Description returns the question's human-readable description.
-// The description is prefixed with "asks " to indicate it's a query.
+// Description returns the question's human-readable description as-is.
 //
 // Returns:
-//   - string: Description formatted as "asks [description]"
+//   - string: Original description provided during question creation
 //
 // Example:
 //
 //	q := core.QuestionAbout("user count", getUserCount)
-//	fmt.Println(q.Description()) // "asks user count"
+//	fmt.Println(q.Description()) // "user count"
 func (q *question[T]) Description() string {
-	return fmt.Sprintf("asks %s", q.description)
+	return q.description
 }
 
 // AnsweredBy returns the answer when asked by the given actor.

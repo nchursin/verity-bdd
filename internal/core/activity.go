@@ -5,6 +5,18 @@ import (
 	"fmt"
 )
 
+type activityPerformer interface {
+	PerformActivity(ctx context.Context, activity Activity) error
+}
+
+func performActivity(ctx context.Context, actor Actor, activity Activity) error {
+	if performer, ok := actor.(activityPerformer); ok {
+		return performer.PerformActivity(ctx, activity)
+	}
+
+	return activity.PerformAs(ctx, actor)
+}
+
 // This file provides concrete implementations of the Activity interface
 // defined in interfaces.go. These implementations enable the creation
 // of both atomic interactions and composed tasks for test scenarios.
@@ -104,13 +116,7 @@ func (t *task) Description() string {
 //	- The original error wrapped with context
 func (t *task) PerformAs(ctx context.Context, actor Actor) error {
 	for _, activity := range t.activities {
-		var err error
-		if performer, ok := actor.(NestedActivityPerformer); ok {
-			err = performer.PerformNestedActivity(ctx, activity)
-		} else {
-			err = activity.PerformAs(ctx, actor)
-		}
-
+		err := performActivity(ctx, actor, activity)
 		if err != nil {
 			return fmt.Errorf("task '%s' failed during activity '%s': %w",
 				t.Description(), activity.Description(), err)

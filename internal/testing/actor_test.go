@@ -113,6 +113,55 @@ func TestTestActorAttemptsToWithNestedTaskReporting(t *testing.T) {
 	)
 }
 
+func TestTestActorPerformActivityReportsNestedTaskHierarchy(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	mockReporter := reportingMocks.NewMockReporter(ctrl)
+	mockTestContext := testingMocks.NewMockTestContext(ctrl)
+
+	gomock.InOrder(
+		mockReporter.EXPECT().OnStepStart("Sam creates an order"),
+		mockReporter.EXPECT().OnStepStart("Sam submits order details"),
+		mockReporter.EXPECT().OnStepStart("Sam opens order page"),
+		mockReporter.EXPECT().OnStepFinish(gomock.Any()).Do(func(result reporting.TestResult) {
+			if result.Name() != "Sam opens order page" {
+				t.Fatalf("unexpected leaf step name: %s", result.Name())
+			}
+		}),
+		mockReporter.EXPECT().OnStepFinish(gomock.Any()).Do(func(result reporting.TestResult) {
+			if result.Name() != "Sam submits order details" {
+				t.Fatalf("unexpected nested task name: %s", result.Name())
+			}
+		}),
+		mockReporter.EXPECT().OnStepFinish(gomock.Any()).Do(func(result reporting.TestResult) {
+			if result.Name() != "Sam creates an order" {
+				t.Fatalf("unexpected root task name: %s", result.Name())
+			}
+		}),
+	)
+
+	actor := &testActor{
+		name:        "Sam",
+		testContext: mockTestContext,
+		reporter:    reporting.NewTestRunnerAdapter(mockReporter),
+		ctx:         context.Background(),
+	}
+
+	err := actor.PerformActivity(context.Background(),
+		core.TaskWhere("#actor creates an order",
+			core.TaskWhere("#actor submits order details",
+				core.Do("#actor opens order page", func(ctx context.Context, actor core.Actor) error {
+					return nil
+				}),
+			),
+		),
+	)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+}
+
 func TestAbilityToReturnsFriendlyError(t *testing.T) {
 	actor := &testActor{
 		name:      "TestActor",

@@ -81,6 +81,53 @@ func TestAllureReporterExample_GeneratesReportFiles(t *testing.T) {
 	require.Equal(t, "secret", notes["Sam"]["token"])
 }
 
+func TestAllureReporterExample_GeneratesNestedTaskSteps(t *testing.T) {
+	resultsDir := t.TempDir()
+	reporter := allure_reporter.NewAllureReporterWithDir(resultsDir)
+
+	test := verity.NewVerityTest(t, verity.Scene{
+		Context:  context.Background(),
+		Reporter: reporter,
+	})
+
+	actor := test.ActorCalled("Sam")
+	actor.AttemptsTo(
+		verity.TaskWhere("#actor creates an order",
+			verity.TaskWhere("#actor submits order details",
+				verity.Do("#actor opens order page", func(ctx context.Context, actor verity.Actor) error {
+					return nil
+				}),
+			),
+		),
+	)
+
+	test.Shutdown()
+
+	resultFile := findSingleAllureResultFile(t, resultsDir)
+	resultPayload, err := os.ReadFile(resultFile)
+	require.NoError(t, err)
+
+	var result map[string]any
+	require.NoError(t, json.Unmarshal(resultPayload, &result))
+
+	steps, ok := result["steps"].([]any)
+	require.True(t, ok)
+	require.Len(t, steps, 1)
+
+	rootStep := steps[0].(map[string]any)
+	require.Equal(t, "Sam creates an order", rootStep["name"])
+
+	nestedSteps, ok := rootStep["steps"].([]any)
+	require.True(t, ok)
+	require.Len(t, nestedSteps, 1)
+	require.Equal(t, "Sam submits order details", nestedSteps[0].(map[string]any)["name"])
+
+	leafSteps, ok := nestedSteps[0].(map[string]any)["steps"].([]any)
+	require.True(t, ok)
+	require.Len(t, leafSteps, 1)
+	require.Equal(t, "Sam opens order page", leafSteps[0].(map[string]any)["name"])
+}
+
 func findSingleAllureResultFile(t *testing.T, resultsDir string) string {
 	t.Helper()
 

@@ -63,7 +63,7 @@ func TestTakeNoteStoresValue(t *testing.T) {
 		t.Fatalf("expected FailFast failure mode")
 	}
 
-	err := activity.PerformAs(actor, context.Background())
+	err := activity.PerformAs(context.Background(), actor)
 	if err != nil {
 		t.Fatalf("expected no error performing take note, got %v", err)
 	}
@@ -81,7 +81,7 @@ func TestTakeNoteRequiresAbility(t *testing.T) {
 	actor := newStubActor("bob", context.Background())
 
 	activity := take_notes.TakeNoteOf("value").As("missing")
-	err := activity.PerformAs(actor, context.Background())
+	err := activity.PerformAs(context.Background(), actor)
 	if err == nil {
 		t.Fatalf("expected error when actor lacks notebook ability")
 	}
@@ -120,7 +120,7 @@ func TestTakeNoteErrorsWhenAbilityTypeMismatch(t *testing.T) {
 	actor := newStubActor("mike", context.Background(), &dummyAbility{})
 
 	activity := take_notes.TakeNoteOf("value").As("k")
-	err := activity.PerformAs(actor, context.Background())
+	err := activity.PerformAs(context.Background(), actor)
 	if err == nil {
 		t.Fatalf("expected error when ability type is not TakeNotesAbility")
 	}

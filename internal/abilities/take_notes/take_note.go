@@ -31,7 +31,7 @@ func (t *takeNoteActivity) Description() string {
 	return fmt.Sprintf("#actor takes note %q", t.key)
 }
 
-func (t *takeNoteActivity) PerformAs(actor core.Actor, ctx context.Context) error {
+func (t *takeNoteActivity) PerformAs(ctx context.Context, actor core.Actor) error {
 	abiliy, err := core.AbilityOf[*TakeNotesAbility](actor)
 	if err != nil {
 		return err

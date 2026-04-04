@@ -40,7 +40,7 @@ func ExampleConsoleReporter_actorNotesWithCoreDo() {
 
 	actor := test.ActorCalled("Sam").WhoCan(take_notes.UsingEmptyNotepad())
 	actor.AttemptsTo(
-		verity.Do("#actor writes a secret", func(actor verity.Actor, ctx context.Context) error {
+		verity.Do("#actor writes a secret", func(ctx context.Context, actor verity.Actor) error {
 			ability, err := actor.AbilityTo(&take_notes.TakeNotesAbility{})
 			if err != nil {
 				return err

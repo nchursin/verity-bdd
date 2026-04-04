@@ -42,7 +42,7 @@ func (a *stubActor) AbilityTo(target abilities.Ability) (abilities.Ability, erro
 
 func (a *stubActor) AttemptsTo(activities ...core.Activity) {
 	for _, activity := range activities {
-		_ = activity.PerformAs(a, a.ctx)
+		_ = activity.PerformAs(a.ctx, a)
 	}
 }
 

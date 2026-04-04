@@ -77,7 +77,7 @@ func TestRequestActivityWithNilBuilderReturnsError(t *testing.T) {
 	activity := &RequestActivity{}
 	actor := newStubActor("nil-builder", context.Background())
 
-	err := activity.PerformAs(actor, context.Background())
+	err := activity.PerformAs(context.Background(), actor)
 	if err == nil {
 		t.Fatalf("expected error for nil builder")
 	}
@@ -100,7 +100,7 @@ func TestSendRequestPerformAsRequiresAbility(t *testing.T) {
 	interaction := &sendRequest{request: req}
 	actor := newStubActor("no-ability", context.Background())
 
-	err = interaction.PerformAs(actor, context.Background())
+	err = interaction.PerformAs(context.Background(), actor)
 	if err == nil {
 		t.Fatalf("expected error when actor lacks ability")
 	}

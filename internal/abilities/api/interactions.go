@@ -31,7 +31,7 @@ func (s *sendRequest) Description() string {
 }
 
 // PerformAs executes the send request interaction
-func (s *sendRequest) PerformAs(actor core.Actor, ctx context.Context) error {
+func (s *sendRequest) PerformAs(ctx context.Context, actor core.Actor) error {
 	if s.request == nil {
 		return fmt.Errorf("request is nil")
 	}
@@ -179,7 +179,7 @@ func (ra *RequestActivity) Description() string {
 }
 
 // PerformAs implements core.Activity interface
-func (ra *RequestActivity) PerformAs(actor core.Actor, ctx context.Context) error {
+func (ra *RequestActivity) PerformAs(ctx context.Context, actor core.Actor) error {
 	if ra.builder == nil {
 		return fmt.Errorf("request builder is nil")
 	}
@@ -191,7 +191,7 @@ func (ra *RequestActivity) PerformAs(actor core.Actor, ctx context.Context) erro
 
 	// Reuse existing sendRequest logic
 	sendReq := &sendRequest{request: req}
-	return sendReq.PerformAs(actor, ctx)
+	return sendReq.PerformAs(ctx, actor)
 }
 
 // FailureMode returns the failure mode for request activities (default: FailFast)

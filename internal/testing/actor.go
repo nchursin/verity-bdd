@@ -112,7 +112,7 @@ func (ta *testActor) AttemptsTo(activities ...core.Activity) {
 			tracker.Start()
 		}
 
-		err := activity.PerformAs(ta, ta.ctx)
+		err := activity.PerformAs(ta.ctx, ta)
 
 		if tracker != nil {
 			tracker.Finish(err)

@@ -8,7 +8,7 @@ import (
 )
 
 func TestRootAPIContractCompiles(t *testing.T) {
-	var _ verity.Activity = verity.Do("noop", func(actor verity.Actor, ctx context.Context) error {
+	var _ verity.Activity = verity.Do("noop", func(ctx context.Context, actor verity.Actor) error {
 		return nil
 	})
 

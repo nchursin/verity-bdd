@@ -90,7 +90,7 @@ func (d *descriptionTestActivity) Description() string {
 	return "verify description format"
 }
 
-func (d *descriptionTestActivity) PerformAs(actor verity.Actor, ctx context.Context) error {
+func (d *descriptionTestActivity) PerformAs(ctx context.Context, actor verity.Actor) error {
 	// This is a meta-test to verify descriptions work correctly
 	// In real usage, descriptions appear in test output
 	return nil

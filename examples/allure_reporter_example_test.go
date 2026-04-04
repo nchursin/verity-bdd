@@ -27,10 +27,10 @@ func TestAllureReporterExample_GeneratesReportFiles(t *testing.T) {
 
 	actor := test.ActorCalled("Sam").WhoCan(take_notes.UsingEmptyNotepad())
 	actor.AttemptsTo(
-		verity.Do("#actor does something", func(actor verity.Actor, ctx context.Context) error {
+		verity.Do("#actor does something", func(ctx context.Context, actor verity.Actor) error {
 			return nil
 		}),
-		verity.Do("#actor records an Allure-friendly step", func(actor verity.Actor, ctx context.Context) error {
+		verity.Do("#actor records an Allure-friendly step", func(ctx context.Context, actor verity.Actor) error {
 			ability, err := actor.AbilityTo(&take_notes.TakeNotesAbility{})
 			if err != nil {
 				return err
@@ -40,7 +40,7 @@ func TestAllureReporterExample_GeneratesReportFiles(t *testing.T) {
 			notebook.Set("token", "secret")
 			return nil
 		}),
-		verity.Do("#actor does something else", func(actor verity.Actor, ctx context.Context) error {
+		verity.Do("#actor does something else", func(ctx context.Context, actor verity.Actor) error {
 			return nil
 		}),
 	)

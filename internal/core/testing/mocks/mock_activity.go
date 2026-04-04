@@ -187,17 +187,17 @@ func (mr *MockActivityMockRecorder) FailureMode() *gomock.Call {
 }
 
 // PerformAs mocks base method.
-func (m *MockActivity) PerformAs(actor core.Actor, ctx context.Context) error {
+func (m *MockActivity) PerformAs(ctx context.Context, actor core.Actor) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "PerformAs", actor, ctx)
+	ret := m.ctrl.Call(m, "PerformAs", ctx, actor)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // PerformAs indicates an expected call of PerformAs.
-func (mr *MockActivityMockRecorder) PerformAs(actor, ctx any) *gomock.Call {
+func (mr *MockActivityMockRecorder) PerformAs(ctx, actor any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "PerformAs", reflect.TypeOf((*MockActivity)(nil).PerformAs), actor, ctx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "PerformAs", reflect.TypeOf((*MockActivity)(nil).PerformAs), ctx, actor)
 }
 
 // MockInteraction is a mock of Interaction interface.
@@ -253,17 +253,17 @@ func (mr *MockInteractionMockRecorder) FailureMode() *gomock.Call {
 }
 
 // PerformAs mocks base method.
-func (m *MockInteraction) PerformAs(actor core.Actor, ctx context.Context) error {
+func (m *MockInteraction) PerformAs(ctx context.Context, actor core.Actor) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "PerformAs", actor, ctx)
+	ret := m.ctrl.Call(m, "PerformAs", ctx, actor)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // PerformAs indicates an expected call of PerformAs.
-func (mr *MockInteractionMockRecorder) PerformAs(actor, ctx any) *gomock.Call {
+func (mr *MockInteractionMockRecorder) PerformAs(ctx, actor any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "PerformAs", reflect.TypeOf((*MockInteraction)(nil).PerformAs), actor, ctx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "PerformAs", reflect.TypeOf((*MockInteraction)(nil).PerformAs), ctx, actor)
 }
 
 // MockTask is a mock of Task interface.
@@ -319,17 +319,17 @@ func (mr *MockTaskMockRecorder) FailureMode() *gomock.Call {
 }
 
 // PerformAs mocks base method.
-func (m *MockTask) PerformAs(actor core.Actor, ctx context.Context) error {
+func (m *MockTask) PerformAs(ctx context.Context, actor core.Actor) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "PerformAs", actor, ctx)
+	ret := m.ctrl.Call(m, "PerformAs", ctx, actor)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // PerformAs indicates an expected call of PerformAs.
-func (mr *MockTaskMockRecorder) PerformAs(actor, ctx any) *gomock.Call {
+func (mr *MockTaskMockRecorder) PerformAs(ctx, actor any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "PerformAs", reflect.TypeOf((*MockTask)(nil).PerformAs), actor, ctx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "PerformAs", reflect.TypeOf((*MockTask)(nil).PerformAs), ctx, actor)
 }
 
 // MockQuestion is a mock of Question interface.

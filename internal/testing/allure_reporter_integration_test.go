@@ -31,7 +31,7 @@ func TestVerityTest_WithAllureReporter_WritesResults(t *testing.T) {
 	notebook := ability.(*take_notes.TakeNotesAbility)
 	notebook.Set("token", "secret")
 
-	actor.AttemptsTo(core.Do("records an action", func(actor core.Actor, ctx context.Context) error {
+	actor.AttemptsTo(core.Do("records an action", func(ctx context.Context, actor core.Actor) error {
 		return nil
 	}))
 

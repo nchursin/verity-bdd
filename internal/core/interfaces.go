@@ -22,8 +22,8 @@
 //
 //	// Perform simple interactions
 //	actor.AttemptsTo(
-//		core.Do("sends GET request", func(a core.Actor) error {
-//			return api.SendGetRequest("/users").PerformAs(a)
+//		core.Do("sends GET request", func(ctx context.Context, a core.Actor) error {
+//			return api.SendGetRequest("/users").PerformAs(ctx, a)
 //		}),
 //	)
 //
@@ -52,8 +52,8 @@
 //	Task        - High-level, business-focused activities composed of multiple interactions
 //
 //	// Interaction example
-//	sendRequest := core.Do("sends POST request", func(actor core.Actor) error {
-//		return api.SendPostRequest("/users", userData).PerformAs(actor)
+//	sendRequest := core.Do("sends POST request", func(ctx context.Context, actor core.Actor) error {
+//		return api.SendPostRequest("/users", userData).PerformAs(ctx, actor)
 //	})
 //
 //	// Task example
@@ -175,11 +175,11 @@ import (
 //
 //	// Perform activities
 //	err := actor.AttemptsTo(
-//		core.Do("creates customer order", func(a core.Actor) error {
-//			return createOrder(orderData).PerformAs(a)
+//		core.Do("creates customer order", func(ctx context.Context, a core.Actor) error {
+//			return createOrder(orderData).PerformAs(ctx, a)
 //		}),
-//		core.Do("verifies order in database", func(a core.Actor) error {
-//			return verifyOrder(orderId).PerformAs(a)
+//		core.Do("verifies order in database", func(ctx context.Context, a core.Actor) error {
+//			return verifyOrder(orderId).PerformAs(ctx, a)
 //		}),
 //	)
 //
@@ -332,8 +332,8 @@ type Actor interface {
 // Creating Activities:
 //
 //	// Simple interaction using core.Do
-//	sendRequest := core.Do("sends GET request", func(actor core.Actor) error {
-//		return api.SendGetRequest("/users").PerformAs(actor)
+//	sendRequest := core.Do("sends GET request", func(ctx context.Context, actor core.Actor) error {
+//		return api.SendGetRequest("/users").PerformAs(ctx, actor)
 //	})
 //
 //	// Custom interaction type
@@ -342,7 +342,7 @@ type Actor interface {
 //		path   string
 //	}
 //
-//	func (s *SendRequestActivity) PerformAs(actor core.Actor) error {
+//	func (s *SendRequestActivity) PerformAs(ctx context.Context, actor core.Actor) error {
 //		// implementation
 //	}
 //
@@ -365,7 +365,7 @@ type Actor interface {
 //
 //	Activities should return descriptive errors with context:
 //
-//	func (a *MyActivity) PerformAs(actor core.Actor) error {
+//	func (a *MyActivity) PerformAs(ctx context.Context, actor core.Actor) error {
 //		ability, err := actor.AbilityTo(&api.CallAnAPI{})
 //		if err != nil {
 //			return fmt.Errorf("actor lacks API ability: %w", err)
@@ -396,7 +396,7 @@ type Activity interface {
 	//
 	// Example:
 	//
-	//	func (s *SendRequestActivity) PerformAs(actor core.Actor, ctx context.Context) error {
+	//	func (s *SendRequestActivity) PerformAs(ctx context.Context, actor core.Actor) error {
 	//		ability, err := actor.AbilityTo(&api.CallAnAPI{})
 	//		if err != nil {
 	//			return fmt.Errorf("actor needs API ability: %w", err)
@@ -405,7 +405,7 @@ type Activity interface {
 	//		api := ability.(api.CallAnAPI)
 	//		return api.SendRequest(s.method, s.path, ctx)
 	//	}
-	PerformAs(actor Actor, ctx context.Context) error
+	PerformAs(ctx context.Context, actor Actor) error
 
 	// Description returns a human-readable description of the activity.
 	// This description is used in test reports and logging.
@@ -453,7 +453,7 @@ type Activity interface {
 // Examples of Interactions:
 //
 //	// API call interaction
-//	sendGetRequest := core.Do("sends GET request to /users", func(actor core.Actor) error {
+//	sendGetRequest := core.Do("sends GET request to /users", func(ctx context.Context, actor core.Actor) error {
 //		ability, err := actor.AbilityTo(&api.CallAnAPI{})
 //		if err != nil {
 //			return fmt.Errorf("actor needs API ability: %w", err)
@@ -462,7 +462,7 @@ type Activity interface {
 //	})
 //
 //	// Database query interaction
-//	queryUser := core.Do("queries user from database", func(actor core.Actor) error {
+//	queryUser := core.Do("queries user from database", func(ctx context.Context, actor core.Actor) error {
 //		ability, err := actor.AbilityTo(&db.DatabaseAbility{})
 //		if err != nil {
 //			return fmt.Errorf("actor needs database ability: %w", err)
@@ -471,7 +471,7 @@ type Activity interface {
 //	})
 //
 //	// File operation interaction
-//	readConfig := core.Do("reads configuration file", func(actor core.Actor) error {
+//	readConfig := core.Do("reads configuration file", func(ctx context.Context, actor core.Actor) error {
 //		ability, err := actor.AbilityTo(&fs.FileSystemAbility{})
 //		if err != nil {
 //			return fmt.Errorf("actor needs file system ability: %w", err)
@@ -487,7 +487,7 @@ type Activity interface {
 //		body    string
 //	}
 //
-//	func (s *SendEmailActivity) PerformAs(actor core.Actor) error {
+//	func (s *SendEmailActivity) PerformAs(ctx context.Context, actor core.Actor) error {
 //		// Implementation for sending email
 //	}
 //
@@ -547,15 +547,15 @@ type Interaction interface {
 //		userData UserData
 //	}
 //
-//	func (c *CreateUserTask) PerformAs(actor core.Actor) error {
+//	func (c *CreateUserTask) PerformAs(ctx context.Context, actor core.Actor) error {
 //		return actor.AttemptsTo(
-//			core.Do("validates user data", func(a core.Actor) error {
+//			core.Do("validates user data", func(ctx context.Context, a core.Actor) error {
 //				return validateUserData(c.userData)
 //			}),
-//			core.Do("creates user in API", func(a core.Actor) error {
+//			core.Do("creates user in API", func(ctx context.Context, a core.Actor) error {
 //				return createUserInAPI(c.userData)
 //			}),
-//			core.Do("verifies user exists", func(a core.Actor) error {
+//			core.Do("verifies user exists", func(ctx context.Context, a core.Actor) error {
 //				return verifyUserExists(c.userData.Email)
 //			}),
 //		)

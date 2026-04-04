@@ -22,7 +22,7 @@ import (
 // Usage Examples:
 //
 //	// Create a simple interaction
-//	sendRequest := core.Do("sends GET request", func(actor core.Actor) error {
+//	sendRequest := core.Do("sends GET request", func(ctx context.Context, actor core.Actor) error {
 //		api := actor.AbilityTo(&api.CallAnAPI{}).(api.CallAnAPI)
 //		return api.SendGetRequest("/users")
 //	})
@@ -86,9 +86,9 @@ func (t *task) Description() string {
 //
 // Example:
 //
-//	func (t *task) PerformAs(actor core.Actor) error {
+//	func (t *task) PerformAs(ctx context.Context, actor core.Actor) error {
 //		for _, activity := range t.activities {
-//			if err := activity.PerformAs(actor); err != nil {
+//			if err := activity.PerformAs(ctx, actor); err != nil {
 //				return fmt.Errorf("task '%s' failed during activity '%s': %w",
 //					t.Description(), activity.Description(), err)
 //			}
@@ -102,9 +102,9 @@ func (t *task) Description() string {
 //	- The task description for identification
 //	- The specific activity that failed
 //	- The original error wrapped with context
-func (t *task) PerformAs(actor Actor, ctx context.Context) error {
+func (t *task) PerformAs(ctx context.Context, actor Actor) error {
 	for _, activity := range t.activities {
-		if err := activity.PerformAs(actor, ctx); err != nil {
+		if err := activity.PerformAs(ctx, actor); err != nil {
 			return fmt.Errorf("task '%s' failed during activity '%s': %w",
 				t.Description(), activity.Description(), err)
 		}
@@ -196,7 +196,7 @@ type interaction struct {
 	description string
 
 	// perform is the function that executes when the interaction is performed
-	perform func(actor Actor, ctx context.Context) error
+	perform func(ctx context.Context, actor Actor) error
 }
 
 // Do creates a new interaction with the given description and perform function.
@@ -205,7 +205,7 @@ type interaction struct {
 //
 // Parameters:
 //   - description: Human-readable description of what the interaction does
-//   - perform: Function that executes the interaction logic (receives actor and context)
+//   - perform: Function that executes the interaction logic (receives context first, then actor)
 //
 // Returns:
 //   - Interaction: A new interaction that executes the provided function
@@ -213,7 +213,7 @@ type interaction struct {
 // Usage Examples:
 //
 //	// Simple API call interaction
-//	sendGetRequest := core.Do("sends GET request to /users", func(actor core.Actor, ctx context.Context) error {
+//	sendGetRequest := core.Do("sends GET request to /users", func(ctx context.Context, actor core.Actor) error {
 //		api, err := actor.AbilityTo(&api.CallAnAPI{})
 //		if err != nil {
 //			return fmt.Errorf("actor needs API ability: %w", err)
@@ -222,7 +222,7 @@ type interaction struct {
 //	})
 //
 //	// Database query interaction
-//	queryUser := core.Do("queries user from database", func(actor core.Actor) error {
+//	queryUser := core.Do("queries user from database", func(ctx context.Context, actor core.Actor) error {
 //		db, err := actor.AbilityTo(&database.DatabaseAbility{})
 //		if err != nil {
 //			return fmt.Errorf("actor needs database ability: %w", err)
@@ -231,7 +231,7 @@ type interaction struct {
 //	})
 //
 //	// File operation interaction
-//	readConfig := core.Do("reads configuration file", func(actor core.Actor) error {
+//	readConfig := core.Do("reads configuration file", func(ctx context.Context, actor core.Actor) error {
 //		fs, err := actor.AbilityTo(&filesystem.FileSystemAbility{})
 //		if err != nil {
 //			return fmt.Errorf("actor needs file system ability: %w", err)
@@ -240,7 +240,7 @@ type interaction struct {
 //	})
 //
 //	// Custom business logic interaction
-//	validateEmail := core.Do("validates email format", func(actor core.Actor) error {
+//	validateEmail := core.Do("validates email format", func(ctx context.Context, actor core.Actor) error {
 //		email := getEmailFromContext()
 //		if !isValidEmail(email) {
 //			return fmt.Errorf("invalid email format: %s", email)
@@ -249,7 +249,7 @@ type interaction struct {
 //	})
 //
 //	// System status check interaction
-//	checkHealth := core.Do("checks system health", func(actor core.Actor) error {
+//	checkHealth := core.Do("checks system health", func(ctx context.Context, actor core.Actor) error {
 //		health := actor.AbilityTo(&monitoring.HealthAbility{})
 //		if err != nil {
 //			return fmt.Errorf("actor needs health check ability: %w", err)
@@ -286,7 +286,7 @@ type interaction struct {
 //  3. Handle errors with proper context
 //  4. Access abilities safely and check for their existence
 //  5. Avoid complex logic in interactions (prefer tasks for workflows)
-func Do(description string, perform func(actor Actor, ctx context.Context) error) Interaction {
+func Do(description string, perform func(ctx context.Context, actor Actor) error) Interaction {
 	return &interaction{
 		description: description,
 		perform:     perform,
@@ -319,8 +319,8 @@ func (i *interaction) Description() string {
 //
 // Note: Error handling and wrapping should be done in the perform function
 // to provide proper context about what went wrong.
-func (i *interaction) PerformAs(actor Actor, ctx context.Context) error {
-	return i.perform(actor, ctx)
+func (i *interaction) PerformAs(ctx context.Context, actor Actor) error {
+	return i.perform(ctx, actor)
 }
 
 // FailureMode returns the failure mode for interactions.

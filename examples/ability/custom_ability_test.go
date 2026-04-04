@@ -221,7 +221,7 @@ func ReadFile(path string) *ReadFileActivity {
 	return &ReadFileActivity{path: path}
 }
 
-func (r *ReadFileActivity) PerformAs(actor verity.Actor, ctx context.Context) error {
+func (r *ReadFileActivity) PerformAs(ctx context.Context, actor verity.Actor) error {
 	ability, err := actor.AbilityTo(&fileSystemAbility{})
 	if err != nil {
 		return fmt.Errorf("actor does not have file system ability: %w", err)
@@ -246,7 +246,7 @@ func WriteFile(path string, content string) *WriteFileActivity {
 	return &WriteFileActivity{path: path, content: content}
 }
 
-func (w *WriteFileActivity) PerformAs(actor verity.Actor, ctx context.Context) error {
+func (w *WriteFileActivity) PerformAs(ctx context.Context, actor verity.Actor) error {
 	ability, err := actor.AbilityTo(&fileSystemAbility{})
 	if err != nil {
 		return fmt.Errorf("actor does not have file system ability: %w", err)
@@ -274,7 +274,7 @@ func DeleteFile(path string) *DeleteFileActivity {
 	return &DeleteFileActivity{path: path}
 }
 
-func (d *DeleteFileActivity) PerformAs(actor verity.Actor, ctx context.Context) error {
+func (d *DeleteFileActivity) PerformAs(ctx context.Context, actor verity.Actor) error {
 	ability, err := actor.AbilityTo(&fileSystemAbility{})
 	if err != nil {
 		return fmt.Errorf("actor does not have file system ability: %w", err)

@@ -8,6 +8,8 @@
 
 A Go implementation of the Serenity/JS Screenplay Pattern for acceptance testing, focused on API testing capabilities.
 
+![Verity-BDD](https://raw.githubusercontent.com/nchursin/resources/refs/heads/master/verity-bdd/dark.png)
+
 ## Overview
 
 Verity-BDD brings the power of the Screenplay Pattern to Go testing, providing:

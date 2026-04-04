@@ -136,7 +136,7 @@ func (ta *testActor) AttemptsTo(activities ...core.Activity) {
 
 // AnswersTo answers questions with boolean success flag
 func (ta *testActor) AnswersTo(question core.Question[any]) (any, bool) {
-	result, err := question.AnsweredBy(ta, ta.ctx)
+	result, err := question.AnsweredBy(ta.ctx, ta)
 	if err != nil {
 		ta.testContext.Errorf("Failed to answer question '%s': %v", question.Description(), err)
 		return nil, false

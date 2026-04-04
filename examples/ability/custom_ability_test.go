@@ -304,7 +304,7 @@ func FileContent(path string) *FileContentQuestion {
 	return &FileContentQuestion{path: path}
 }
 
-func (f *FileContentQuestion) AnsweredBy(actor verity.Actor, ctx context.Context) (string, error) {
+func (f *FileContentQuestion) AnsweredBy(ctx context.Context, actor verity.Actor) (string, error) {
 	ability, err := actor.AbilityTo(&fileSystemAbility{})
 	if err != nil {
 		return "", fmt.Errorf("actor does not have file system ability: %w", err)
@@ -327,7 +327,7 @@ func FileExists(path string) *FileExistsQuestion {
 	return &FileExistsQuestion{path: path}
 }
 
-func (f *FileExistsQuestion) AnsweredBy(actor verity.Actor, ctx context.Context) (bool, error) {
+func (f *FileExistsQuestion) AnsweredBy(ctx context.Context, actor verity.Actor) (bool, error) {
 	ability, err := actor.AbilityTo(&fileSystemAbility{})
 	if err != nil {
 		return false, fmt.Errorf("actor does not have file system ability: %w", err)
@@ -356,17 +356,17 @@ func TestFileSystemAbility_BasicOperations(t *testing.T) {
 		WriteFile("test.txt", testContent),
 	)
 
-	content, err := FileContent("test.txt").AnsweredBy(actor, ctx)
+	content, err := FileContent("test.txt").AnsweredBy(ctx, actor)
 	require.NoError(t, err)
 	require.Equal(t, testContent, content)
 
 	// Test file existence
-	exists, err := FileExists("test.txt").AnsweredBy(actor, ctx)
+	exists, err := FileExists("test.txt").AnsweredBy(ctx, actor)
 	require.NoError(t, err)
 	require.True(t, exists)
 
 	// Test non-existent file
-	exists, err = FileExists("nonexistent.txt").AnsweredBy(actor, ctx)
+	exists, err = FileExists("nonexistent.txt").AnsweredBy(ctx, actor)
 	require.NoError(t, err)
 	require.False(t, exists)
 
@@ -376,7 +376,7 @@ func TestFileSystemAbility_BasicOperations(t *testing.T) {
 	)
 	require.NoError(t, err)
 
-	exists, err = FileExists("test.txt").AnsweredBy(actor, ctx)
+	exists, err = FileExists("test.txt").AnsweredBy(ctx, actor)
 	require.NoError(t, err)
 	require.False(t, exists)
 }
@@ -401,7 +401,7 @@ func TestFileSystemAbility_DirectoryOperations(t *testing.T) {
 		WriteFile("testdir/nested.txt", "nested content"),
 	)
 
-	exists, err := FileExists("testdir/nested.txt").AnsweredBy(actor, ctx)
+	exists, err := FileExists("testdir/nested.txt").AnsweredBy(ctx, actor)
 	require.NoError(t, err)
 	require.True(t, exists)
 }
@@ -550,7 +550,7 @@ func TestFileSystemAbility_WithAPIIntegration(t *testing.T) {
 	)
 
 	// Save API response to file
-	responseBody, err := api.LastResponseBody{}.AnsweredBy(actor, ctx)
+	responseBody, err := api.LastResponseBody{}.AnsweredBy(ctx, actor)
 	require.NoError(t, err)
 
 	actor.AttemptsTo(
@@ -558,7 +558,7 @@ func TestFileSystemAbility_WithAPIIntegration(t *testing.T) {
 	)
 
 	// Verify file was created and contains expected data
-	fileContent, err := FileContent("post.json").AnsweredBy(actor, ctx)
+	fileContent, err := FileContent("post.json").AnsweredBy(ctx, actor)
 	require.NoError(t, err)
 	require.Contains(t, fileContent, "sunt aut facere")
 	require.Contains(t, fileContent, "quia et suscipit")

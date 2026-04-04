@@ -12,13 +12,13 @@ func TestQuestionsErrorWhenNoResponse(t *testing.T) {
 	ab := Using(http.DefaultClient)
 	actor := newStubActor("no-response", context.Background(), ab)
 
-	if _, err := LastResponseStatusQ.AnsweredBy(actor, context.Background()); err == nil {
+	if _, err := LastResponseStatusQ.AnsweredBy(context.Background(), actor); err == nil {
 		t.Fatalf("expected error when no response available")
 	}
-	if _, err := LastResponseBodyQ.AnsweredBy(actor, context.Background()); err == nil {
+	if _, err := LastResponseBodyQ.AnsweredBy(context.Background(), actor); err == nil {
 		t.Fatalf("expected error when no response available")
 	}
-	if _, err := NewResponseHeader("X-Test").AnsweredBy(actor, context.Background()); err == nil {
+	if _, err := NewResponseHeader("X-Test").AnsweredBy(context.Background(), actor); err == nil {
 		t.Fatalf("expected error when no response available")
 	}
 }
@@ -42,11 +42,11 @@ func TestLastResponseBodyCanBeReadMultipleTimes(t *testing.T) {
 	defer resp.Body.Close()
 
 	actor := newStubActor("reader", context.Background(), ab)
-	body1, err := LastResponseBodyQ.AnsweredBy(actor, context.Background())
+	body1, err := LastResponseBodyQ.AnsweredBy(context.Background(), actor)
 	if err != nil {
 		t.Fatalf("first read failed: %v", err)
 	}
-	body2, err := LastResponseBodyQ.AnsweredBy(actor, context.Background())
+	body2, err := LastResponseBodyQ.AnsweredBy(context.Background(), actor)
 	if err != nil {
 		t.Fatalf("second read failed: %v", err)
 	}
@@ -87,7 +87,7 @@ func TestResponseBodyAsJSON(t *testing.T) {
 	}
 
 	requestJSON("/ok")
-	answer, err := NewResponseBodyAsJSON[map[string]string]().AnsweredBy(actor, context.Background())
+	answer, err := NewResponseBodyAsJSON[map[string]string]().AnsweredBy(context.Background(), actor)
 	if err != nil {
 		t.Fatalf("expected JSON parse to succeed, got error: %v", err)
 	}
@@ -96,7 +96,7 @@ func TestResponseBodyAsJSON(t *testing.T) {
 	}
 
 	requestJSON("/bad")
-	if _, err := NewResponseBodyAsJSON[map[string]string]().AnsweredBy(actor, context.Background()); err == nil {
+	if _, err := NewResponseBodyAsJSON[map[string]string]().AnsweredBy(context.Background(), actor); err == nil {
 		t.Fatalf("expected error for invalid JSON body")
 	}
 }
@@ -120,7 +120,7 @@ func TestJSONPathTraversal(t *testing.T) {
 	}
 	defer resp.Body.Close()
 
-	email, err := NewJSONPath("user.emails.1").AnsweredBy(actor, context.Background())
+	email, err := NewJSONPath("user.emails.1").AnsweredBy(context.Background(), actor)
 	if err != nil {
 		t.Fatalf("expected email path to succeed: %v", err)
 	}
@@ -128,7 +128,7 @@ func TestJSONPathTraversal(t *testing.T) {
 		t.Fatalf("unexpected email value: %v", email)
 	}
 
-	ids, err := NewJSONPath("items.*.id").AnsweredBy(actor, context.Background())
+	ids, err := NewJSONPath("items.*.id").AnsweredBy(context.Background(), actor)
 	if err != nil {
 		t.Fatalf("expected wildcard path to succeed: %v", err)
 	}
@@ -138,10 +138,10 @@ func TestJSONPathTraversal(t *testing.T) {
 		t.Fatalf("unexpected ids result: %#v", ids)
 	}
 
-	if _, err := NewJSONPath("user.emails.5").AnsweredBy(actor, context.Background()); err == nil {
+	if _, err := NewJSONPath("user.emails.5").AnsweredBy(context.Background(), actor); err == nil {
 		t.Fatalf("expected out-of-bounds error")
 	}
-	if _, err := NewJSONPath("user.unknown").AnsweredBy(actor, context.Background()); err == nil {
+	if _, err := NewJSONPath("user.unknown").AnsweredBy(context.Background(), actor); err == nil {
 		t.Fatalf("expected unknown path error")
 	}
 }

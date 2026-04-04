@@ -12,12 +12,12 @@ func TestQuestionAboutCreatesQuestion(t *stdtesting.T) {
 	ctx := context.Background()
 	test := veritytesting.NewVerityTestWithContext(ctx, t)
 
-	question := core.QuestionAbout[int]("number", func(actor core.Actor, ctx context.Context) (int, error) {
+	question := core.QuestionAbout[int]("number", func(ctx context.Context, actor core.Actor) (int, error) {
 		return 7, nil
 	})
 
 	actor := test.ActorCalled("Questioner")
-	value, err := question.AnsweredBy(actor, ctx)
+	value, err := question.AnsweredBy(ctx, actor)
 	if err != nil {
 		t.Fatalf("expected no error, got %v", err)
 	}
@@ -32,7 +32,7 @@ func TestQuestionAboutCreatesQuestion(t *stdtesting.T) {
 }
 
 func TestNewQuestionDescriptionIsNotPrefixed(t *stdtesting.T) {
-	question := core.NewQuestion[string]("client record of company", func(actor core.Actor, ctx context.Context) (string, error) {
+	question := core.NewQuestion[string]("client record of company", func(ctx context.Context, actor core.Actor) (string, error) {
 		return "ok", nil
 	})
 

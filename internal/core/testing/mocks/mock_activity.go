@@ -357,18 +357,18 @@ func (m *MockQuestion[T]) EXPECT() *MockQuestionMockRecorder[T] {
 }
 
 // AnsweredBy mocks base method.
-func (m *MockQuestion[T]) AnsweredBy(actor core.Actor, ctx context.Context) (T, error) {
+func (m *MockQuestion[T]) AnsweredBy(ctx context.Context, actor core.Actor) (T, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "AnsweredBy", actor, ctx)
+	ret := m.ctrl.Call(m, "AnsweredBy", ctx, actor)
 	ret0, _ := ret[0].(T)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // AnsweredBy indicates an expected call of AnsweredBy.
-func (mr *MockQuestionMockRecorder[T]) AnsweredBy(actor, ctx any) *gomock.Call {
+func (mr *MockQuestionMockRecorder[T]) AnsweredBy(ctx, actor any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AnsweredBy", reflect.TypeOf((*MockQuestion[T])(nil).AnsweredBy), actor, ctx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AnsweredBy", reflect.TypeOf((*MockQuestion[T])(nil).AnsweredBy), ctx, actor)
 }
 
 // Description mocks base method.

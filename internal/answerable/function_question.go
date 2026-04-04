@@ -10,13 +10,13 @@ import (
 // It executes the provided function when asked by any actor.
 type functionQuestion[T any] struct {
 	description string
-	function    func(core.Actor, context.Context) (T, error)
+	function    func(context.Context, core.Actor) (T, error)
 }
 
 // AnsweredBy executes the function and returns its result.
 // If the function returns an error, that error is returned.
-func (f *functionQuestion[T]) AnsweredBy(actor core.Actor, ctx context.Context) (T, error) {
-	return f.function(actor, ctx)
+func (f *functionQuestion[T]) AnsweredBy(ctx context.Context, actor core.Actor) (T, error) {
+	return f.function(ctx, actor)
 }
 
 // Description returns the provided description.

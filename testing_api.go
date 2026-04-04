@@ -21,6 +21,6 @@ func ValueOf[T any](value T) Question[T] {
 	return internalanswerable.ValueOf(value)
 }
 
-func ResultOf[T any](description string, fn func(Actor, context.Context) (T, error)) Question[T] {
+func ResultOf[T any](description string, fn func(context.Context, Actor) (T, error)) Question[T] {
 	return internalanswerable.ResultOf(description, fn)
 }

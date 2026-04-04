@@ -40,7 +40,7 @@ func (e *EnsureActivity[T]) Description() string {
 
 // PerformAs executes the ensure activity
 func (e *EnsureActivity[T]) PerformAs(ctx context.Context, actor core.Actor) error {
-	actual, err := e.question.AnsweredBy(actor, ctx)
+	actual, err := e.question.AnsweredBy(ctx, actor)
 	if err != nil {
 		return fmt.Errorf("failed to answer question '%s': %w", e.question.Description(), err)
 	}

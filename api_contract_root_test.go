@@ -14,9 +14,9 @@ func TestRootAPIContractCompiles(t *testing.T) {
 
 	_ = verity.TaskWhere("empty")
 
-	q := verity.QuestionAbout("answer", func(actor verity.Actor, ctx context.Context) (int, error) {
+	q := verity.QuestionAbout("answer", func(ctx context.Context, actor verity.Actor) (int, error) {
 		return 42, nil
 	})
 
-	_, _ = q.AnsweredBy(nil, context.Background())
+	_, _ = q.AnsweredBy(context.Background(), nil)
 }

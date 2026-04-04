@@ -699,8 +699,8 @@ type Question[T any] interface {
 	// 3. Return typed result and any error
 	//
 	// Parameters:
-	//   - actor: The actor asking the question
 	//   - ctx: Context for cancellation and timeout
+	//   - actor: The actor asking the question
 	//
 	// Returns:
 	//   - T: The typed answer to the question
@@ -708,7 +708,7 @@ type Question[T any] interface {
 	//
 	// Example:
 	//
-	//	func (q *userCountQuestion) AnsweredBy(actor core.Actor, ctx context.Context) (int, error) {
+	//	func (q *userCountQuestion) AnsweredBy(ctx context.Context, actor core.Actor) (int, error) {
 	//		db, err := actor.AbilityTo(&database.DatabaseAbility{})
 	//		if err != nil {
 	//			return 0, fmt.Errorf("actor needs database ability: %w", err)
@@ -719,12 +719,12 @@ type Question[T any] interface {
 	//
 	// Usage:
 	//
-	//	count, err := question.AnsweredBy(actor, ctx)
+	//	count, err := question.AnsweredBy(ctx, actor)
 	//	if err != nil {
 	//		return fmt.Errorf("failed to get user count: %w", err)
 	//	}
 	//	fmt.Printf("User count: %d\n", count)
-	AnsweredBy(actor Actor, ctx context.Context) (T, error)
+	AnsweredBy(ctx context.Context, actor Actor) (T, error)
 
 	// Description returns a human-readable description of what the question asks.
 	// This description is used in test reports and assertion messages.

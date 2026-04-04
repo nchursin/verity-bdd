@@ -16,7 +16,7 @@ type valueQuestion[T any] struct {
 
 // AnsweredBy returns the static value when asked by any actor.
 // For error types, the error is returned as the value rather than as a failure condition.
-func (v *valueQuestion[T]) AnsweredBy(actor core.Actor, ctx context.Context) (T, error) {
+func (v *valueQuestion[T]) AnsweredBy(ctx context.Context, actor core.Actor) (T, error) {
 	return v.value, nil
 }
 

@@ -47,7 +47,7 @@ func (a *stubActor) AttemptsTo(activities ...core.Activity) {
 }
 
 func (a *stubActor) AnswersTo(question core.Question[any]) (any, bool) {
-	answer, err := question.AnsweredBy(a, a.ctx)
+	answer, err := question.AnsweredBy(a.ctx, a)
 	return answer, err == nil
 }
 

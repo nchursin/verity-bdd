@@ -113,7 +113,7 @@ func ValueOf[T any](value T) core.Question[T] {
 //		}),
 //		expectations.GreaterThan(0),
 //	)
-func ResultOf[T any](description string, fn func(core.Actor, context.Context) (T, error)) core.Question[T] {
+func ResultOf[T any](description string, fn func(context.Context, core.Actor) (T, error)) core.Question[T] {
 	if fn == nil {
 		panic("ResultOf: function parameter cannot be nil")
 	}

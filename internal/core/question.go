@@ -63,7 +63,7 @@ type question[T any] struct {
 	description string
 
 	// ask is the function that executes when the question is answered
-	ask func(actor Actor, ctx context.Context) (T, error)
+	ask func(ctx context.Context, actor Actor) (T, error)
 }
 
 // NewQuestion creates a new question with the given description and ask function.
@@ -139,7 +139,7 @@ type question[T any] struct {
 //		ensure.That(userCount, expectations.GreaterThan(0)),
 //		ensure.That(isSystemOnline, expectations.IsTrue()),
 //	)
-func NewQuestion[T any](description string, ask func(actor Actor, ctx context.Context) (T, error)) Question[T] {
+func NewQuestion[T any](description string, ask func(ctx context.Context, actor Actor) (T, error)) Question[T] {
 	return &question[T]{
 		description: description,
 		ask:         ask,
@@ -183,8 +183,8 @@ func (q *question[T]) Description() string {
 //		return fmt.Errorf("failed to answer question '%s': %w", question.Description(), err)
 //	}
 //	fmt.Printf("Answer: %v\n", count)
-func (q *question[T]) AnsweredBy(actor Actor, ctx context.Context) (T, error) {
-	return q.ask(actor, ctx)
+func (q *question[T]) AnsweredBy(ctx context.Context, actor Actor) (T, error) {
+	return q.ask(ctx, actor)
 }
 
 // QuestionAbout creates a new question with the given description and ask function.
@@ -252,6 +252,6 @@ func (q *question[T]) AnsweredBy(actor Actor, ctx context.Context) (T, error) {
 //
 //	// Both create the same type of question
 //	var q1, q2 core.Question[int]
-func QuestionAbout[T any](description string, ask func(actor Actor, ctx context.Context) (T, error)) Question[T] {
+func QuestionAbout[T any](description string, ask func(ctx context.Context, actor Actor) (T, error)) Question[T] {
 	return NewQuestion(description, ask)
 }

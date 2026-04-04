@@ -25,7 +25,7 @@ func (q *noteQuestion[T]) Description() string {
 	return fmt.Sprintf("the note %q", q.key)
 }
 
-func (q *noteQuestion[T]) AnsweredBy(actor core.Actor, ctx context.Context) (T, error) {
+func (q *noteQuestion[T]) AnsweredBy(ctx context.Context, actor core.Actor) (T, error) {
 	var zero T
 
 	ability, err := core.AbilityOf[*TakeNotesAbility](actor)

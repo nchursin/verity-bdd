@@ -20,7 +20,7 @@ func TestResultOf(t *testing.T) {
 	actor.AttemptsTo(
 		// Simple calculation
 		ensure.That(
-			verity.ResultOf("calculated value", func(actor verity.Actor, ctx context.Context) (int, error) {
+			verity.ResultOf("calculated value", func(ctx context.Context, actor verity.Actor) (int, error) {
 				return 42, nil
 			}),
 			expectations.Equals(42),
@@ -28,7 +28,7 @@ func TestResultOf(t *testing.T) {
 
 		// String manipulation
 		ensure.That(
-			verity.ResultOf("greeting message", func(actor verity.Actor, ctx context.Context) (string, error) {
+			verity.ResultOf("greeting message", func(ctx context.Context, actor verity.Actor) (string, error) {
 				return "Hello, " + actor.Name(), nil
 			}),
 			expectations.Contains("Hello, ResultOfTester"),
@@ -36,7 +36,7 @@ func TestResultOf(t *testing.T) {
 
 		// Boolean logic
 		ensure.That(
-			verity.ResultOf("validation result", func(actor verity.Actor, ctx context.Context) (bool, error) {
+			verity.ResultOf("validation result", func(ctx context.Context, actor verity.Actor) (bool, error) {
 				name := actor.Name()
 				return len(name) > 5, nil
 			}),
@@ -45,7 +45,7 @@ func TestResultOf(t *testing.T) {
 
 		// Float calculation
 		ensure.That(
-			verity.ResultOf("division result", func(actor verity.Actor, ctx context.Context) (float64, error) {
+			verity.ResultOf("division result", func(ctx context.Context, actor verity.Actor) (float64, error) {
 				return 10.0 / 2.0, nil
 			}),
 			expectations.Equals(5.0),
@@ -64,7 +64,7 @@ func TestResultOfCalculations(t *testing.T) {
 
 	dataProcessor.AttemptsTo(
 		ensure.That(
-			verity.ResultOf("sum of even numbers", func(actor verity.Actor, ctx context.Context) (int, error) {
+			verity.ResultOf("sum of even numbers", func(ctx context.Context, actor verity.Actor) (int, error) {
 				sum := 0
 				for _, num := range numbers {
 					if num%2 == 0 {
@@ -77,7 +77,7 @@ func TestResultOfCalculations(t *testing.T) {
 		),
 
 		ensure.That(
-			verity.ResultOf("average of numbers", func(actor verity.Actor, ctx context.Context) (float64, error) {
+			verity.ResultOf("average of numbers", func(ctx context.Context, actor verity.Actor) (float64, error) {
 				if len(numbers) == 0 {
 					return 0, fmt.Errorf("no numbers to calculate average")
 				}
@@ -91,7 +91,7 @@ func TestResultOfCalculations(t *testing.T) {
 		),
 
 		ensure.That(
-			verity.ResultOf("maximum value", func(actor verity.Actor, ctx context.Context) (int, error) {
+			verity.ResultOf("maximum value", func(ctx context.Context, actor verity.Actor) (int, error) {
 				if len(numbers) == 0 {
 					return 0, fmt.Errorf("no numbers to find maximum")
 				}
@@ -118,7 +118,7 @@ func TestResultWithErrorHandling(t *testing.T) {
 	actor.AttemptsTo(
 		// This will succeed
 		ensure.That(
-			verity.ResultOf("successful operation", func(actor verity.Actor, ctx context.Context) (string, error) {
+			verity.ResultOf("successful operation", func(ctx context.Context, actor verity.Actor) (string, error) {
 				return "success", nil
 			}),
 			expectations.Equals("success"),
@@ -126,7 +126,7 @@ func TestResultWithErrorHandling(t *testing.T) {
 
 		// Example: Conditional logic with error handling
 		ensure.That(
-			verity.ResultOf("safe division", func(actor verity.Actor, ctx context.Context) (float64, error) {
+			verity.ResultOf("safe division", func(ctx context.Context, actor verity.Actor) (float64, error) {
 				numerator, denominator := 10, 2
 				if denominator == 0 {
 					return 0, fmt.Errorf("division by zero")
@@ -138,7 +138,7 @@ func TestResultWithErrorHandling(t *testing.T) {
 
 		// Example: String manipulation with validation
 		ensure.That(
-			verity.ResultOf("validated string", func(actor verity.Actor, ctx context.Context) (string, error) {
+			verity.ResultOf("validated string", func(ctx context.Context, actor verity.Actor) (string, error) {
 				input := "test"
 				if input == "" {
 					return "", fmt.Errorf("input cannot be empty")
@@ -158,7 +158,7 @@ func TestResultOfWithActor(t *testing.T) {
 	actor2 := test.ActorCalled("Actor2")
 
 	// Both actors use the same ResultOf question but get different results
-	greetingQuestion := verity.ResultOf("personalized greeting", func(actor verity.Actor, ctx context.Context) (string, error) {
+	greetingQuestion := verity.ResultOf("personalized greeting", func(ctx context.Context, actor verity.Actor) (string, error) {
 		return fmt.Sprintf("Hello, %s!", actor.Name()), nil
 	})
 
@@ -171,7 +171,7 @@ func TestResultOfWithActor(t *testing.T) {
 	)
 
 	// Different actors can have different calculations
-	nameLengthQuestion := verity.ResultOf("name length", func(actor verity.Actor, ctx context.Context) (int, error) {
+	nameLengthQuestion := verity.ResultOf("name length", func(ctx context.Context, actor verity.Actor) (int, error) {
 		return len(actor.Name()), nil
 	})
 
@@ -199,7 +199,7 @@ func TestResultOfComplexTypes(t *testing.T) {
 	actor.AttemptsTo(
 		// Create and validate a struct
 		ensure.That(
-			verity.ResultOf("user creation", func(actor verity.Actor, ctx context.Context) (User, error) {
+			verity.ResultOf("user creation", func(ctx context.Context, actor verity.Actor) (User, error) {
 				return User{
 					Name:  "John Doe",
 					Age:   30,
@@ -211,7 +211,7 @@ func TestResultOfComplexTypes(t *testing.T) {
 
 		// Work with slices
 		ensure.That(
-			verity.ResultOf("user names list", func(actor verity.Actor, ctx context.Context) ([]string, error) {
+			verity.ResultOf("user names list", func(ctx context.Context, actor verity.Actor) ([]string, error) {
 				users := []User{
 					{Name: "Alice", Age: 25, Email: "alice@example.com"},
 					{Name: "Bob", Age: 30, Email: "bob@example.com"},
@@ -236,7 +236,7 @@ func TestResultOfComplexTypes(t *testing.T) {
 
 		// Work with maps
 		ensure.That(
-			verity.ResultOf("user data map", func(actor verity.Actor, ctx context.Context) (map[string]interface{}, error) {
+			verity.ResultOf("user data map", func(ctx context.Context, actor verity.Actor) (map[string]interface{}, error) {
 				return map[string]interface{}{
 					"name":    "Jane Doe",
 					"age":     28,
@@ -254,7 +254,7 @@ func TestResultOfComplexTypes(t *testing.T) {
 
 		// Pointer operations
 		ensure.That(
-			verity.ResultOf("pointer to string", func(actor verity.Actor, ctx context.Context) (*string, error) {
+			verity.ResultOf("pointer to string", func(ctx context.Context, actor verity.Actor) (*string, error) {
 				message := "Hello from pointer"
 				return &message, nil
 			}),
@@ -281,7 +281,7 @@ func TestResultOfMixedWithStatic(t *testing.T) {
 
 		// Dynamic calculation using static values
 		ensure.That(
-			verity.ResultOf("double calculation", func(actor verity.Actor, ctx context.Context) (int, error) {
+			verity.ResultOf("double calculation", func(ctx context.Context, actor verity.Actor) (int, error) {
 				staticValue := 42
 				return staticValue * 2, nil
 			}),
@@ -290,7 +290,7 @@ func TestResultOfMixedWithStatic(t *testing.T) {
 
 		// Complex calculation
 		ensure.That(
-			verity.ResultOf("complex math", func(actor verity.Actor, ctx context.Context) (int, error) {
+			verity.ResultOf("complex math", func(ctx context.Context, actor verity.Actor) (int, error) {
 				a := 10
 				b := 20
 				c := a + b  // 30
@@ -303,7 +303,7 @@ func TestResultOfMixedWithStatic(t *testing.T) {
 
 		// String operations
 		ensure.That(
-			verity.ResultOf("string building", func(actor verity.Actor, ctx context.Context) (string, error) {
+			verity.ResultOf("string building", func(ctx context.Context, actor verity.Actor) (string, error) {
 				parts := []string{"Hello", "from", "ResultOf"}
 				result := ""
 				for i, part := range parts {
@@ -328,7 +328,7 @@ func TestResultOfEdgeCases(t *testing.T) {
 	actor.AttemptsTo(
 		// Empty slice
 		ensure.That(
-			verity.ResultOf("empty slice", func(actor verity.Actor, ctx context.Context) ([]int, error) {
+			verity.ResultOf("empty slice", func(ctx context.Context, actor verity.Actor) ([]int, error) {
 				return []int{}, nil
 			}),
 			expectations.Equals([]int{}),
@@ -336,7 +336,7 @@ func TestResultOfEdgeCases(t *testing.T) {
 
 		// Nil pointer
 		ensure.That(
-			verity.ResultOf("nil pointer", func(actor verity.Actor, ctx context.Context) (*int, error) {
+			verity.ResultOf("nil pointer", func(ctx context.Context, actor verity.Actor) (*int, error) {
 				return nil, nil
 			}),
 			expectations.Equals((*int)(nil)),
@@ -344,7 +344,7 @@ func TestResultOfEdgeCases(t *testing.T) {
 
 		// Empty string
 		ensure.That(
-			verity.ResultOf("empty string", func(actor verity.Actor, ctx context.Context) (string, error) {
+			verity.ResultOf("empty string", func(ctx context.Context, actor verity.Actor) (string, error) {
 				return "", nil
 			}),
 			expectations.Equals(""),
@@ -352,21 +352,21 @@ func TestResultOfEdgeCases(t *testing.T) {
 
 		// Zero values
 		ensure.That(
-			verity.ResultOf("zero int", func(actor verity.Actor, ctx context.Context) (int, error) {
+			verity.ResultOf("zero int", func(ctx context.Context, actor verity.Actor) (int, error) {
 				return 0, nil
 			}),
 			expectations.Equals(0),
 		),
 
 		ensure.That(
-			verity.ResultOf("zero float", func(actor verity.Actor, ctx context.Context) (float64, error) {
+			verity.ResultOf("zero float", func(ctx context.Context, actor verity.Actor) (float64, error) {
 				return 0.0, nil
 			}),
 			expectations.Equals(0.0),
 		),
 
 		ensure.That(
-			verity.ResultOf("zero bool", func(actor verity.Actor, ctx context.Context) (bool, error) {
+			verity.ResultOf("zero bool", func(ctx context.Context, actor verity.Actor) (bool, error) {
 				return false, nil
 			}),
 			expectations.Equals(false),

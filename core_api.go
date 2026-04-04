@@ -16,7 +16,7 @@ type Task = internalcore.Task
 
 type Question[T any] interface {
 	Description() string
-	AnsweredBy(actor Actor, ctx context.Context) (T, error)
+	AnsweredBy(ctx context.Context, actor Actor) (T, error)
 }
 
 type TestResult = internalcore.TestResult
@@ -46,11 +46,11 @@ var Optional = internalcore.Optional
 
 var AbilityName = internalcore.AbilityName
 
-func NewQuestion[T any](description string, ask func(actor Actor, ctx context.Context) (T, error)) Question[T] {
+func NewQuestion[T any](description string, ask func(ctx context.Context, actor Actor) (T, error)) Question[T] {
 	return internalcore.NewQuestion(description, ask)
 }
 
-func QuestionAbout[T any](description string, ask func(actor Actor, ctx context.Context) (T, error)) Question[T] {
+func QuestionAbout[T any](description string, ask func(ctx context.Context, actor Actor) (T, error)) Question[T] {
 	return internalcore.QuestionAbout(description, ask)
 }
 

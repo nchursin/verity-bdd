@@ -30,8 +30,9 @@ type runningTest struct {
 }
 
 type openStep struct {
-	name    string
-	startMs int64
+	name     string
+	startMs  int64
+	children []allureStepResult
 }
 
 type allureResult struct {
@@ -54,6 +55,7 @@ type allureStepResult struct {
 	Status      string             `json:"status"`
 	Start       int64              `json:"start"`
 	Stop        int64              `json:"stop"`
+	Steps       []allureStepResult `json:"steps,omitempty"`
 	Attachments []allureAttachment `json:"attachments,omitempty"`
 }
 
@@ -105,25 +107,35 @@ func (ar *AllureReporter) OnStepFinish(stepResult reporting.TestResult) {
 
 	startMs := time.Now().UnixMilli()
 	name := stepResult.Name()
+	var finished openStep
 	if len(ar.current.openSteps) > 0 {
-		last := ar.current.openSteps[len(ar.current.openSteps)-1]
+		finished = ar.current.openSteps[len(ar.current.openSteps)-1]
 		ar.current.openSteps = ar.current.openSteps[:len(ar.current.openSteps)-1]
-		startMs = last.startMs
+		startMs = finished.startMs
 		if name == "" {
-			name = last.name
+			name = finished.name
 		}
 	}
 
 	stopMs := endTime(startMs, stepResult.Duration())
 
 	attachments := ar.persistAttachments(stepResult.Attachments())
-	ar.current.steps = append(ar.current.steps, allureStepResult{
+	step := allureStepResult{
 		Name:        name,
 		Status:      mapStatus(stepResult.Status()),
 		Start:       startMs,
 		Stop:        stopMs,
+		Steps:       finished.children,
 		Attachments: attachments,
-	})
+	}
+
+	if len(ar.current.openSteps) == 0 {
+		ar.current.steps = append(ar.current.steps, step)
+		return
+	}
+
+	parentIndex := len(ar.current.openSteps) - 1
+	ar.current.openSteps[parentIndex].children = append(ar.current.openSteps[parentIndex].children, step)
 }
 
 func (ar *AllureReporter) OnTestFinish(result reporting.TestResult) {

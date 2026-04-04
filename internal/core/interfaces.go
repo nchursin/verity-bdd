@@ -320,6 +320,13 @@ type Actor interface {
 	AnswersTo(question Question[any]) (any, bool)
 }
 
+// NestedActivityPerformer is an internal extension point used by task execution
+// to delegate child activities back through an actor-specific execution pipeline.
+// It intentionally sits outside Actor so the public Actor API stays unchanged.
+type NestedActivityPerformer interface {
+	PerformNestedActivity(ctx context.Context, activity Activity) error
+}
+
 // Activity represents an action that an actor can perform.
 // Activities are the building blocks of test scenarios in the Screenplay Pattern.
 // They define what actors do rather than how they interact with specific interfaces.

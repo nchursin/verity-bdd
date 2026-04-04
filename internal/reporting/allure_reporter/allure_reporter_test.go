@@ -124,6 +124,27 @@ func TestAllureReporter_RecordsSteps(t *testing.T) {
 	require.Greater(t, result.Steps[0].Stop, result.Steps[0].Start)
 }
 
+func TestAllureReporter_RecordsNestedSteps(t *testing.T) {
+	t.Parallel()
+
+	resultsDir := t.TempDir()
+	r := NewAllureReporterWithDir(resultsDir)
+
+	r.OnTestStart("NestedStepTest")
+	r.OnStepStart("creates an order")
+	r.OnStepStart("opens order page")
+	r.OnStepFinish(&stubResult{name: "opens order page", status: reporting.StatusPassed, duration: 0.01})
+	r.OnStepFinish(&stubResult{name: "creates an order", status: reporting.StatusPassed, duration: 0.02})
+	r.OnTestFinish(&stubResult{name: "NestedStepTest", status: reporting.StatusPassed, duration: 0.03})
+
+	result := readSingleResultFile(t, resultsDir)
+	require.Len(t, result.Steps, 1)
+	require.Equal(t, "creates an order", result.Steps[0].Name)
+	require.Len(t, result.Steps[0].Steps, 1)
+	require.Equal(t, "opens order page", result.Steps[0].Steps[0].Name)
+	require.Equal(t, "passed", result.Steps[0].Steps[0].Status)
+}
+
 func TestAllureReporter_WritesTestAttachments(t *testing.T) {
 	t.Parallel()
 
@@ -209,6 +230,7 @@ type expectedStep struct {
 	Status      string               `json:"status"`
 	Start       int64                `json:"start"`
 	Stop        int64                `json:"stop"`
+	Steps       []expectedStep       `json:"steps,omitempty"`
 	Attachments []expectedAttachment `json:"attachments,omitempty"`
 }
 

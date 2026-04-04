@@ -64,6 +64,52 @@ func TestVerityTest_WithAllureReporter_WritesResults(t *testing.T) {
 	require.Equal(t, "secret", notesJSON["Sam"]["token"])
 }
 
+func TestVerityTest_WithAllureReporter_WritesNestedTaskResults(t *testing.T) {
+	t.Parallel()
+
+	resultsDir := t.TempDir()
+	reporter := allure_reporter.NewAllureReporterWithDir(resultsDir)
+
+	test := NewVerityTest(t, Scene{
+		Context:  context.Background(),
+		Reporter: reporter,
+	})
+
+	actor := test.ActorCalled("Sam")
+	actor.AttemptsTo(
+		core.TaskWhere("#actor creates an order",
+			core.Do("#actor opens order page", func(ctx context.Context, actor core.Actor) error {
+				return nil
+			}),
+			core.Do("#actor saves order", func(ctx context.Context, actor core.Actor) error {
+				return nil
+			}),
+		),
+	)
+
+	test.Shutdown()
+
+	resultPath := readResultFilePath(t, resultsDir)
+	payload, err := os.ReadFile(resultPath)
+	require.NoError(t, err)
+
+	var result map[string]any
+	require.NoError(t, json.Unmarshal(payload, &result))
+
+	steps, ok := result["steps"].([]any)
+	require.True(t, ok)
+	require.Len(t, steps, 1)
+
+	taskStep := steps[0].(map[string]any)
+	require.Equal(t, "Sam creates an order", taskStep["name"])
+
+	childSteps, ok := taskStep["steps"].([]any)
+	require.True(t, ok)
+	require.Len(t, childSteps, 2)
+	require.Equal(t, "Sam opens order page", childSteps[0].(map[string]any)["name"])
+	require.Equal(t, "Sam saves order", childSteps[1].(map[string]any)["name"])
+}
+
 func readResultFilePath(t *testing.T, dir string) string {
 	t.Helper()
 

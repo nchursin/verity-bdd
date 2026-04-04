@@ -104,7 +104,14 @@ func (t *task) Description() string {
 //	- The original error wrapped with context
 func (t *task) PerformAs(ctx context.Context, actor Actor) error {
 	for _, activity := range t.activities {
-		if err := activity.PerformAs(ctx, actor); err != nil {
+		var err error
+		if performer, ok := actor.(NestedActivityPerformer); ok {
+			err = performer.PerformNestedActivity(ctx, activity)
+		} else {
+			err = activity.PerformAs(ctx, actor)
+		}
+
+		if err != nil {
 			return fmt.Errorf("task '%s' failed during activity '%s': %w",
 				t.Description(), activity.Description(), err)
 		}

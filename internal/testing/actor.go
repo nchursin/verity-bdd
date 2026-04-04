@@ -106,17 +106,7 @@ func (ta *testActor) AbilityTo(abilityType abilities.Ability) (abilities.Ability
 //   - Ignore: Silently ignores the error and continues
 func (ta *testActor) AttemptsTo(activities ...core.Activity) {
 	for _, activity := range activities {
-		var tracker *reporting.ActivityTracker
-		if ta.reporter != nil {
-			tracker = reporting.NewActivityTrackerWithActor(ta.reporter.GetReporter(), activity.Description(), ta.name)
-			tracker.Start()
-		}
-
-		err := activity.PerformAs(ta.ctx, ta)
-
-		if tracker != nil {
-			tracker.Finish(err)
-		}
+		err := ta.performActivity(ta.ctx, activity)
 
 		if err != nil {
 			failureMode := activity.FailureMode()
@@ -132,6 +122,28 @@ func (ta *testActor) AttemptsTo(activities ...core.Activity) {
 			}
 		}
 	}
+}
+
+// PerformNestedActivity executes a child activity within a parent task while
+// preserving the same reporting pipeline as top-level activities.
+func (ta *testActor) PerformNestedActivity(ctx context.Context, activity core.Activity) error {
+	return ta.performActivity(ctx, activity)
+}
+
+func (ta *testActor) performActivity(ctx context.Context, activity core.Activity) error {
+	var tracker *reporting.ActivityTracker
+	if ta.reporter != nil {
+		tracker = reporting.NewActivityTrackerWithActor(ta.reporter.GetReporter(), activity.Description(), ta.name)
+		tracker.Start()
+	}
+
+	err := activity.PerformAs(ctx, ta)
+
+	if tracker != nil {
+		tracker.Finish(err)
+	}
+
+	return err
 }
 
 // AnswersTo answers questions with boolean success flag

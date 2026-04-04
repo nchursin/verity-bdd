@@ -62,6 +62,57 @@ func TestTestActorAttemptsToWithReporting(t *testing.T) {
 	actor.AttemptsTo(mockActivity)
 }
 
+func TestTestActorAttemptsToWithNestedTaskReporting(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	mockReporter := reportingMocks.NewMockReporter(ctrl)
+	mockTestContext := testingMocks.NewMockTestContext(ctrl)
+
+	gomock.InOrder(
+		mockReporter.EXPECT().OnStepStart("Sam creates an order"),
+		mockReporter.EXPECT().OnStepStart("Sam opens order page"),
+		mockReporter.EXPECT().OnStepFinish(gomock.Any()).Do(func(result reporting.TestResult) {
+			if result.Name() != "Sam opens order page" {
+				t.Fatalf("unexpected child step name: %s", result.Name())
+			}
+		}),
+		mockReporter.EXPECT().OnStepStart("Sam saves order"),
+		mockReporter.EXPECT().OnStepFinish(gomock.Any()).Do(func(result reporting.TestResult) {
+			if result.Name() != "Sam saves order" {
+				t.Fatalf("unexpected child step name: %s", result.Name())
+			}
+		}),
+		mockReporter.EXPECT().OnStepFinish(gomock.Any()).Do(func(result reporting.TestResult) {
+			if result.Name() != "Sam creates an order" {
+				t.Fatalf("unexpected task step name: %s", result.Name())
+			}
+		}),
+	)
+
+	mockTestContext.EXPECT().Failed().Return(false).AnyTimes()
+
+	adapter := reporting.NewTestRunnerAdapter(mockReporter)
+	test := &verityTest{
+		testCtx: mockTestContext,
+		ctx:     context.Background(),
+		actors:  make(map[string]core.Actor),
+		adapter: adapter,
+	}
+
+	actor := test.ActorCalled("Sam")
+	actor.AttemptsTo(
+		core.TaskWhere("#actor creates an order",
+			core.Do("#actor opens order page", func(ctx context.Context, actor core.Actor) error {
+				return nil
+			}),
+			core.Do("#actor saves order", func(ctx context.Context, actor core.Actor) error {
+				return nil
+			}),
+		),
+	)
+}
+
 func TestAbilityToReturnsFriendlyError(t *testing.T) {
 	actor := &testActor{
 		name:      "TestActor",

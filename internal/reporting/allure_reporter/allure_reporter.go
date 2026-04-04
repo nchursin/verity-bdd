@@ -13,7 +13,7 @@ import (
 	"github.com/nchursin/verity-bdd/internal/reporting"
 )
 
-// AllureReporter writes Serenity events in Allure 2 result format.
+// AllureReporter writes Verity BDD events in Allure 2 result format.
 type AllureReporter struct {
 	resultsDir string
 

@@ -1,4 +1,4 @@
-// Package testing provides the TestContext API for simplified Serenity/JS testing in Go.
+// Package testing provides the TestContext API for simplified testing in Go.
 //
 // The TestContext API eliminates the need for manual error handling in tests by
 // automatically managing test failures through the testing.TB interface.

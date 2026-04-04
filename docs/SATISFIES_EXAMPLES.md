@@ -4,7 +4,7 @@ This document provides comprehensive examples of using the `Satisfies` expectati
 
 ## Overview
 
-The `Satisfies` expectation allows you to create custom validation logic using functions, similar to Serenity/JS. It's particularly useful for complex business rules, struct comparisons, and scenarios where built-in expectations aren't sufficient.
+The `Satisfies` expectation allows you to create custom validation logic using functions. It's particularly useful for complex business rules, struct comparisons, and scenarios where built-in expectations aren't sufficient.
 
 ## Basic Usage
 

@@ -6,7 +6,7 @@
 > This project is still at version 0.x.x. It means I do not guarantee ANY backwards compatibility for ANY changes. I use this project daily and adjust the API to real world usage.
 > The plan is to go v1.x.x in Summer 2026.
 
-A Go implementation of the Serenity/JS Screenplay Pattern for acceptance testing, focused on API testing capabilities.
+A Go implementation of the Screenplay Pattern for acceptance testing, focused on API testing capabilities.
 
 ![Verity-BDD](https://raw.githubusercontent.com/nchursin/resources/refs/heads/master/verity-bdd/dark.png)
 
@@ -534,17 +534,6 @@ admin.AttemptsTo(createResourceTask)
 // User interacts with resources
 user.AttemptsTo(accessResourceTask)
 ```
-
-## Comparison with Serenity/JS
-
-This Go implementation follows the same design principles as Serenity/JS:
-
-| Serenity/JS | Verity-BDD |
-|--------------|-------------|
-| `actorCalled('John')` | `test.ActorCalled("John")` |
-| `WhoCan(CallAnAPI.using(...))` | `WhoCan(api.CallAnApiAt(...))` |
-| `attemptsTo(Send.a(...))` | `AttemptsTo(api.SendGetRequest(...))` |
-| `Ensure.that(LastResponse.status(), equals(200))` | `ensure.That(api.LastResponseStatus{}, expectations.Equals(200))` |
 
 ## Contributing
 

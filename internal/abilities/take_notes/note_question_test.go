@@ -9,15 +9,15 @@ import (
 
 func TestNoteQuestionReturnsTypedValue(t *testing.T) {
 	ability := take_notes.UsingEmptyNotepad()
-	ability.(*take_notes.TakeNotesAbility).Set("name", "serenity")
+	ability.(*take_notes.TakeNotesAbility).Set("name", "verity")
 	actor := newStubActor("reader", context.Background(), ability)
 
 	answer, err := take_notes.Note[string]("name").AnsweredBy(context.Background(), actor)
 	if err != nil {
 		t.Fatalf("expected note to be answered, got error: %v", err)
 	}
-	if answer != "serenity" {
-		t.Fatalf("expected 'serenity', got %v", answer)
+	if answer != "verity" {
+		t.Fatalf("expected 'verity', got %v", answer)
 	}
 }
 

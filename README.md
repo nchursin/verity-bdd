@@ -2,6 +2,10 @@
 
 ![CI](https://github.com/nchursin/verity-bdd/workflows/CI/badge.svg) ![codecov](https://codecov.io/gh/nchursin/verity-bdd/graph/badge.svg) ![Version](https://img.shields.io/github/v/release/nchursin/verity-bdd)
 
+> [!WARNING]
+> This project is still at version 0.x.x. It means I do not guarantee ANY backwards compatibility for ANY changes. I use this project daily and adjust the API to real world usage.
+> The plan is to go v1.x.x in Summer 2026.
+
 A Go implementation of the Serenity/JS Screenplay Pattern for acceptance testing, focused on API testing capabilities.
 
 ## Overview
@@ -15,11 +19,6 @@ Verity-BDD brings the power of the Screenplay Pattern to Go testing, providing:
 - **Framework agnostic** - Works with any Go test runner
 
 ## Quick Start
-
-## Breaking Rename Notice
-
-This project was hard-renamed from `Serenity-Go` to `Verity-BDD` with no backward compatibility aliases.
-If you migrate existing tests, use `docs/MIGRATION_SERENITY_TO_VERITY.md`.
 
 ### Installation
 
@@ -153,7 +152,7 @@ type User struct {
 err := actor.AttemptsTo(
     api.SendGetRequest("/users/1"),
     ensure.That(api.LastResponseStatus{}, expectations.Equals(200)),
-    
+
     // Parse response as JSON struct
     ensure.That(api.NewResponseBodyAsJSON[User](), expectations.Satisfies("has valid user", func(actual User) error {
         if actual.Name == "" {
@@ -164,11 +163,11 @@ err := actor.AttemptsTo(
         }
         return nil
     })),
-    
+
     // JSONPath queries
     ensure.That(api.NewJSONPath("name"), expectations.Contains("John")),
     ensure.That(api.NewJSONPath("data.users.*.email"), expectations.Contains("@")),
-    
+
     // Response time validation
     ensure.That(api.ResponseTime{}, expectations.IsLessThan(1000)), // milliseconds
 )

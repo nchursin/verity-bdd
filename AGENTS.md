@@ -10,3 +10,5 @@ All the implementation is in `./internal` folder. API is exposed explicitly.
 ## Development workflow
 For all functionlaity **ALWAYS** use `test-driven-development` skill.
 
+## AI instructions
+Read general instructions in `.ai` folder.

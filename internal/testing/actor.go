@@ -106,7 +106,7 @@ func (ta *testActor) AbilityTo(abilityType abilities.Ability) (abilities.Ability
 //   - Ignore: Silently ignores the error and continues
 func (ta *testActor) AttemptsTo(activities ...core.Activity) {
 	for _, activity := range activities {
-		err := ta.performActivity(ta.ctx, activity)
+		err := ta.PerformActivity(ta.ctx, activity)
 
 		if err != nil {
 			failureMode := activity.FailureMode()
@@ -124,13 +124,9 @@ func (ta *testActor) AttemptsTo(activities ...core.Activity) {
 	}
 }
 
-// PerformNestedActivity executes a child activity within a parent task while
-// preserving the same reporting pipeline as top-level activities.
-func (ta *testActor) PerformNestedActivity(ctx context.Context, activity core.Activity) error {
-	return ta.performActivity(ctx, activity)
-}
-
-func (ta *testActor) performActivity(ctx context.Context, activity core.Activity) error {
+// PerformActivity executes a single activity through the actor reporting pipeline
+// and returns the underlying execution error to the caller.
+func (ta *testActor) PerformActivity(ctx context.Context, activity core.Activity) error {
 	var tracker *reporting.ActivityTracker
 	if ta.reporter != nil {
 		tracker = reporting.NewActivityTrackerWithActor(ta.reporter.GetReporter(), activity.Description(), ta.name)

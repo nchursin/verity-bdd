@@ -145,6 +145,30 @@ func TestAllureReporter_RecordsNestedSteps(t *testing.T) {
 	require.Equal(t, "passed", result.Steps[0].Steps[0].Status)
 }
 
+func TestAllureReporter_RecordsNestedStepsAtMultipleLevels(t *testing.T) {
+	t.Parallel()
+
+	resultsDir := t.TempDir()
+	r := NewAllureReporterWithDir(resultsDir)
+
+	r.OnTestStart("NestedTaskTreeTest")
+	r.OnStepStart("creates an order")
+	r.OnStepStart("submits order details")
+	r.OnStepStart("opens order page")
+	r.OnStepFinish(&stubResult{name: "opens order page", status: reporting.StatusPassed, duration: 0.01})
+	r.OnStepFinish(&stubResult{name: "submits order details", status: reporting.StatusPassed, duration: 0.02})
+	r.OnStepFinish(&stubResult{name: "creates an order", status: reporting.StatusPassed, duration: 0.03})
+	r.OnTestFinish(&stubResult{name: "NestedTaskTreeTest", status: reporting.StatusPassed, duration: 0.04})
+
+	result := readSingleResultFile(t, resultsDir)
+	require.Len(t, result.Steps, 1)
+	require.Equal(t, "creates an order", result.Steps[0].Name)
+	require.Len(t, result.Steps[0].Steps, 1)
+	require.Equal(t, "submits order details", result.Steps[0].Steps[0].Name)
+	require.Len(t, result.Steps[0].Steps[0].Steps, 1)
+	require.Equal(t, "opens order page", result.Steps[0].Steps[0].Steps[0].Name)
+}
+
 func TestAllureReporter_WritesTestAttachments(t *testing.T) {
 	t.Parallel()
 

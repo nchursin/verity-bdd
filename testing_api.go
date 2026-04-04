@@ -13,4 +13,3 @@ type TestContext = internaltesting.TestContext
 var NewVerityTest = internaltesting.NewVerityTest
 var NewVerityTestWithContext = internaltesting.NewVerityTestWithContext
 var NewVerityTestWithReporter = internaltesting.NewVerityTestWithReporter
-

@@ -1,1 +1,2 @@
 - never do `git push` unless explicitly asked to
+- never commit plans

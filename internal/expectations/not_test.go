@@ -3,9 +3,10 @@ package expectations_test
 import (
 	"testing"
 
-	"github.com/nchursin/verity-bdd/internal/expectations"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	"github.com/nchursin/verity-bdd/internal/expectations"
 )
 
 func TestNot_PassesWhenInnerFails(t *testing.T) {
@@ -16,7 +17,7 @@ func TestNot_PassesWhenInnerFails(t *testing.T) {
 func TestNot_FailsWhenInnerPasses(t *testing.T) {
 	err := expectations.Not(expectations.Equals("foo")).Evaluate("foo")
 	require.Error(t, err)
-	assert.Equal(t, "not equals foo", err.Error())
+	assert.Equal(t, "not equals foo: got foo", err.Error())
 }
 
 func TestNot_Description(t *testing.T) {
@@ -27,10 +28,21 @@ func TestNot_Description(t *testing.T) {
 func TestNot_IsEmpty_FailsOnEmptyString(t *testing.T) {
 	err := expectations.Not(expectations.IsEmpty()).Evaluate("")
 	require.Error(t, err)
-	assert.Equal(t, "not is empty", err.Error())
+	assert.Equal(t, "not is empty: got ", err.Error())
 }
 
 func TestNot_IsEmpty_PassesOnNonEmptyString(t *testing.T) {
 	err := expectations.Not(expectations.IsEmpty()).Evaluate("hello")
 	assert.NoError(t, err)
+}
+
+func TestNot_DoubleNegation_PassesWhenInnerPasses(t *testing.T) {
+	err := expectations.Not(expectations.Not(expectations.Equals("foo"))).Evaluate("foo")
+	assert.NoError(t, err)
+}
+
+func TestNot_DoubleNegation_FailsWhenInnerFails(t *testing.T) {
+	err := expectations.Not(expectations.Not(expectations.Equals("foo"))).Evaluate("bar")
+	require.Error(t, err)
+	assert.Equal(t, "not not equals foo: got bar", err.Error())
 }

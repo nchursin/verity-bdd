@@ -14,7 +14,7 @@ type NotExpectation[T any] struct {
 // Evaluate returns nil if the inner expectation fails, and an error if it passes
 func (n NotExpectation[T]) Evaluate(actual T) error {
 	if err := n.inner.Evaluate(actual); err == nil {
-		return fmt.Errorf("not %s", n.inner.Description())
+		return fmt.Errorf("not %s: got %v", n.inner.Description(), actual)
 	}
 	return nil
 }

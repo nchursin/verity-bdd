@@ -38,3 +38,7 @@ func Equals[T any](expected T) ensure.Expectation[T] {
 func Satisfies[T any](description string, fn func(T) error) ensure.Expectation[T] {
 	return internalexpectations.Satisfies(description, fn)
 }
+
+func Not[T any](inner ensure.Expectation[T]) ensure.Expectation[T] {
+	return internalexpectations.Not(inner)
+}

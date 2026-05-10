@@ -12,3 +12,8 @@ func TestExpectationsAPIContractCompiles(t *testing.T) {
 	q := answerable.ValueOf("hello")
 	_ = ensure.That(q, ve.Contains("ell"))
 }
+
+func TestNotExpectationAPIContractCompiles(t *testing.T) {
+	q := answerable.ValueOf("hello")
+	_ = ensure.That(q, ve.Not(ve.Contains("xyz")))
+}

@@ -26,13 +26,13 @@ func TestNot_Description(t *testing.T) {
 }
 
 func TestNot_IsEmpty_FailsOnEmptyString(t *testing.T) {
-	err := expectations.Not(expectations.IsEmpty()).Evaluate("")
+	err := expectations.Not(expectations.IsEmpty[string]()).Evaluate("")
 	require.Error(t, err)
 	assert.Equal(t, "not is empty: got ", err.Error())
 }
 
 func TestNot_IsEmpty_PassesOnNonEmptyString(t *testing.T) {
-	err := expectations.Not(expectations.IsEmpty()).Evaluate("hello")
+	err := expectations.Not(expectations.IsEmpty[string]()).Evaluate("hello")
 	assert.NoError(t, err)
 }
 

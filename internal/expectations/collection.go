@@ -7,16 +7,11 @@ import (
 	"github.com/nchursin/verity-bdd/internal/expectations/ensure"
 )
 
-// IsEmptyExpectation checks if a string is empty
-type IsEmptyExpectation struct{}
-
-// NewIsEmpty creates a new IsEmpty expectation
-func NewIsEmpty() ensure.Expectation[interface{}] {
-	return IsEmptyExpectation{}
-}
+// IsEmptyExpectation checks if a value is empty (string, slice, array, or map)
+type IsEmptyExpectation[T any] struct{}
 
 // Evaluate evaluates the is empty expectation
-func (ie IsEmptyExpectation) Evaluate(actual interface{}) error {
+func (ie IsEmptyExpectation[T]) Evaluate(actual T) error {
 	val := reflect.ValueOf(actual)
 
 	switch val.Kind() {
@@ -40,27 +35,22 @@ func (ie IsEmptyExpectation) Evaluate(actual interface{}) error {
 }
 
 // Description returns the expectation description
-func (ie IsEmptyExpectation) Description() string {
+func (ie IsEmptyExpectation[T]) Description() string {
 	return "is empty"
 }
 
-// Convenience function for creating IsEmpty expectations
-func IsEmpty() ensure.Expectation[interface{}] {
-	return NewIsEmpty()
+// IsEmpty creates an IsEmpty expectation for the given type
+func IsEmpty[T any]() ensure.Expectation[T] {
+	return IsEmptyExpectation[T]{}
 }
 
-// ArrayLengthEqualsExpectation checks if an array/slice has the expected length
-type ArrayLengthEqualsExpectation struct {
+// ArrayLengthEqualsExpectation checks if an array/slice/string has the expected length
+type ArrayLengthEqualsExpectation[T any] struct {
 	expectedLength int
 }
 
-// NewArrayLengthEquals creates a new ArrayLengthEquals expectation
-func NewArrayLengthEquals(expectedLength int) ensure.Expectation[interface{}] {
-	return ArrayLengthEqualsExpectation{expectedLength: expectedLength}
-}
-
 // Evaluate evaluates the array length expectation
-func (ale ArrayLengthEqualsExpectation) Evaluate(actual interface{}) error {
+func (ale ArrayLengthEqualsExpectation[T]) Evaluate(actual T) error {
 	val := reflect.ValueOf(actual)
 
 	var length int
@@ -80,11 +70,11 @@ func (ale ArrayLengthEqualsExpectation) Evaluate(actual interface{}) error {
 }
 
 // Description returns the expectation description
-func (ale ArrayLengthEqualsExpectation) Description() string {
+func (ale ArrayLengthEqualsExpectation[T]) Description() string {
 	return fmt.Sprintf("has length %d", ale.expectedLength)
 }
 
-// Convenience function for creating ArrayLengthEquals expectations
-func ArrayLengthEquals(expectedLength int) ensure.Expectation[interface{}] {
-	return NewArrayLengthEquals(expectedLength)
+// ArrayLengthEquals creates an ArrayLengthEquals expectation for the given type
+func ArrayLengthEquals[T any](expectedLength int) ensure.Expectation[T] {
+	return ArrayLengthEqualsExpectation[T]{expectedLength: expectedLength}
 }

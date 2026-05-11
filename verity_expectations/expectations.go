@@ -7,10 +7,16 @@ import (
 
 var Contains = internalexpectations.Contains
 var ContainsKey = internalexpectations.ContainsKey
-var IsEmpty = internalexpectations.IsEmpty
-var ArrayLengthEquals = internalexpectations.ArrayLengthEquals
 var IsGreaterThan = internalexpectations.IsGreaterThan
 var IsLessThan = internalexpectations.IsLessThan
+
+func IsEmpty[T any]() ensure.Expectation[T] {
+	return internalexpectations.IsEmpty[T]()
+}
+
+func ArrayLengthEquals[T any](expectedLength int) ensure.Expectation[T] {
+	return internalexpectations.ArrayLengthEquals[T](expectedLength)
+}
 
 func Equals[T any](expected T) ensure.Expectation[T] {
 	return internalexpectations.Equals(expected)

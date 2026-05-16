@@ -57,21 +57,6 @@ func (mr *MockActorMockRecorder) AbilityTo(ability any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AbilityTo", reflect.TypeOf((*MockActor)(nil).AbilityTo), ability)
 }
 
-// AnswersTo mocks base method.
-func (m *MockActor) AnswersTo(question core.Question[any]) (any, bool) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "AnswersTo", question)
-	ret0, _ := ret[0].(any)
-	ret1, _ := ret[1].(bool)
-	return ret0, ret1
-}
-
-// AnswersTo indicates an expected call of AnswersTo.
-func (mr *MockActorMockRecorder) AnswersTo(question any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AnswersTo", reflect.TypeOf((*MockActor)(nil).AnswersTo), question)
-}
-
 // AttemptsTo mocks base method.
 func (m *MockActor) AttemptsTo(activities ...core.Activity) {
 	m.ctrl.T.Helper()

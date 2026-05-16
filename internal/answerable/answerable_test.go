@@ -36,11 +36,6 @@ func (m *mockActor) AbilityTo(ability abilities.Ability) (abilities.Ability, err
 func (m *mockActor) AttemptsTo(activities ...core.Activity) {
 }
 
-func (m *mockActor) AnswersTo(question core.Question[any]) (any, bool) {
-	result, err := question.AnsweredBy(context.Background(), m)
-	return result, err == nil
-}
-
 // Test types for comprehensive testing
 type TestUser struct {
 	Name string

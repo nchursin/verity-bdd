@@ -20,7 +20,7 @@ func TestNotesExample(t *testing.T) {
         take_notes.TakeNoteOf("Bearer abc123").As("auth token"),
     )
 
-    token, ok := actor.AnswersTo(take_notes.Note[string]("auth token"))
+    token, ok := take_notes.Note[string]("auth token").AnsweredBy(actor)
     if !ok {
         t.Fatalf("note not found")
     }

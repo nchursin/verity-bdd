@@ -32,7 +32,6 @@ type Ability = internalabilities.Ability
 //	WhoCan() adds abilities to the actor, returning the same actor for chaining.
 //	AbilityTo() retrieves a specific ability by type for use in activities.
 //	AttemptsTo() executes one or more activities sequentially.
-//	AnswersTo() answers questions about system state (legacy method).
 //
 // Example Usage:
 //

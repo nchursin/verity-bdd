@@ -45,10 +45,6 @@ func (a *stubActor) AbilityTo(target abilities.Ability) (abilities.Ability, erro
 
 func (a *stubActor) AttemptsTo(activities ...core.Activity) {}
 
-func (a *stubActor) AnswersTo(question core.Question[any]) (any, bool) {
-	return nil, false
-}
-
 func TestTakeNoteStoresValue(t *testing.T) {
 	ability := take_notes.UsingEmptyNotepad()
 	actor := newStubActor("alice", context.Background(), ability)

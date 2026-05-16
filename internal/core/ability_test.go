@@ -28,8 +28,7 @@ func (s *stubActor) AbilityTo(_ abilities.Ability) (abilities.Ability, error) {
 	}
 	return s.abilityToResp, nil
 }
-func (s *stubActor) AttemptsTo(_ ...Activity)              {}
-func (s *stubActor) AnswersTo(_ Question[any]) (any, bool) { return nil, false }
+func (s *stubActor) AttemptsTo(_ ...Activity) {}
 
 func TestAbilityNameStripsPointer(t *testing.T) {
 	ab := &testAbility{}

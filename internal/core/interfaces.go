@@ -163,7 +163,6 @@ import (
 //	WhoCan() adds abilities to the actor, returning the same actor for chaining.
 //	AbilityTo() retrieves a specific ability by type for use in activities.
 //	AttemptsTo() executes one or more activities sequentially.
-//	AnswersTo() answers questions about system state (legacy method).
 //
 // Example Usage:
 //
@@ -292,32 +291,6 @@ type Actor interface {
 	//		core.Do("final verification", verification),
 	//	)
 	AttemptsTo(activities ...Activity)
-
-	// AnswersTo answers a question about the system state.
-	// This is a legacy method - prefer using Question.AnsweredBy() directly.
-	//
-	// Parameters:
-	//   - question: The question to answer
-	//
-	// Returns:
-	//   - any: The answer to the question
-	//   - bool: True if the question was answered successfully
-	//
-	// Example (legacy):
-	//
-	//	answer, ok := actor.AnswersTo(userCountQuestion)
-	//	if !ok {
-	//		return fmt.Errorf("failed to answer question")
-	//	}
-	//	count := answer.(int)
-	//
-	// Recommended approach:
-	//
-	//	count, err := userCountQuestion.AnsweredBy(actor)
-	//	if err != nil {
-	//		return fmt.Errorf("failed to get user count: %w", err)
-	//	}
-	AnswersTo(question Question[any]) (any, bool)
 }
 
 // Activity represents an action that an actor can perform.

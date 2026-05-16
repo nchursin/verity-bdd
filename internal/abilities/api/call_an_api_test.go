@@ -46,11 +46,6 @@ func (a *stubActor) AttemptsTo(activities ...core.Activity) {
 	}
 }
 
-func (a *stubActor) AnswersTo(question core.Question[any]) (any, bool) {
-	answer, err := question.AnsweredBy(a.ctx, a)
-	return answer, err == nil
-}
-
 func TestSendRequestStoresLastResponse(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusCreated)

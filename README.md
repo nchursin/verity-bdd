@@ -1,6 +1,6 @@
 # Verity-BDD: Screenplay Pattern Testing Framework for Go
 
-![CI](https://github.com/nchursin/verity-bdd/workflows/CI/badge.svg) ![codecov](https://codecov.io/gh/nchursin/verity-bdd/graph/badge.svg) ![Version](https://img.shields.io/github/v/release/nchursin/verity-bdd)
+![CI](https://github.com/verity-bdd/verity-bdd/workflows/CI/badge.svg) ![codecov](https://codecov.io/gh/nchursin/verity-bdd/graph/badge.svg) ![Version](https://img.shields.io/github/v/release/nchursin/verity-bdd)
 
 > [!WARNING]
 > This project is still at version 0.x.x. It means I do not guarantee ANY backwards compatibility for ANY changes. I use this project daily and adjust the API to real world usage.
@@ -25,7 +25,7 @@ Verity-BDD brings the power of the Screenplay Pattern to Go testing, providing:
 ### Installation
 
 ```bash
-go get github.com/nchursin/verity-bdd
+go get github.com/verity-bdd/verity-bdd
 ```
 
 ### Basic Example
@@ -36,10 +36,10 @@ package main
 import (
     "testing"
 
-    "github.com/nchursin/verity-bdd/verity_abilities/api"
-    expectations "github.com/nchursin/verity-bdd/verity_expectations"
-    "github.com/nchursin/verity-bdd/verity_expectations/ensure"
-    verity "github.com/nchursin/verity-bdd"
+    "github.com/verity-bdd/verity-bdd/verity_abilities/api"
+    expectations "github.com/verity-bdd/verity-bdd/verity_expectations"
+    "github.com/verity-bdd/verity-bdd/verity_expectations/ensure"
+    verity "github.com/verity-bdd/verity-bdd"
 )
 
 func TestAPI(t *testing.T) {
@@ -329,8 +329,8 @@ Example output:
 ```go
 import (
     "os"
-    "github.com/nchursin/verity-bdd/verity_reporting/console_reporter"
-    verity "github.com/nchursin/verity-bdd"
+    "github.com/verity-bdd/verity-bdd/verity_reporting/console_reporter"
+    verity "github.com/verity-bdd/verity-bdd"
 )
 
 // Create custom console reporter
@@ -346,8 +346,8 @@ For detailed documentation on console reporting, see [docs/reporting.md](docs/re
 ```go
 import (
     "os"
-    "github.com/nchursin/verity-bdd/verity_reporting/console_reporter"
-    verity "github.com/nchursin/verity-bdd"
+    "github.com/verity-bdd/verity-bdd/verity_reporting/console_reporter"
+    verity "github.com/verity-bdd/verity-bdd"
 )
 
 // Create file for output
@@ -374,8 +374,8 @@ Verity-BDD includes a native Allure reporter that writes Allure 2 result files, 
 import (
     "context"
 
-    "github.com/nchursin/verity-bdd/verity_reporting/allure_reporter"
-    verity "github.com/nchursin/verity-bdd"
+    "github.com/verity-bdd/verity-bdd/verity_reporting/allure_reporter"
+    verity "github.com/verity-bdd/verity-bdd"
 )
 
 func TestWithAllure(t *testing.T) {
@@ -419,13 +419,13 @@ For detailed `Satisfies` examples, see [docs/SATISFIES_EXAMPLES.md](docs/SATISFI
 
 ### Core Components
 
-- **github.com/nchursin/verity-bdd** - Core Screenplay API, testing API, and answerable helpers
-- **github.com/nchursin/verity-bdd/verity_abilities** - Default ability contracts and ability packages
-- **github.com/nchursin/verity-bdd/verity_expectations** - Expectations and assertion helpers
-- **github.com/nchursin/verity-bdd/verity_expectations/ensure** - Ensure activities
-- **github.com/nchursin/verity-bdd/verity_reporting** - Reporting contracts and adapters
-- **github.com/nchursin/verity-bdd/verity_reporting/console_reporter** - Console reporter
-- **github.com/nchursin/verity-bdd/verity_reporting/allure_reporter** - Allure reporter
+- **github.com/verity-bdd/verity-bdd** - Core Screenplay API, testing API, and answerable helpers
+- **github.com/verity-bdd/verity-bdd/verity_abilities** - Default ability contracts and ability packages
+- **github.com/verity-bdd/verity-bdd/verity_expectations** - Expectations and assertion helpers
+- **github.com/verity-bdd/verity-bdd/verity_expectations/ensure** - Ensure activities
+- **github.com/verity-bdd/verity-bdd/verity_reporting** - Reporting contracts and adapters
+- **github.com/verity-bdd/verity-bdd/verity_reporting/console_reporter** - Console reporter
+- **github.com/verity-bdd/verity-bdd/verity_reporting/allure_reporter** - Allure reporter
 
 ### Design Principles
 

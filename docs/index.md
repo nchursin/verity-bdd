@@ -40,7 +40,7 @@ test := verity.NewVerityTest(t, verity.Scene{})
 actor := test.ActorCalled("APITester").WhoCan(api.CallAnApiAt("https://api.example.com"))
 ```
 
-### Abilities  
+### Abilities
 Abilities enable actors to interact with different parts of your system:
 ```go
 apiAbility := api.CallAnApiAt("https://api.example.com")
@@ -59,7 +59,7 @@ err := actor.AttemptsTo(
 
 ### 1. Install
 ```bash
-go get github.com/nchursin/verity-bdd
+go get github.com/verity-bdd/verity-bdd
 ```
 
 ### 2. Basic Test
@@ -86,7 +86,7 @@ Ready to extend the framework? Check out our [Creating Custom Abilities guide](a
 ### [Creating Custom Abilities](abilities.md)
 Learn how to create your own abilities for:
 - Database testing
-- File system operations  
+- File system operations
 - Third-party service integrations
 - Custom protocols and APIs
 
@@ -105,9 +105,9 @@ Ready-to-use templates for:
 
 ## 🤝 Contributing
 
-Have an idea to improve the documentation? Found something unclear? 
+Have an idea to improve the documentation? Found something unclear?
 
-- Check out the [main repository](https://github.com/nchursin/verity-bdd)
+- Check out the [main repository](https://github.com/verity-bdd/verity-bdd)
 - Open an issue for documentation improvements
 - Submit pull requests for new examples and guides
 

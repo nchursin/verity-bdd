@@ -5,11 +5,11 @@ import (
 
 	"go.uber.org/mock/gomock"
 
-	verity "github.com/nchursin/verity-bdd"
-	"github.com/nchursin/verity-bdd/internal/testing/mocks"
-	"github.com/nchursin/verity-bdd/verity_abilities/api"
-	expectations "github.com/nchursin/verity-bdd/verity_expectations"
-	"github.com/nchursin/verity-bdd/verity_expectations/ensure"
+	verity "github.com/verity-bdd/verity-bdd"
+	"github.com/verity-bdd/verity-bdd/internal/testing/mocks"
+	"github.com/verity-bdd/verity-bdd/verity_abilities/api"
+	expectations "github.com/verity-bdd/verity-bdd/verity_expectations"
+	"github.com/verity-bdd/verity-bdd/verity_expectations/ensure"
 )
 
 // TestIntentionalFailure demonstrates error handling with wrong assertion using mock TestContext

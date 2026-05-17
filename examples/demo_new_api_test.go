@@ -4,10 +4,10 @@ import (
 	"context"
 	"testing"
 
-	verity "github.com/nchursin/verity-bdd"
-	"github.com/nchursin/verity-bdd/verity_abilities/api"
-	expectations "github.com/nchursin/verity-bdd/verity_expectations"
-	"github.com/nchursin/verity-bdd/verity_expectations/ensure"
+	verity "github.com/verity-bdd/verity-bdd"
+	"github.com/verity-bdd/verity-bdd/verity_abilities/api"
+	expectations "github.com/verity-bdd/verity-bdd/verity_expectations"
+	"github.com/verity-bdd/verity-bdd/verity_expectations/ensure"
 )
 
 // TestNewAPIDemonstration demonstrates the new TestContext API without require.NoError

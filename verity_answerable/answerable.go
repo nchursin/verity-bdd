@@ -3,8 +3,8 @@ package verity_answerable
 import (
 	"context"
 
-	verity "github.com/nchursin/verity-bdd"
-	internalanswerable "github.com/nchursin/verity-bdd/internal/answerable"
+	verity "github.com/verity-bdd/verity-bdd"
+	internalanswerable "github.com/verity-bdd/verity-bdd/internal/answerable"
 )
 
 // ValueOf creates a Question[T] that returns the provided static value

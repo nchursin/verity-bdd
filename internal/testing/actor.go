@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/nchursin/verity-bdd/internal/abilities"
-	"github.com/nchursin/verity-bdd/internal/core"
-	"github.com/nchursin/verity-bdd/internal/reporting"
+	"github.com/verity-bdd/verity-bdd/internal/abilities"
+	"github.com/verity-bdd/verity-bdd/internal/core"
+	"github.com/verity-bdd/verity-bdd/internal/reporting"
 )
 
 // testActor implements the Actor interface with TestContext integration.

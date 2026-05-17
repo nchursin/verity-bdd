@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/nchursin/verity-bdd/internal/expectations"
+	"github.com/verity-bdd/verity-bdd/internal/expectations"
 )
 
 func TestNot_PassesWhenInnerFails(t *testing.T) {

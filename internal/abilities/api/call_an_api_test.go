@@ -8,8 +8,8 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/nchursin/verity-bdd/internal/abilities"
-	"github.com/nchursin/verity-bdd/internal/core"
+	"github.com/verity-bdd/verity-bdd/internal/abilities"
+	"github.com/verity-bdd/verity-bdd/internal/core"
 )
 
 type stubActor struct {

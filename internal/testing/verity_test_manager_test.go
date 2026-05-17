@@ -8,13 +8,13 @@ import (
 	"github.com/stretchr/testify/require"
 	"go.uber.org/mock/gomock"
 
-	"github.com/nchursin/verity-bdd/internal/abilities"
-	"github.com/nchursin/verity-bdd/internal/reporting"
-	"github.com/nchursin/verity-bdd/internal/reporting/console_reporter"
-	reportingMocks "github.com/nchursin/verity-bdd/internal/reporting/mocks"
-	"github.com/nchursin/verity-bdd/internal/testing/mocks"
+	"github.com/verity-bdd/verity-bdd/internal/abilities"
+	"github.com/verity-bdd/verity-bdd/internal/reporting"
+	"github.com/verity-bdd/verity-bdd/internal/reporting/console_reporter"
+	reportingMocks "github.com/verity-bdd/verity-bdd/internal/reporting/mocks"
+	"github.com/verity-bdd/verity-bdd/internal/testing/mocks"
 
-	"github.com/nchursin/verity-bdd/internal/abilities/take_notes"
+	"github.com/verity-bdd/verity-bdd/internal/abilities/take_notes"
 )
 
 type sceneDefaultAbility struct {

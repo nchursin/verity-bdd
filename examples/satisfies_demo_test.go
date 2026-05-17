@@ -9,10 +9,10 @@ import (
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
 
-	verity "github.com/nchursin/verity-bdd"
-	answerable "github.com/nchursin/verity-bdd/verity_answerable"
-	expectations "github.com/nchursin/verity-bdd/verity_expectations"
-	"github.com/nchursin/verity-bdd/verity_expectations/ensure"
+	verity "github.com/verity-bdd/verity-bdd"
+	answerable "github.com/verity-bdd/verity-bdd/verity_answerable"
+	expectations "github.com/verity-bdd/verity-bdd/verity_expectations"
+	"github.com/verity-bdd/verity-bdd/verity_expectations/ensure"
 )
 
 // TestSatisfiesBasic demonstrates basic usage of Satisfies expectation

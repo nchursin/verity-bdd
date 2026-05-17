@@ -5,7 +5,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/nchursin/verity-bdd/internal/abilities"
+	"github.com/verity-bdd/verity-bdd/internal/abilities"
 )
 
 type testAbility struct{ id string }

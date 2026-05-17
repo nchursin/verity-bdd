@@ -7,12 +7,12 @@ import (
 
 	"go.uber.org/mock/gomock"
 
-	"github.com/nchursin/verity-bdd/internal/abilities"
-	take_notes "github.com/nchursin/verity-bdd/internal/abilities/take_notes"
-	"github.com/nchursin/verity-bdd/internal/core"
-	"github.com/nchursin/verity-bdd/internal/reporting"
-	"github.com/nchursin/verity-bdd/internal/reporting/mocks"
-	veritytesting "github.com/nchursin/verity-bdd/internal/testing"
+	"github.com/verity-bdd/verity-bdd/internal/abilities"
+	take_notes "github.com/verity-bdd/verity-bdd/internal/abilities/take_notes"
+	"github.com/verity-bdd/verity-bdd/internal/core"
+	"github.com/verity-bdd/verity-bdd/internal/reporting"
+	"github.com/verity-bdd/verity-bdd/internal/reporting/mocks"
+	veritytesting "github.com/verity-bdd/verity-bdd/internal/testing"
 )
 
 type stubActor struct {

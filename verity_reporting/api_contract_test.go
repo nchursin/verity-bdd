@@ -3,8 +3,8 @@ package verity_reporting_test
 import (
 	"testing"
 
-	vr "github.com/nchursin/verity-bdd/verity_reporting"
-	"github.com/nchursin/verity-bdd/verity_reporting/console_reporter"
+	vr "github.com/verity-bdd/verity-bdd/verity_reporting"
+	"github.com/verity-bdd/verity-bdd/verity_reporting/console_reporter"
 )
 
 func TestReportingAPIContractCompiles(t *testing.T) {

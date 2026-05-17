@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"testing"
 
-	verity "github.com/nchursin/verity-bdd"
+	verity "github.com/verity-bdd/verity-bdd"
 )
 
 // TestCoreDoFunction demonstrates the new verity.Do function for quick activity creation

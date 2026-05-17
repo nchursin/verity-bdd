@@ -3,7 +3,7 @@ package examples
 import (
 	"testing"
 
-	"github.com/nchursin/verity-bdd/internal/testing/testserver"
+	"github.com/verity-bdd/verity-bdd/internal/testing/testserver"
 )
 
 func localJSONPlaceholderURL(t testing.TB) string {

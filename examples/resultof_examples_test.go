@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"testing"
 
-	verity "github.com/nchursin/verity-bdd"
-	answerable "github.com/nchursin/verity-bdd/verity_answerable"
-	expectations "github.com/nchursin/verity-bdd/verity_expectations"
-	"github.com/nchursin/verity-bdd/verity_expectations/ensure"
+	verity "github.com/verity-bdd/verity-bdd"
+	answerable "github.com/verity-bdd/verity-bdd/verity_answerable"
+	expectations "github.com/verity-bdd/verity-bdd/verity_expectations"
+	"github.com/verity-bdd/verity-bdd/verity_expectations/ensure"
 )
 
 // TestResultOf demonstrates usage of answerable.ResultOf for dynamic assertions

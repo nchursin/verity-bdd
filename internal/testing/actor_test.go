@@ -6,12 +6,12 @@ import (
 
 	"go.uber.org/mock/gomock"
 
-	"github.com/nchursin/verity-bdd/internal/abilities"
-	"github.com/nchursin/verity-bdd/internal/core"
-	coreMocks "github.com/nchursin/verity-bdd/internal/core/testing/mocks"
-	"github.com/nchursin/verity-bdd/internal/reporting"
-	reportingMocks "github.com/nchursin/verity-bdd/internal/reporting/mocks"
-	testingMocks "github.com/nchursin/verity-bdd/internal/testing/mocks"
+	"github.com/verity-bdd/verity-bdd/internal/abilities"
+	"github.com/verity-bdd/verity-bdd/internal/core"
+	coreMocks "github.com/verity-bdd/verity-bdd/internal/core/testing/mocks"
+	"github.com/verity-bdd/verity-bdd/internal/reporting"
+	reportingMocks "github.com/verity-bdd/verity-bdd/internal/reporting/mocks"
+	testingMocks "github.com/verity-bdd/verity-bdd/internal/testing/mocks"
 )
 
 type dummyAbility struct{ id string }

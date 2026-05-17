@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/nchursin/verity-bdd/internal/abilities"
+	"github.com/verity-bdd/verity-bdd/internal/abilities"
 )
 
 func abilityTypeName(t reflect.Type) string {

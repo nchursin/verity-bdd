@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/nchursin/verity-bdd/internal/abilities"
+	"github.com/verity-bdd/verity-bdd/internal/abilities"
 )
 
 // TakeNotesAbility wraps the NoteBook so it can be registered as an ability.

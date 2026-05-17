@@ -9,10 +9,10 @@ package main
 
 import (
     "testing"
-    "github.com/nchursin/verity-bdd"
-    "github.com/nchursin/verity-bdd/verity_expectations"
-    "github.com/nchursin/verity-bdd/verity_expectations/ensure"
-    verity "github.com/nchursin/verity-bdd"
+    "github.com/verity-bdd/verity-bdd"
+    "github.com/verity-bdd/verity-bdd/verity_expectations"
+    "github.com/verity-bdd/verity-bdd/verity_expectations/ensure"
+    verity "github.com/verity-bdd/verity-bdd"
 )
 
 func TestStaticValues(t *testing.T) {
@@ -54,10 +54,10 @@ func TestMixedQuestions(t *testing.T) {
     apiTester.AttemptsTo(
         // Dynamic: Get actual data from API
         api.SendGetRequest("/users/1"),
-        
+
         // Static: Compare against expected status code
         ensure.That(answerable.ValueOf(200), expectations.Equals(200)),
-        
+
         // Dynamic: Check actual API response
         ensure.That(api.LastResponseStatus{}, expectations.Equals(200)),
         ensure.That(api.LastResponseBody{}, expectations.Contains("name")),

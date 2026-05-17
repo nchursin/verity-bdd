@@ -9,7 +9,7 @@ package testing
 import (
 	"reflect"
 
-	"github.com/nchursin/verity-bdd/internal/abilities"
+	"github.com/verity-bdd/verity-bdd/internal/abilities"
 )
 
 // abilityMatchesType checks if the provided ability is assignable to or implements

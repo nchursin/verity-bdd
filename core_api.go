@@ -3,8 +3,8 @@ package verity
 import (
 	"context"
 
-	internalabilities "github.com/nchursin/verity-bdd/internal/abilities"
-	internalcore "github.com/nchursin/verity-bdd/internal/core"
+	internalabilities "github.com/verity-bdd/verity-bdd/internal/abilities"
+	internalcore "github.com/verity-bdd/verity-bdd/internal/core"
 )
 
 // Ability enables an actor to interact with a specific interface of the system.

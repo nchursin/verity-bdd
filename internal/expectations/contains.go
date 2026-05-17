@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/nchursin/verity-bdd/internal/expectations/ensure"
+	"github.com/verity-bdd/verity-bdd/internal/expectations/ensure"
 )
 
 // ContainsExpectation checks if a string contains the expected substring

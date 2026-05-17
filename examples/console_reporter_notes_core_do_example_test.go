@@ -3,8 +3,8 @@ package examples
 import (
 	"context"
 
-	verity "github.com/nchursin/verity-bdd"
-	"github.com/nchursin/verity-bdd/verity_abilities/take_notes"
+	verity "github.com/verity-bdd/verity-bdd"
+	"github.com/verity-bdd/verity-bdd/verity_abilities/take_notes"
 )
 
 type exampleTestContext struct {

@@ -1,6 +1,6 @@
 package verity_reporting
 
-import internalreporting "github.com/nchursin/verity-bdd/internal/reporting"
+import internalreporting "github.com/verity-bdd/verity-bdd/internal/reporting"
 
 // Reporter handles test execution reporting.
 type Reporter = internalreporting.Reporter

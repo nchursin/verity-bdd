@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	verity "github.com/nchursin/verity-bdd"
+	verity "github.com/verity-bdd/verity-bdd"
 )
 
 func TestRootAPIContractCompiles(t *testing.T) {

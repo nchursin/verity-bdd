@@ -3,8 +3,8 @@ package expectations
 import (
 	"fmt"
 
-	"github.com/nchursin/verity-bdd/internal/expectations/ensure"
-	"github.com/nchursin/verity-bdd/internal/expectations/utils"
+	"github.com/verity-bdd/verity-bdd/internal/expectations/ensure"
+	"github.com/verity-bdd/verity-bdd/internal/expectations/utils"
 )
 
 // IsGreaterThanExpectation checks if a numeric value is greater than expected

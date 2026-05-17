@@ -5,10 +5,10 @@ import (
 	"errors"
 	"testing"
 
-	verity "github.com/nchursin/verity-bdd"
-	answerable "github.com/nchursin/verity-bdd/verity_answerable"
-	expectations "github.com/nchursin/verity-bdd/verity_expectations"
-	"github.com/nchursin/verity-bdd/verity_expectations/ensure"
+	verity "github.com/verity-bdd/verity-bdd"
+	answerable "github.com/verity-bdd/verity-bdd/verity_answerable"
+	expectations "github.com/verity-bdd/verity-bdd/verity_expectations"
+	"github.com/verity-bdd/verity-bdd/verity_expectations/ensure"
 )
 
 // TestAnswerableWithEnsure demonstrates the complete integration of answerable.ValueOf

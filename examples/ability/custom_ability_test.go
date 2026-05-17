@@ -10,9 +10,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	verity "github.com/nchursin/verity-bdd"
-	"github.com/nchursin/verity-bdd/internal/testing/testserver"
-	"github.com/nchursin/verity-bdd/verity_abilities/api"
+	verity "github.com/verity-bdd/verity-bdd"
+	"github.com/verity-bdd/verity-bdd/internal/testing/testserver"
+	"github.com/verity-bdd/verity-bdd/verity_abilities/api"
 )
 
 // FileSystemAbility enables an actor to interact with the file system

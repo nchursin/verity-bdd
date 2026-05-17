@@ -7,7 +7,7 @@ import (
 	"net/url"
 	"sync"
 
-	"github.com/nchursin/verity-bdd/internal/abilities"
+	"github.com/verity-bdd/verity-bdd/internal/abilities"
 )
 
 // CallAnAPI enables an actor to make HTTP requests to APIs

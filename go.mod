@@ -1,4 +1,4 @@
-module github.com/nchursin/verity-bdd
+module github.com/verity-bdd/verity-bdd
 
 go 1.23.4
 

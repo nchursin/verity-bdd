@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/nchursin/verity-bdd/internal/core"
+	"github.com/verity-bdd/verity-bdd/internal/core"
 )
 
 // valueQuestion[T] implements core.Question[T] for static values.

@@ -3,7 +3,7 @@ package answerable
 import (
 	"context"
 
-	"github.com/nchursin/verity-bdd/internal/core"
+	"github.com/verity-bdd/verity-bdd/internal/core"
 )
 
 // functionQuestion[T] implements core.Question[T] for functions.

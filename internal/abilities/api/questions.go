@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/nchursin/verity-bdd/internal/core"
+	"github.com/verity-bdd/verity-bdd/internal/core"
 )
 
 // LastResponseStatus returns the status code of the last response

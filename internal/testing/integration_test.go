@@ -8,11 +8,11 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/nchursin/verity-bdd/internal/abilities/api"
-	"github.com/nchursin/verity-bdd/internal/expectations"
-	"github.com/nchursin/verity-bdd/internal/expectations/ensure"
-	"github.com/nchursin/verity-bdd/internal/reporting/console_reporter"
-	"github.com/nchursin/verity-bdd/internal/testing/testserver"
+	"github.com/verity-bdd/verity-bdd/internal/abilities/api"
+	"github.com/verity-bdd/verity-bdd/internal/expectations"
+	"github.com/verity-bdd/verity-bdd/internal/expectations/ensure"
+	"github.com/verity-bdd/verity-bdd/internal/reporting/console_reporter"
+	"github.com/verity-bdd/verity-bdd/internal/testing/testserver"
 )
 
 func TestReportingIntegration(t *testing.T) {

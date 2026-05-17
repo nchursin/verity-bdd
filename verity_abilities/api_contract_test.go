@@ -3,9 +3,9 @@ package verity_abilities_test
 import (
 	"testing"
 
-	verity "github.com/nchursin/verity-bdd"
-	"github.com/nchursin/verity-bdd/verity_abilities/api"
-	"github.com/nchursin/verity-bdd/verity_abilities/take_notes"
+	verity "github.com/verity-bdd/verity-bdd"
+	"github.com/verity-bdd/verity-bdd/verity_abilities/api"
+	"github.com/verity-bdd/verity-bdd/verity_abilities/take_notes"
 )
 
 func TestAbilitiesAPIContractCompiles(t *testing.T) {

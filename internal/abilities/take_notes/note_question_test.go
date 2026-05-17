@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	take_notes "github.com/nchursin/verity-bdd/internal/abilities/take_notes"
+	take_notes "github.com/verity-bdd/verity-bdd/internal/abilities/take_notes"
 )
 
 func TestNoteQuestionReturnsTypedValue(t *testing.T) {

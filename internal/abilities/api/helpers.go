@@ -3,7 +3,7 @@ package api
 import (
 	"net/http"
 
-	"github.com/nchursin/verity-bdd/internal/core"
+	"github.com/verity-bdd/verity-bdd/internal/core"
 )
 
 // SendRequest creates a SendRequest interaction (exported function)

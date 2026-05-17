@@ -13,7 +13,7 @@ import (
 	io "io"
 	reflect "reflect"
 
-	reporting "github.com/nchursin/verity-bdd/internal/reporting"
+	reporting "github.com/verity-bdd/verity-bdd/internal/reporting"
 	gomock "go.uber.org/mock/gomock"
 )
 

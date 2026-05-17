@@ -9,9 +9,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/nchursin/verity-bdd/internal/abilities/take_notes"
-	"github.com/nchursin/verity-bdd/internal/core"
-	"github.com/nchursin/verity-bdd/internal/reporting/allure_reporter"
+	"github.com/verity-bdd/verity-bdd/internal/abilities/take_notes"
+	"github.com/verity-bdd/verity-bdd/internal/core"
+	"github.com/verity-bdd/verity-bdd/internal/reporting/allure_reporter"
 )
 
 func TestVerityTest_WithAllureReporter_WritesResults(t *testing.T) {

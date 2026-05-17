@@ -1,7 +1,7 @@
 package verity
 
 import (
-	internaltesting "github.com/nchursin/verity-bdd/internal/testing"
+	internaltesting "github.com/verity-bdd/verity-bdd/internal/testing"
 )
 
 // ReporterProvider provides access to reporter adapter.

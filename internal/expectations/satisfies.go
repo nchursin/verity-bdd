@@ -1,7 +1,7 @@
 package expectations
 
 import (
-	"github.com/nchursin/verity-bdd/internal/expectations/ensure"
+	"github.com/verity-bdd/verity-bdd/internal/expectations/ensure"
 )
 
 // SatisfiesExpectation represents a custom expectation that evaluates using a provided function

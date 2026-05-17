@@ -4,11 +4,11 @@ import (
 	"errors"
 	"testing"
 
-	verity "github.com/nchursin/verity-bdd"
-	"github.com/nchursin/verity-bdd/verity_abilities/api"
-	answerable "github.com/nchursin/verity-bdd/verity_answerable"
-	expectations "github.com/nchursin/verity-bdd/verity_expectations"
-	"github.com/nchursin/verity-bdd/verity_expectations/ensure"
+	verity "github.com/verity-bdd/verity-bdd"
+	"github.com/verity-bdd/verity-bdd/verity_abilities/api"
+	answerable "github.com/verity-bdd/verity-bdd/verity_answerable"
+	expectations "github.com/verity-bdd/verity-bdd/verity_expectations"
+	"github.com/verity-bdd/verity-bdd/verity_expectations/ensure"
 )
 
 // TestAnswerableValueOf demonstrates the usage of answerable.ValueOf() API

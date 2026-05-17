@@ -9,9 +9,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	verity "github.com/nchursin/verity-bdd"
-	"github.com/nchursin/verity-bdd/verity_abilities/take_notes"
-	"github.com/nchursin/verity-bdd/verity_reporting/allure_reporter"
+	verity "github.com/verity-bdd/verity-bdd"
+	"github.com/verity-bdd/verity-bdd/verity_abilities/take_notes"
+	"github.com/verity-bdd/verity-bdd/verity_reporting/allure_reporter"
 )
 
 // TestAllureReporterExample_GeneratesReportFiles is a documentation-style example:

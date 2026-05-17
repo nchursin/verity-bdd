@@ -68,7 +68,7 @@ package answerable
 import (
 	"context"
 
-	"github.com/nchursin/verity-bdd/internal/core"
+	"github.com/verity-bdd/verity-bdd/internal/core"
 )
 
 // ValueOf creates a core.Question[T] that returns the provided static value

@@ -1,7 +1,7 @@
 package api
 
 import (
-	internalapi "github.com/nchursin/verity-bdd/internal/abilities/api"
+	internalapi "github.com/verity-bdd/verity-bdd/internal/abilities/api"
 )
 
 // CallAnAPI enables an actor to make HTTP requests to APIs.

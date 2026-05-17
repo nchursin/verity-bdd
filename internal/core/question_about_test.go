@@ -4,8 +4,8 @@ import (
 	"context"
 	stdtesting "testing"
 
-	"github.com/nchursin/verity-bdd/internal/core"
-	veritytesting "github.com/nchursin/verity-bdd/internal/testing"
+	"github.com/verity-bdd/verity-bdd/internal/core"
+	veritytesting "github.com/verity-bdd/verity-bdd/internal/testing"
 )
 
 func TestQuestionAboutCreatesQuestion(t *stdtesting.T) {

@@ -3,7 +3,7 @@ package testing
 import (
 	"testing"
 
-	"github.com/nchursin/verity-bdd/internal/abilities"
+	"github.com/verity-bdd/verity-bdd/internal/abilities"
 )
 
 type helperIfaceAbility interface {

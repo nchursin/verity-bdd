@@ -1,8 +1,8 @@
 package ensure
 
 import (
-	verity "github.com/nchursin/verity-bdd"
-	internalensure "github.com/nchursin/verity-bdd/internal/expectations/ensure"
+	verity "github.com/verity-bdd/verity-bdd"
+	internalensure "github.com/verity-bdd/verity-bdd/internal/expectations/ensure"
 )
 
 type Expectation[T any] interface {

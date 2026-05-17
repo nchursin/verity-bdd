@@ -132,7 +132,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/nchursin/verity-bdd/internal/abilities"
+	"github.com/verity-bdd/verity-bdd/internal/abilities"
 )
 
 // Actor represents a person or external system interacting with the system under test.

@@ -13,8 +13,8 @@ import (
 	context "context"
 	reflect "reflect"
 
-	abilities "github.com/nchursin/verity-bdd/internal/abilities"
-	core "github.com/nchursin/verity-bdd/internal/core"
+	abilities "github.com/verity-bdd/verity-bdd/internal/abilities"
+	core "github.com/verity-bdd/verity-bdd/internal/core"
 	gomock "go.uber.org/mock/gomock"
 )
 

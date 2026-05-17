@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/nchursin/verity-bdd/internal/core"
+	"github.com/verity-bdd/verity-bdd/internal/core"
 )
 
 // Expectation represents an expectation that can be evaluated against actual values

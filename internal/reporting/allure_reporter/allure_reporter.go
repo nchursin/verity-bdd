@@ -10,7 +10,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/nchursin/verity-bdd/internal/reporting"
+	"github.com/verity-bdd/verity-bdd/internal/reporting"
 )
 
 // AllureReporter writes Verity BDD events in Allure 2 result format.

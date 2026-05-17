@@ -8,7 +8,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/nchursin/verity-bdd/internal/reporting"
+	"github.com/verity-bdd/verity-bdd/internal/reporting"
 )
 
 // activeStep represents a currently executing step

@@ -1,8 +1,8 @@
 package take_notes
 
 import (
-	verity "github.com/nchursin/verity-bdd"
-	internalnotes "github.com/nchursin/verity-bdd/internal/abilities/take_notes"
+	verity "github.com/verity-bdd/verity-bdd"
+	internalnotes "github.com/verity-bdd/verity-bdd/internal/abilities/take_notes"
 )
 
 // TakeNotesAbility wraps the NoteBook so it can be registered as an ability.

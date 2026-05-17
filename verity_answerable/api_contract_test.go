@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	verity "github.com/nchursin/verity-bdd"
-	answerable "github.com/nchursin/verity-bdd/verity_answerable"
+	verity "github.com/verity-bdd/verity-bdd"
+	answerable "github.com/verity-bdd/verity-bdd/verity_answerable"
 )
 
 func TestAnswerableAPIContractCompiles(t *testing.T) {

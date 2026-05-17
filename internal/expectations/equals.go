@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/nchursin/verity-bdd/internal/expectations/ensure"
+	"github.com/verity-bdd/verity-bdd/internal/expectations/ensure"
 )
 
 // EqualsExpectation checks if the actual value equals the expected value

@@ -1,8 +1,8 @@
 package verity_expectations
 
 import (
-	internalexpectations "github.com/nchursin/verity-bdd/internal/expectations"
-	"github.com/nchursin/verity-bdd/verity_expectations/ensure"
+	internalexpectations "github.com/verity-bdd/verity-bdd/internal/expectations"
+	"github.com/verity-bdd/verity-bdd/verity_expectations/ensure"
 )
 
 // Contains checks if a string contains the expected substring.

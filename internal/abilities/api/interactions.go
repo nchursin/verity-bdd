@@ -8,7 +8,7 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/nchursin/verity-bdd/internal/core"
+	"github.com/verity-bdd/verity-bdd/internal/core"
 )
 
 // sendRequest is an interaction that sends an HTTP request

@@ -242,7 +242,7 @@ case "$COMMAND" in
         echo
         echo -e "${GREEN}✅ Release $NEXT_VERSION created successfully!${NC}"
         echo -e "${BLUE}🌐 GitHub Actions will now create the automated release.${NC}"
-        echo -e "${BLUE}🔗 Watch the progress at: https://github.com/nchursin/verity-bdd/actions${NC}"
+        echo -e "${BLUE}🔗 Watch the progress at: https://github.com/verity-bdd/verity-bdd/actions${NC}"
         ;;
 
     "help"|"-h"|"--help")

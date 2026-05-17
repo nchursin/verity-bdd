@@ -7,10 +7,13 @@ import (
 
 // Contains checks if a string contains the expected substring.
 var Contains = internalexpectations.Contains
+
 // ContainsKey checks if a map contains the expected key.
 var ContainsKey = internalexpectations.ContainsKey
+
 // IsGreaterThan checks if a numeric value is greater than the expected value.
 var IsGreaterThan = internalexpectations.IsGreaterThan
+
 // IsLessThan checks if a numeric value is less than the expected value.
 var IsLessThan = internalexpectations.IsLessThan
 

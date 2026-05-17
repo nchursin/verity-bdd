@@ -15,6 +15,6 @@ jobs:
         uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.DOCS_REPO_TOKEN }}
-          repository: nchursin/verity-bdd-site
+          repository: verity-bdd/verity-bdd.github.io
           event-type: lib-updated
           client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
